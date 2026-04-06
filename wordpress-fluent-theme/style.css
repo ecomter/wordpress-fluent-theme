@@ -8,10 +8,122 @@
  * Author:       ecomter
  * Author URI:   https://github.com/ecomter
  * Template:     argon
- * Version:      0.1.0
+ * Version:      0.2.0
  * License:      GPL-2.0-or-later
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  wordpress-fluent-theme
+ */
+
+/*
+ * ================================================================
+ * QUICK-START USAGE EXAMPLES
+ * ================================================================
+ *
+ * BUTTONS
+ * -------
+ * <!-- Primary (accent fill) -->
+ * <button class="fluent-btn fluent-btn--primary">Save changes</button>
+ *
+ * <!-- Subtle (low-emphasis, tinted fill) -->
+ * <button class="fluent-btn fluent-btn--subtle">View details</button>
+ *
+ * <!-- Outline (ghost / secondary) -->
+ * <button class="fluent-btn fluent-btn--outline">Cancel</button>
+ *
+ * <!-- Danger (destructive action) -->
+ * <button class="fluent-btn fluent-btn--danger">Delete post</button>
+ *
+ * <!-- Compound (title + description line) -->
+ * <button class="fluent-btn fluent-btn--compound fluent-btn--primary">
+ *   <span class="fluent-btn__title">Open settings</span>
+ *   <span class="fluent-btn__desc">Manage your account</span>
+ * </button>
+ *
+ * <!-- Icon-only -->
+ * <button class="fluent-btn fluent-btn--icon" aria-label="Close">✕</button>
+ *
+ * <!-- Small / Large size modifiers -->
+ * <button class="fluent-btn fluent-btn--primary fluent-btn--sm">Small</button>
+ * <button class="fluent-btn fluent-btn--primary fluent-btn--lg">Large</button>
+ *
+ *
+ * TEXT STYLES (utility classes)
+ * -----------------------------
+ * <p class="fluent-text--display">Hero display heading</p>
+ * <h1 class="fluent-text--title-lg">Large title</h1>
+ * <h2 class="fluent-text--title">Title</h2>
+ * <h3 class="fluent-text--subtitle">Subtitle</h3>
+ * <p class="fluent-text--body-strong">Strong body text</p>
+ * <p class="fluent-text--body">Regular body text</p>
+ * <p class="fluent-text--body-sm">Small body text</p>
+ * <span class="fluent-text--caption">Caption / meta text</span>
+ * <span class="fluent-text--overline">OVERLINE LABEL</span>
+ * <p class="fluent-text--secondary">Muted secondary text</p>
+ * <p class="fluent-text--disabled">Disabled-state text</p>
+ *
+ *
+ * DRAWER (slide-out panel)
+ * ------------------------
+ * CSS-only approach — add/remove class="fluent-drawer--open" via JS or
+ * use the bundled fluent-drawer.js for automatic open/close handling.
+ *
+ * <!-- Trigger button -->
+ * <button class="fluent-btn fluent-btn--primary"
+ *         data-fluent-drawer-toggle="my-drawer">Open drawer</button>
+ *
+ * <!-- Drawer from the left (default) -->
+ * <div class="fluent-drawer" id="my-drawer" role="dialog"
+ *      aria-modal="true" aria-label="Navigation">
+ *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="my-drawer"></div>
+ *   <div class="fluent-drawer__panel">
+ *     <div class="fluent-drawer__header">
+ *       <span class="fluent-text--subtitle">Menu</span>
+ *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
+ *               data-fluent-drawer-close="my-drawer" aria-label="Close drawer">✕</button>
+ *     </div>
+ *     <div class="fluent-drawer__body">
+ *       <p>Drawer content goes here.</p>
+ *     </div>
+ *   </div>
+ * </div>
+ *
+ * <!-- Drawer from the right -->
+ * <div class="fluent-drawer fluent-drawer--right" id="settings-drawer" role="dialog"
+ *      aria-modal="true" aria-label="Settings">
+ *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="settings-drawer"></div>
+ *   <div class="fluent-drawer__panel">
+ *     <div class="fluent-drawer__header">
+ *       <span class="fluent-text--subtitle">Settings</span>
+ *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
+ *               data-fluent-drawer-close="settings-drawer" aria-label="Close">✕</button>
+ *     </div>
+ *     <div class="fluent-drawer__body">...</div>
+ *   </div>
+ * </div>
+ *
+ * <!-- Bottom sheet drawer (mobile-friendly) -->
+ * <div class="fluent-drawer fluent-drawer--bottom" id="bottom-sheet" role="dialog"
+ *      aria-modal="true" aria-label="Options">
+ *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="bottom-sheet"></div>
+ *   <div class="fluent-drawer__panel">
+ *     <div class="fluent-drawer__header">
+ *       <span class="fluent-text--subtitle">Options</span>
+ *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
+ *               data-fluent-drawer-close="bottom-sheet" aria-label="Close">✕</button>
+ *     </div>
+ *     <div class="fluent-drawer__body">...</div>
+ *   </div>
+ * </div>
+ *
+ *
+ * FLUENT WEB COMPONENTS (loaded via CDN in functions.php)
+ * -------------------------------------------------------
+ * <fluent-button appearance="accent">Primary</fluent-button>
+ * <fluent-button appearance="outline">Secondary</fluent-button>
+ * <fluent-button appearance="subtle">Subtle</fluent-button>
+ * <fluent-text-input placeholder="Search…"></fluent-text-input>
+ * <fluent-card>Card content</fluent-card>
+ * ================================================================
  */
 
 /* ============================================================
@@ -22,91 +134,251 @@
 :root {
   /* --- Typography --- */
   --fluent-font: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
-  --fluent-font-size-base:   16px;
-  --fluent-font-size-sm:     13px;
-  --fluent-font-size-lg:     20px;
-  --fluent-font-size-xl:     28px;
-  --fluent-line-height:      1.6;
-  --fluent-font-weight-base: 400;
-  --fluent-font-weight-semi: 600;
-  --fluent-font-weight-bold: 700;
+  --fluent-font-mono: "Cascadia Code", "Cascadia Mono", "Consolas", monospace;
 
-  /* --- Accent / Brand --- */
-  --fluent-accent:           #0f6cbd;   /* Fluent "Communication Blue" */
-  --fluent-accent-hover:     #115ea3;
-  --fluent-accent-active:    #0e4f8a;
-  --fluent-accent-subtle:    #eff6fc;   /* tint for tags, badges */
+  /* Font size scale (Fluent type ramp) */
+  --fluent-font-size-caption:  12px;
+  --fluent-font-size-sm:       13px;
+  --fluent-font-size-body:     14px;
+  --fluent-font-size-base:     16px;
+  --fluent-font-size-subtitle: 20px;
+  --fluent-font-size-title:    24px;
+  --fluent-font-size-title-lg: 28px;
+  --fluent-font-size-xl:       32px;
+  --fluent-font-size-display:  40px;
+
+  /* Line heights */
+  --fluent-line-height:         1.6;
+  --fluent-line-height-tight:   1.25;
+  --fluent-line-height-heading: 1.3;
+
+  /* Font weights */
+  --fluent-font-weight-base:    400;
+  --fluent-font-weight-medium:  500;
+  --fluent-font-weight-semi:    600;
+  --fluent-font-weight-bold:    700;
+
+  /* Letter spacing */
+  --fluent-tracking-tight:   -0.01em;
+  --fluent-tracking-normal:   0em;
+  --fluent-tracking-wide:     0.05em;
+  --fluent-tracking-wider:    0.10em;
+
+  /* --- Accent / Brand colors --- */
+  --fluent-accent:             #0f6cbd;   /* Fluent "Communication Blue" */
+  --fluent-accent-hover:       #115ea3;
+  --fluent-accent-active:      #0e4f8a;
+  --fluent-accent-subtle:      #eff6fc;   /* tint for tags, badges */
+  --fluent-accent-subtle-hover:#dce9f8;
+
+  /* Semantic status colors */
+  --fluent-color-success:      #107c10;
+  --fluent-color-success-bg:   #dff6dd;
+  --fluent-color-warning:      #f7630c;
+  --fluent-color-warning-bg:   #fff4ce;
+  --fluent-color-danger:       #c50f1f;
+  --fluent-color-danger-bg:    #fde7e9;
+  --fluent-color-danger-hover: #a80000;
+  --fluent-color-info:         #0f6cbd;
+  --fluent-color-info-bg:      #eff6fc;
+
+  /* Neutral palette */
+  --fluent-neutral-4:          #f8f8f8;
+  --fluent-neutral-8:          #f0f0f0;
+  --fluent-neutral-16:         #e0e0e0;
+  --fluent-neutral-32:         #c4c4c4;
+  --fluent-neutral-64:         #888888;
+  --fluent-neutral-96:         #1c1c1c;
 
   /* --- Surface / Background --- */
   --fluent-bg:               #f3f3f3;   /* page background */
   --fluent-surface:          #ffffff;   /* card / panel surface */
   --fluent-surface-alt:      #fafafa;   /* alternate surface (e.g. table rows) */
+  --fluent-surface-raised:   #ffffff;   /* elevated surface */
   --fluent-overlay:          rgba(255, 255, 255, 0.85);
+  --fluent-scrim:            rgba(0, 0, 0, 0.40);  /* drawer backdrop */
 
   /* --- Text --- */
   --fluent-text:             #1b1a19;   /* primary text */
   --fluent-text-secondary:   #605e5c;   /* meta, captions */
+  --fluent-text-tertiary:    #8a8886;   /* placeholders */
   --fluent-text-disabled:    #a19f9d;
+  --fluent-text-on-accent:   #ffffff;   /* text on filled accent bg */
 
   /* --- Stroke / Border --- */
   --fluent-stroke:           1px solid rgba(0, 0, 0, 0.08);
   --fluent-stroke-strong:    1px solid rgba(0, 0, 0, 0.18);
+  --fluent-stroke-focus:     2px solid var(--fluent-accent);
 
   /* --- Corner Radius --- */
+  --fluent-radius-xs:        2px;
   --fluent-radius-sm:        4px;
   --fluent-radius-md:        8px;
   --fluent-radius-lg:        12px;
+  --fluent-radius-xl:        16px;
+  --fluent-radius-2xl:       20px;
   --fluent-radius-pill:      9999px;
 
   /* --- Elevation Shadows --- */
-  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.05);
-  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.07);
-  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.10), 0 16px 36px rgba(0, 0, 0, 0.09);
+  --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.05);
+  --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.07);
+  --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.10), 0 16px 36px rgba(0, 0, 0, 0.09);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.14), 0 32px 56px rgba(0, 0, 0, 0.12);
+  /* Legacy aliases (keep backward compat) */
+  --fluent-shadow-1: var(--fluent-shadow-2);
 
   /* --- Spacing scale (base 4 px grid) --- */
-  --fluent-space-1: 4px;
-  --fluent-space-2: 8px;
-  --fluent-space-3: 12px;
-  --fluent-space-4: 16px;
-  --fluent-space-5: 20px;
-  --fluent-space-6: 24px;
-  --fluent-space-8: 32px;
+  --fluent-space-px: 1px;
+  --fluent-space-1:  4px;
+  --fluent-space-2:  8px;
+  --fluent-space-3:  12px;
+  --fluent-space-4:  16px;
+  --fluent-space-5:  20px;
+  --fluent-space-6:  24px;
+  --fluent-space-7:  28px;
+  --fluent-space-8:  32px;
   --fluent-space-10: 40px;
+  --fluent-space-12: 48px;
+  --fluent-space-16: 64px;
 
-  /* --- Transition --- */
-  --fluent-transition: 120ms cubic-bezier(0.33, 1, 0.68, 1);
+  /* --- Sizing --- */
+  --fluent-size-icon-sm:   16px;
+  --fluent-size-icon-md:   20px;
+  --fluent-size-icon-lg:   24px;
+  --fluent-btn-height-sm:  28px;
+  --fluent-btn-height-md:  32px;
+  --fluent-btn-height-lg:  40px;
+
+  /* --- Z-index scale --- */
+  --fluent-z-base:    0;
+  --fluent-z-raised:  10;
+  --fluent-z-sticky:  100;
+  --fluent-z-overlay: 200;
+  --fluent-z-drawer:  300;
+  --fluent-z-modal:   400;
+  --fluent-z-tooltip: 500;
+
+  /* --- Transitions --- */
+  --fluent-transition:        120ms cubic-bezier(0.33, 1, 0.68, 1);
+  --fluent-transition-slow:   240ms cubic-bezier(0.33, 1, 0.68, 1);
+  --fluent-transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --fluent-drawer-transition: 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
    2. DARK MODE TOKENS
    Argon uses the "darkmode" class on <html> for its dark theme.
    We mirror the same selector so tokens update automatically.
+   Also supports prefers-color-scheme for users without Argon's
+   toggle when the body has no explicit darkmode class.
    ============================================================ */
+html.darkmode,
+@media (prefers-color-scheme: dark) {
+  html:not(.lightmode) {
+    --fluent-bg:               #1f1f1f;
+    --fluent-surface:          #2b2b2b;
+    --fluent-surface-alt:      #323232;
+    --fluent-surface-raised:   #363636;
+    --fluent-overlay:          rgba(43, 43, 43, 0.90);
+    --fluent-scrim:            rgba(0, 0, 0, 0.60);
+
+    --fluent-text:             #f3f2f1;
+    --fluent-text-secondary:   #c8c6c4;
+    --fluent-text-tertiary:    #a09e9c;
+    --fluent-text-disabled:    #7a7878;
+    --fluent-text-on-accent:   #ffffff;
+
+    --fluent-stroke:           1px solid rgba(255, 255, 255, 0.10);
+    --fluent-stroke-strong:    1px solid rgba(255, 255, 255, 0.20);
+
+    --fluent-accent:           #479ef5;
+    --fluent-accent-hover:     #62abf5;
+    --fluent-accent-active:    #2886de;
+    --fluent-accent-subtle:    #1a3a5c;
+    --fluent-accent-subtle-hover: #1e4570;
+
+    --fluent-color-success:      #54b054;
+    --fluent-color-success-bg:   #1a3a1a;
+    --fluent-color-warning:      #f7890c;
+    --fluent-color-warning-bg:   #3a2e10;
+    --fluent-color-danger:       #e84747;
+    --fluent-color-danger-bg:    #3a1515;
+    --fluent-color-danger-hover: #f55a5a;
+    --fluent-color-info:         #479ef5;
+    --fluent-color-info-bg:      #1a3a5c;
+
+    --fluent-neutral-4:          #262626;
+    --fluent-neutral-8:          #303030;
+    --fluent-neutral-16:         #404040;
+    --fluent-neutral-32:         #585858;
+    --fluent-neutral-64:         #8a8a8a;
+    --fluent-neutral-96:         #f0f0f0;
+
+    --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
+    --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
+    --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+    --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 32px 56px rgba(0, 0, 0, 0.45);
+    --fluent-shadow-1:  var(--fluent-shadow-2);
+  }
+}
+
+/* Explicit class override (always wins regardless of OS preference) */
 html.darkmode {
-  --fluent-bg:             #1f1f1f;
-  --fluent-surface:        #2b2b2b;
-  --fluent-surface-alt:    #323232;
-  --fluent-overlay:        rgba(43, 43, 43, 0.90);
+  --fluent-bg:               #1f1f1f;
+  --fluent-surface:          #2b2b2b;
+  --fluent-surface-alt:      #323232;
+  --fluent-surface-raised:   #363636;
+  --fluent-overlay:          rgba(43, 43, 43, 0.90);
+  --fluent-scrim:            rgba(0, 0, 0, 0.60);
 
-  --fluent-text:           #f3f2f1;
-  --fluent-text-secondary: #c8c6c4;
-  --fluent-text-disabled:  #7a7878;
+  --fluent-text:             #f3f2f1;
+  --fluent-text-secondary:   #c8c6c4;
+  --fluent-text-tertiary:    #a09e9c;
+  --fluent-text-disabled:    #7a7878;
+  --fluent-text-on-accent:   #ffffff;
 
-  --fluent-stroke:         1px solid rgba(255, 255, 255, 0.10);
-  --fluent-stroke-strong:  1px solid rgba(255, 255, 255, 0.20);
+  --fluent-stroke:           1px solid rgba(255, 255, 255, 0.10);
+  --fluent-stroke-strong:    1px solid rgba(255, 255, 255, 0.20);
 
-  --fluent-accent:         #479ef5;    /* lighter blue looks better on dark */
-  --fluent-accent-hover:   #62abf5;
-  --fluent-accent-subtle:  #1a3a5c;
+  --fluent-accent:           #479ef5;
+  --fluent-accent-hover:     #62abf5;
+  --fluent-accent-active:    #2886de;
+  --fluent-accent-subtle:    #1a3a5c;
+  --fluent-accent-subtle-hover: #1e4570;
 
-  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
-  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
-  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+  --fluent-color-success:      #54b054;
+  --fluent-color-success-bg:   #1a3a1a;
+  --fluent-color-warning:      #f7890c;
+  --fluent-color-warning-bg:   #3a2e10;
+  --fluent-color-danger:       #e84747;
+  --fluent-color-danger-bg:    #3a1515;
+  --fluent-color-danger-hover: #f55a5a;
+  --fluent-color-info:         #479ef5;
+  --fluent-color-info-bg:      #1a3a5c;
+
+  --fluent-neutral-4:          #262626;
+  --fluent-neutral-8:          #303030;
+  --fluent-neutral-16:         #404040;
+  --fluent-neutral-32:         #585858;
+  --fluent-neutral-64:         #8a8a8a;
+  --fluent-neutral-96:         #f0f0f0;
+
+  --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
+  --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
+  --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 32px 56px rgba(0, 0, 0, 0.45);
+  --fluent-shadow-1:  var(--fluent-shadow-2);
 }
 
 /* ============================================================
    3. BASE / RESET
    ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--fluent-font) !important;
   font-size: var(--fluent-font-size-base);
@@ -115,6 +387,12 @@ body {
   color: var(--fluent-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ============================================================
@@ -140,15 +418,128 @@ a:focus {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--fluent-font);
   font-weight: var(--fluent-font-weight-semi);
-  line-height: 1.3;
+  line-height: var(--fluent-line-height-heading);
   color: var(--fluent-text);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--fluent-tracking-tight);
+  margin-top: 0;
 }
 
 h1 { font-size: var(--fluent-font-size-xl); }
-h2 { font-size: 22px; }
-h3 { font-size: 18px; }
+h2 { font-size: var(--fluent-font-size-title); }
+h3 { font-size: var(--fluent-font-size-subtitle); }
 h4 { font-size: var(--fluent-font-size-base); font-weight: var(--fluent-font-weight-bold); }
+h5 { font-size: var(--fluent-font-size-body); font-weight: var(--fluent-font-weight-bold); }
+h6 { font-size: var(--fluent-font-size-sm); font-weight: var(--fluent-font-weight-bold); }
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--fluent-space-4);
+  color: var(--fluent-text);
+  line-height: var(--fluent-line-height);
+}
+
+/* ============================================================
+   5a. FLUENT TEXT UTILITY CLASSES
+   Use these anywhere to apply Fluent type ramp styles without
+   relying on the HTML element. Mix with color utilities below.
+
+   Usage: <p class="fluent-text--display">Hero heading</p>
+   ============================================================ */
+
+/* Display — hero / marketing headers */
+.fluent-text--display {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-display);
+  font-weight: var(--fluent-font-weight-bold);
+  line-height: var(--fluent-line-height-tight);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Large title — page headings */
+.fluent-text--title-lg {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-title-lg);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Title — section headings */
+.fluent-text--title {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-title);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Subtitle — card / widget titles */
+.fluent-text--subtitle {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  color: var(--fluent-text);
+}
+
+/* Body strong — emphasized body copy */
+.fluent-text--body-strong {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Body — default reading text */
+.fluent-text--body {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Body small — compact lists, helper text */
+.fluent-text--body-sm {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-body);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.5;
+  color: var(--fluent-text);
+}
+
+/* Caption — dates, bylines, labels */
+.fluent-text--caption {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.5;
+  color: var(--fluent-text-secondary);
+}
+
+/* Overline — section labels above headings */
+.fluent-text--overline {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.5;
+  letter-spacing: var(--fluent-tracking-wider);
+  text-transform: uppercase;
+  color: var(--fluent-text-secondary);
+}
+
+/* Color modifier utilities */
+.fluent-text--secondary  { color: var(--fluent-text-secondary) !important; }
+.fluent-text--tertiary   { color: var(--fluent-text-tertiary)  !important; }
+.fluent-text--disabled   { color: var(--fluent-text-disabled)  !important; }
+.fluent-text--accent     { color: var(--fluent-accent)         !important; }
+.fluent-text--success    { color: var(--fluent-color-success)  !important; }
+.fluent-text--warning    { color: var(--fluent-color-warning)  !important; }
+.fluent-text--danger     { color: var(--fluent-color-danger)   !important; }
 
 /* ============================================================
    6. CARD / SURFACE ELEMENTS
@@ -244,49 +635,112 @@ h1.entry-title {
 }
 
 /* ============================================================
-   8. BUTTONS
+   8. BUTTONS — Fluent Design button system
+   ============================================================
+
+   Base class: .fluent-btn
+   Variants:   --primary   (accent fill — default CTA)
+               --subtle    (low emphasis, tinted fill)
+               --outline   (ghost / secondary)
+               --transparent (no bg, no border)
+               --danger    (destructive action)
+               --success   (confirmation action)
+   Modifiers:  --sm / --lg (size)
+               --icon      (square icon-only button)
+               --compound  (title + description layout)
+               --disabled  (or use the [disabled] attr)
+
+   Also patches WP / Argon native classes for drop-in compat.
    ============================================================ */
+
+/* --- Base token layer (all buttons inherit these) --- */
+.fluent-btn,
 button,
 .btn,
 input[type="submit"],
 input[type="button"],
 input[type="reset"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fluent-space-2);
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-5);
   font-family: var(--fluent-font);
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-semi);
+  line-height: 1;
+  white-space: nowrap;
   border-radius: var(--fluent-radius-md);
   border: var(--fluent-stroke-strong);
-  padding: var(--fluent-space-2) var(--fluent-space-5);
   cursor: pointer;
-  transition: background var(--fluent-transition),
-              border-color var(--fluent-transition),
-              box-shadow var(--fluent-transition);
+  text-decoration: none;
+  vertical-align: middle;
+  transition:
+    background var(--fluent-transition),
+    border-color var(--fluent-transition),
+    color var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition);
+  /* Default appearance: transparent with border */
+  background: transparent;
+  color: var(--fluent-text);
 }
 
-/* Primary (accent) button */
+.fluent-btn:focus-visible,
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible {
+  outline: var(--fluent-stroke-focus);
+  outline-offset: 2px;
+}
+
+/* --- Primary (accent fill) --- */
+.fluent-btn--primary,
 .btn-primary,
 input[type="submit"] {
   background: var(--fluent-accent) !important;
   border-color: var(--fluent-accent) !important;
-  color: #ffffff !important;
-  box-shadow: var(--fluent-shadow-1);
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: var(--fluent-shadow-2);
 }
 
+.fluent-btn--primary:hover,
 .btn-primary:hover,
 input[type="submit"]:hover {
   background: var(--fluent-accent-hover) !important;
   border-color: var(--fluent-accent-hover) !important;
-  box-shadow: var(--fluent-shadow-2);
+  box-shadow: var(--fluent-shadow-4);
 }
 
+.fluent-btn--primary:active,
 .btn-primary:active,
 input[type="submit"]:active {
   background: var(--fluent-accent-active) !important;
   border-color: var(--fluent-accent-active) !important;
   transform: scale(0.98);
+  box-shadow: none;
 }
 
-/* Secondary (ghost) button */
+/* --- Subtle (low-emphasis tinted fill) --- */
+.fluent-btn--subtle {
+  background: var(--fluent-accent-subtle) !important;
+  border-color: transparent !important;
+  color: var(--fluent-accent) !important;
+}
+
+.fluent-btn--subtle:hover {
+  background: var(--fluent-accent-subtle-hover) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.fluent-btn--subtle:active {
+  background: var(--fluent-accent-subtle) !important;
+  transform: scale(0.98);
+}
+
+/* --- Outline (ghost / secondary) --- */
+.fluent-btn--outline,
 .btn-secondary,
 .btn-outline {
   background: transparent !important;
@@ -294,14 +748,158 @@ input[type="submit"]:active {
   color: var(--fluent-text) !important;
 }
 
+.fluent-btn--outline:hover,
 .btn-secondary:hover,
 .btn-outline:hover {
   background: rgba(0, 0, 0, 0.04) !important;
+  box-shadow: var(--fluent-shadow-2);
 }
 
+html.darkmode .fluent-btn--outline:hover,
 html.darkmode .btn-secondary:hover,
 html.darkmode .btn-outline:hover {
   background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.fluent-btn--outline:active,
+.btn-secondary:active {
+  background: rgba(0, 0, 0, 0.07) !important;
+  transform: scale(0.98);
+}
+
+/* --- Transparent (no background, no border — for in-content use) --- */
+.fluent-btn--transparent {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--fluent-text) !important;
+}
+
+.fluent-btn--transparent:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.darkmode .fluent-btn--transparent:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* --- Danger (destructive) --- */
+.fluent-btn--danger {
+  background: var(--fluent-color-danger-bg) !important;
+  border-color: var(--fluent-color-danger) !important;
+  color: var(--fluent-color-danger) !important;
+}
+
+.fluent-btn--danger:hover {
+  background: var(--fluent-color-danger) !important;
+  border-color: var(--fluent-color-danger) !important;
+  color: #ffffff !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.fluent-btn--danger:active {
+  background: var(--fluent-color-danger-hover) !important;
+  border-color: var(--fluent-color-danger-hover) !important;
+  color: #ffffff !important;
+  transform: scale(0.98);
+}
+
+/* --- Success (confirmation) --- */
+.fluent-btn--success {
+  background: var(--fluent-color-success-bg) !important;
+  border-color: var(--fluent-color-success) !important;
+  color: var(--fluent-color-success) !important;
+}
+
+.fluent-btn--success:hover {
+  background: var(--fluent-color-success) !important;
+  border-color: var(--fluent-color-success) !important;
+  color: #ffffff !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* --- Size modifiers --- */
+.fluent-btn--sm {
+  height: var(--fluent-btn-height-sm) !important;
+  padding: 0 var(--fluent-space-3) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  border-radius: var(--fluent-radius-sm) !important;
+}
+
+.fluent-btn--lg {
+  height: var(--fluent-btn-height-lg) !important;
+  padding: 0 var(--fluent-space-6) !important;
+  font-size: var(--fluent-font-size-subtitle) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+}
+
+/* --- Icon-only (square, no text) --- */
+.fluent-btn--icon {
+  width: var(--fluent-btn-height-md);
+  height: var(--fluent-btn-height-md);
+  padding: 0 !important;
+  border-radius: var(--fluent-radius-sm);
+  font-size: var(--fluent-size-icon-md);
+  line-height: 1;
+}
+
+.fluent-btn--icon.fluent-btn--sm {
+  width: var(--fluent-btn-height-sm);
+  height: var(--fluent-btn-height-sm);
+  font-size: var(--fluent-size-icon-sm);
+}
+
+.fluent-btn--icon.fluent-btn--lg {
+  width: var(--fluent-btn-height-lg);
+  height: var(--fluent-btn-height-lg);
+  font-size: var(--fluent-size-icon-lg);
+}
+
+/* --- Compound (title + one-line description) ---
+   Usage:
+   <button class="fluent-btn fluent-btn--compound fluent-btn--primary">
+     <span class="fluent-btn__title">Go to settings</span>
+     <span class="fluent-btn__desc">Manage your profile</span>
+   </button>
+--- */
+.fluent-btn--compound {
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  padding: var(--fluent-space-3) var(--fluent-space-5);
+  min-width: 180px;
+  gap: 2px;
+}
+
+.fluent-btn__title {
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.25;
+}
+
+.fluent-btn__desc {
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+/* --- Disabled state --- */
+.fluent-btn:disabled,
+.fluent-btn[disabled],
+.fluent-btn--disabled,
+button:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* --- Pill button convenience modifier --- */
+.fluent-btn--pill {
+  border-radius: var(--fluent-radius-pill) !important;
 }
 
 /* ============================================================
@@ -549,3 +1147,385 @@ html.darkmode ::-webkit-scrollbar-thumb {
   outline-offset: 2px;
   border-radius: var(--fluent-radius-sm);
 }
+
+/* ============================================================
+   20. DRAWER — slide-out panel component
+   ============================================================
+
+   The Fluent drawer is a slide-in overlay panel anchored to
+   one edge of the viewport. It consists of:
+
+     .fluent-drawer            — host element (hidden by default)
+       .fluent-drawer__overlay — translucent backdrop (click-to-close)
+       .fluent-drawer__panel   — the visible content pane
+         .fluent-drawer__header — title row + close button area
+         .fluent-drawer__body   — scrollable content
+         .fluent-drawer__footer — optional sticky action row
+
+   Positional variants (add to .fluent-drawer):
+     .fluent-drawer--left   (default) — slides in from the left
+     .fluent-drawer--right  — slides in from the right
+     .fluent-drawer--bottom — rises from the bottom (mobile sheet)
+     .fluent-drawer--top    — drops from the top
+
+   State:
+     .fluent-drawer--open   — add this class to reveal the drawer
+                              (handled automatically by fluent-drawer.js)
+
+   Sizing modifier:
+     .fluent-drawer--narrow  — 240 px panel width / height
+     .fluent-drawer--wide    — 480 px panel width / height
+
+   JS integration (fluent-drawer.js):
+     data-fluent-drawer-toggle="drawer-id"  — open/close trigger
+     data-fluent-drawer-close="drawer-id"   — close-only trigger
+   ============================================================ */
+
+/* --- Host (covers the full viewport) --- */
+.fluent-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fluent-z-drawer);
+  pointer-events: none;
+  /* visibility drives accessibility; opacity drives fade */
+  visibility: hidden;
+  /* Transitions are handled per-child so the panel and overlay
+     can animate independently (overlay fades, panel slides). */
+}
+
+.fluent-drawer--open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* --- Overlay / backdrop --- */
+.fluent-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--fluent-scrim);
+  opacity: 0;
+  transition: opacity var(--fluent-drawer-transition);
+}
+
+.fluent-drawer--open .fluent-drawer__overlay {
+  opacity: 1;
+}
+
+/* --- Panel (the actual drawer content) --- */
+.fluent-drawer__panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--fluent-surface);
+  box-shadow: var(--fluent-shadow-16);
+  overflow: hidden;
+  transition: transform var(--fluent-drawer-transition);
+  /* Ensure panel is above overlay */
+  z-index: 1;
+}
+
+/* --- Left (default) drawer --- */
+.fluent-drawer:not(.fluent-drawer--right):not(.fluent-drawer--bottom):not(.fluent-drawer--top)
+.fluent-drawer__panel,
+.fluent-drawer--left .fluent-drawer__panel {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(360px, 85vw);
+  border-radius: 0 var(--fluent-radius-lg) var(--fluent-radius-lg) 0;
+  transform: translateX(-100%);
+}
+
+.fluent-drawer:not(.fluent-drawer--right):not(.fluent-drawer--bottom):not(.fluent-drawer--top).fluent-drawer--open
+.fluent-drawer__panel,
+.fluent-drawer--left.fluent-drawer--open .fluent-drawer__panel {
+  transform: translateX(0);
+}
+
+/* --- Right drawer --- */
+.fluent-drawer--right .fluent-drawer__panel {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: min(360px, 85vw);
+  border-radius: var(--fluent-radius-lg) 0 0 var(--fluent-radius-lg);
+  transform: translateX(100%);
+}
+
+.fluent-drawer--right.fluent-drawer--open .fluent-drawer__panel {
+  transform: translateX(0);
+}
+
+/* --- Bottom drawer (mobile sheet) --- */
+.fluent-drawer--bottom .fluent-drawer__panel {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  max-height: 80vh;
+  border-radius: var(--fluent-radius-xl) var(--fluent-radius-xl) 0 0;
+  transform: translateY(100%);
+}
+
+.fluent-drawer--bottom.fluent-drawer--open .fluent-drawer__panel {
+  transform: translateY(0);
+}
+
+/* --- Top drawer --- */
+.fluent-drawer--top .fluent-drawer__panel {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: auto;
+  max-height: 80vh;
+  border-radius: 0 0 var(--fluent-radius-xl) var(--fluent-radius-xl);
+  transform: translateY(-100%);
+}
+
+.fluent-drawer--top.fluent-drawer--open .fluent-drawer__panel {
+  transform: translateY(0);
+}
+
+/* --- Sizing modifiers --- */
+.fluent-drawer--narrow .fluent-drawer__panel { width: min(240px, 80vw) !important; }
+.fluent-drawer--wide   .fluent-drawer__panel { width: min(480px, 90vw) !important; }
+.fluent-drawer--bottom.fluent-drawer--narrow .fluent-drawer__panel,
+.fluent-drawer--top.fluent-drawer--narrow    .fluent-drawer__panel {
+  width: 100% !important;
+  max-height: 40vh;
+}
+.fluent-drawer--bottom.fluent-drawer--wide .fluent-drawer__panel,
+.fluent-drawer--top.fluent-drawer--wide    .fluent-drawer__panel {
+  width: 100% !important;
+  max-height: 90vh;
+}
+
+/* --- Header --- */
+.fluent-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+  border-bottom: var(--fluent-stroke);
+  flex-shrink: 0;
+}
+
+/* --- Body (scrollable) --- */
+.fluent-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--fluent-space-5);
+  overscroll-behavior: contain;
+}
+
+/* --- Footer (sticky action row) --- */
+.fluent-drawer__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--fluent-space-3);
+  padding: var(--fluent-space-3) var(--fluent-space-5);
+  border-top: var(--fluent-stroke);
+  flex-shrink: 0;
+}
+
+/* --- Reduce motion support --- */
+@media (prefers-reduced-motion: reduce) {
+  .fluent-drawer__overlay,
+  .fluent-drawer__panel {
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ============================================================
+   21. STATUS / ALERT BANNERS — Fluent notification strips
+   ============================================================
+
+   Usage:
+   <div class="fluent-alert fluent-alert--info">
+     <strong>Info:</strong> Your changes have been saved.
+   </div>
+   ============================================================ */
+.fluent-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fluent-space-3);
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-radius: var(--fluent-radius-md);
+  border-left: 4px solid;
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-line-height);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.fluent-alert--info {
+  background: var(--fluent-color-info-bg);
+  border-color: var(--fluent-color-info);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--success {
+  background: var(--fluent-color-success-bg);
+  border-color: var(--fluent-color-success);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--warning {
+  background: var(--fluent-color-warning-bg);
+  border-color: var(--fluent-color-warning);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--danger {
+  background: var(--fluent-color-danger-bg);
+  border-color: var(--fluent-color-danger);
+  color: var(--fluent-text);
+}
+
+/* ============================================================
+   22. BADGE / CHIP — inline status labels
+   ============================================================
+
+   Usage:
+   <span class="fluent-badge">Default</span>
+   <span class="fluent-badge fluent-badge--accent">New</span>
+   <span class="fluent-badge fluent-badge--success">Published</span>
+   <span class="fluent-badge fluent-badge--danger">Draft</span>
+   ============================================================ */
+.fluent-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--fluent-space-2);
+  border-radius: var(--fluent-radius-pill);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.4;
+  background: var(--fluent-neutral-16);
+  color: var(--fluent-text);
+  white-space: nowrap;
+}
+
+.fluent-badge--accent  { background: var(--fluent-accent-subtle); color: var(--fluent-accent); }
+.fluent-badge--success { background: var(--fluent-color-success-bg); color: var(--fluent-color-success); }
+.fluent-badge--warning { background: var(--fluent-color-warning-bg); color: var(--fluent-color-warning); }
+.fluent-badge--danger  { background: var(--fluent-color-danger-bg);  color: var(--fluent-color-danger); }
+
+/* ============================================================
+   23. CARD COMPONENT — standalone Fluent card
+   ============================================================
+
+   Usage:
+   <div class="fluent-card">
+     <div class="fluent-card__media">
+       <img src="…" alt="…">
+     </div>
+     <div class="fluent-card__body">
+       <span class="fluent-text--overline">Category</span>
+       <h3 class="fluent-text--subtitle">Card title</h3>
+       <p class="fluent-text--body">Description text.</p>
+     </div>
+     <div class="fluent-card__footer">
+       <button class="fluent-btn fluent-btn--primary fluent-btn--sm">Read more</button>
+     </div>
+   </div>
+   ============================================================ */
+.fluent-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-2);
+  overflow: hidden;
+  transition:
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition);
+}
+
+.fluent-card:hover {
+  box-shadow: var(--fluent-shadow-4);
+  transform: translateY(-2px);
+}
+
+.fluent-card__media img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.fluent-card__body {
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-2);
+}
+
+.fluent-card__footer {
+  padding: var(--fluent-space-3) var(--fluent-space-5);
+  border-top: var(--fluent-stroke);
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-3);
+}
+
+/* ============================================================
+   24. DIVIDER UTILITY
+   ============================================================ */
+.fluent-divider {
+  border: none;
+  border-top: var(--fluent-stroke);
+  margin: var(--fluent-space-4) 0;
+}
+
+.fluent-divider--strong {
+  border-top-color: rgba(0, 0, 0, 0.18);
+}
+
+html.darkmode .fluent-divider--strong {
+  border-top-color: rgba(255, 255, 255, 0.20);
+}
+
+/* ============================================================
+   25. SPACING UTILITY CLASSES
+   Fluent-aligned padding and margin helpers.
+   e.g. class="fluent-p-4 fluent-mt-2"
+   ============================================================ */
+.fluent-p-1  { padding: var(--fluent-space-1)  !important; }
+.fluent-p-2  { padding: var(--fluent-space-2)  !important; }
+.fluent-p-3  { padding: var(--fluent-space-3)  !important; }
+.fluent-p-4  { padding: var(--fluent-space-4)  !important; }
+.fluent-p-5  { padding: var(--fluent-space-5)  !important; }
+.fluent-p-6  { padding: var(--fluent-space-6)  !important; }
+.fluent-p-8  { padding: var(--fluent-space-8)  !important; }
+
+.fluent-px-1 { padding-inline: var(--fluent-space-1) !important; }
+.fluent-px-2 { padding-inline: var(--fluent-space-2) !important; }
+.fluent-px-3 { padding-inline: var(--fluent-space-3) !important; }
+.fluent-px-4 { padding-inline: var(--fluent-space-4) !important; }
+.fluent-px-5 { padding-inline: var(--fluent-space-5) !important; }
+.fluent-px-6 { padding-inline: var(--fluent-space-6) !important; }
+
+.fluent-py-1 { padding-block: var(--fluent-space-1) !important; }
+.fluent-py-2 { padding-block: var(--fluent-space-2) !important; }
+.fluent-py-3 { padding-block: var(--fluent-space-3) !important; }
+.fluent-py-4 { padding-block: var(--fluent-space-4) !important; }
+.fluent-py-5 { padding-block: var(--fluent-space-5) !important; }
+.fluent-py-6 { padding-block: var(--fluent-space-6) !important; }
+
+.fluent-mt-0 { margin-top: 0            !important; }
+.fluent-mt-1 { margin-top: var(--fluent-space-1)  !important; }
+.fluent-mt-2 { margin-top: var(--fluent-space-2)  !important; }
+.fluent-mt-3 { margin-top: var(--fluent-space-3)  !important; }
+.fluent-mt-4 { margin-top: var(--fluent-space-4)  !important; }
+.fluent-mt-6 { margin-top: var(--fluent-space-6)  !important; }
+.fluent-mt-8 { margin-top: var(--fluent-space-8)  !important; }
+
+.fluent-mb-0 { margin-bottom: 0            !important; }
+.fluent-mb-1 { margin-bottom: var(--fluent-space-1)  !important; }
+.fluent-mb-2 { margin-bottom: var(--fluent-space-2)  !important; }
+.fluent-mb-3 { margin-bottom: var(--fluent-space-3)  !important; }
+.fluent-mb-4 { margin-bottom: var(--fluent-space-4)  !important; }
+.fluent-mb-6 { margin-bottom: var(--fluent-space-6)  !important; }
+.fluent-mb-8 { margin-bottom: var(--fluent-space-8)  !important; }
