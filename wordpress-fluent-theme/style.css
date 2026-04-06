@@ -8,10 +8,187 @@
  * Author:       ecomter
  * Author URI:   https://github.com/ecomter
  * Template:     argon
- * Version:      0.1.0
+ * Version:      0.2.0
  * License:      GPL-2.0-or-later
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  wordpress-fluent-theme
+ */
+
+/*
+ * ================================================================
+ * QUICK-START USAGE EXAMPLES
+ * ================================================================
+ *
+ * ----------------------------------------------------------------
+ * BUTTONS
+ * ----------------------------------------------------------------
+ * <!-- Primary (accent fill) -->
+ * <button class="fluent-btn fluent-btn--primary">Save changes</button>
+ *
+ * <!-- Subtle (low-emphasis, tinted fill) -->
+ * <button class="fluent-btn fluent-btn--subtle">View details</button>
+ *
+ * <!-- Outline (ghost / secondary) -->
+ * <button class="fluent-btn fluent-btn--outline">Cancel</button>
+ *
+ * <!-- Danger (destructive action) -->
+ * <button class="fluent-btn fluent-btn--danger">Delete post</button>
+ *
+ * <!-- Success (confirmation) -->
+ * <button class="fluent-btn fluent-btn--success">Publish post</button>
+ *
+ * <!-- Compound (title + description line) -->
+ * <button class="fluent-btn fluent-btn--compound fluent-btn--primary">
+ *   <span class="fluent-btn__title">Open settings</span>
+ *   <span class="fluent-btn__desc">Manage your account</span>
+ * </button>
+ *
+ * <!-- Icon-only -->
+ * <button class="fluent-btn fluent-btn--icon" aria-label="Close">✕</button>
+ *
+ * <!-- Size modifiers (sm / lg) -->
+ * <button class="fluent-btn fluent-btn--primary fluent-btn--sm">Small</button>
+ * <button class="fluent-btn fluent-btn--primary fluent-btn--lg">Large</button>
+ *
+ * <!-- Fluent UI Web Component equivalents (CDN, no extra JS) -->
+ * <fluent-button appearance="accent">Primary</fluent-button>
+ * <fluent-button appearance="subtle">Subtle</fluent-button>
+ * <fluent-button appearance="outline">Outline</fluent-button>
+ * <fluent-button appearance="transparent">Transparent</fluent-button>
+ *
+ *
+ * ----------------------------------------------------------------
+ * TEXT STYLES (utility classes)
+ * ----------------------------------------------------------------
+ * <p   class="fluent-text--display">Hero display heading</p>
+ * <h1  class="fluent-text--title-lg">Large title</h1>
+ * <h2  class="fluent-text--title">Title</h2>
+ * <h3  class="fluent-text--subtitle">Subtitle</h3>
+ * <p   class="fluent-text--body-strong">Strong body text</p>
+ * <p   class="fluent-text--body">Regular body text</p>
+ * <p   class="fluent-text--body-sm">Small body text</p>
+ * <span class="fluent-text--caption">Caption / meta text</span>
+ * <span class="fluent-text--overline">OVERLINE LABEL</span>
+ * <!-- Color modifiers -->
+ * <p   class="fluent-text--secondary">Muted secondary text</p>
+ * <p   class="fluent-text--disabled">Disabled-state text</p>
+ * <p   class="fluent-text--accent">Accent-colored text</p>
+ * <p   class="fluent-text--danger">Error text</p>
+ *
+ *
+ * ----------------------------------------------------------------
+ * DRAWER — Approach A: <fluent-drawer> Web Component (recommended)
+ * ----------------------------------------------------------------
+ * Requires: functions.php enqueues the Fluent UI Web Components CDN
+ * bundle. This is the same component used in Microsoft 365 products.
+ * Spec: https://github.com/microsoft/fluentui/tree/master/packages/web-components/src/drawer
+ *
+ * Attributes:
+ *   type     = "modal" (default) | "non-modal" | "inline"
+ *   position = "start" (left, default) | "end" (right)
+ *   size     = "small" (320px) | "medium" (default, 592px) |
+ *              "large" (940px) | "full" (100%)
+ *   aria-labelledby, aria-describedby, aria-label
+ *
+ * JS API:  drawerEl.show()   — opens the drawer
+ *          drawerEl.hide()   — closes the drawer
+ * Events:  beforetoggle, toggle  (CustomEvent, same as <dialog>)
+ *
+ * <!-- Left-side modal drawer -->
+ * <fluent-button id="nav-trigger" appearance="accent">Open navigation</fluent-button>
+ *
+ * <fluent-drawer id="nav-drawer" type="modal" position="start" size="medium"
+ *                aria-labelledby="nav-title">
+ *   <drawer-body>
+ *     <h2 id="nav-title" slot="title">Navigation</h2>
+ *     <nav>
+ *       <ul>
+ *         <li><a href="/">Home</a></li>
+ *         <li><a href="/blog">Blog</a></li>
+ *       </ul>
+ *     </nav>
+ *     <div slot="footer">
+ *       <fluent-button appearance="outline" id="nav-close">Close</fluent-button>
+ *     </div>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ * <script>
+ *   const btn    = document.getElementById('nav-trigger');
+ *   const drawer = document.getElementById('nav-drawer');
+ *   const close  = document.getElementById('nav-close');
+ *   btn.addEventListener('click', () => drawer.show());
+ *   close.addEventListener('click', () => drawer.hide());
+ *   // Or use the helper from fluent-drawer.js:
+ *   btn.setAttribute('data-fluent-drawer-toggle', 'nav-drawer');
+ *   close.setAttribute('data-fluent-drawer-close', 'nav-drawer');
+ * </script>
+ *
+ * <!-- Right-side settings drawer -->
+ * <fluent-drawer id="settings-drawer" type="modal" position="end" size="medium"
+ *                aria-labelledby="settings-title">
+ *   <drawer-body>
+ *     <h2 id="settings-title" slot="title">Settings</h2>
+ *     <p>Settings content here.</p>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ * <!-- Non-modal (no backdrop, stays alongside content) -->
+ * <fluent-drawer id="sidebar-drawer" type="non-modal" position="start" size="small"
+ *                aria-label="Sidebar">
+ *   <drawer-body>
+ *     <h2 slot="title">Sidebar</h2>
+ *     <p>Always-visible content.</p>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ *
+ * ----------------------------------------------------------------
+ * DRAWER — Approach B: <dialog> native fallback (no CDN required)
+ * ----------------------------------------------------------------
+ * Use when the Fluent WC CDN is unavailable or you want full control
+ * over the markup. fluent-drawer.js handles showModal() / close().
+ *
+ * data-fluent-drawer-toggle="id"  → open/toggle trigger
+ * data-fluent-drawer-close="id"   → close-only trigger
+ * Programmatic: FluentDrawer.show('id') / .hide('id') / .toggle('id')
+ *
+ * <!-- Trigger -->
+ * <button class="fluent-btn fluent-btn--primary"
+ *         data-fluent-drawer-toggle="nav-dialog">Open navigation</button>
+ *
+ * <!-- Left-side modal drawer (position="start", default) -->
+ * <dialog class="fluent-drawer-dialog" id="nav-dialog"
+ *         data-position="start" data-size="medium">
+ *   <div class="fluent-drawer-body">
+ *     <div class="fluent-drawer-body__header">
+ *       <h2 class="fluent-text--subtitle" id="nav-dialog-title">Navigation</h2>
+ *       <button class="fluent-btn fluent-btn--icon"
+ *               data-fluent-drawer-close="nav-dialog" aria-label="Close">✕</button>
+ *     </div>
+ *     <div class="fluent-drawer-body__content">
+ *       <p>Drawer content here.</p>
+ *     </div>
+ *     <div class="fluent-drawer-body__footer">
+ *       <button class="fluent-btn fluent-btn--outline"
+ *               data-fluent-drawer-close="nav-dialog">Close</button>
+ *     </div>
+ *   </div>
+ * </dialog>
+ *
+ * <!-- Right-side drawer (position="end") -->
+ * <dialog class="fluent-drawer-dialog" id="settings-dialog"
+ *         data-position="end" data-size="medium">
+ *   <div class="fluent-drawer-body">
+ *     <div class="fluent-drawer-body__header">
+ *       <h2 class="fluent-text--subtitle">Settings</h2>
+ *       <button class="fluent-btn fluent-btn--icon"
+ *               data-fluent-drawer-close="settings-dialog" aria-label="Close">✕</button>
+ *     </div>
+ *     <div class="fluent-drawer-body__content">...</div>
+ *   </div>
+ * </dialog>
+ * ================================================================
  */
 
 /* ============================================================
@@ -22,91 +199,252 @@
 :root {
   /* --- Typography --- */
   --fluent-font: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
-  --fluent-font-size-base:   16px;
-  --fluent-font-size-sm:     13px;
-  --fluent-font-size-lg:     20px;
-  --fluent-font-size-xl:     28px;
-  --fluent-line-height:      1.6;
-  --fluent-font-weight-base: 400;
-  --fluent-font-weight-semi: 600;
-  --fluent-font-weight-bold: 700;
+  --fluent-font-mono: "Cascadia Code", "Cascadia Mono", "Consolas", monospace;
 
-  /* --- Accent / Brand --- */
-  --fluent-accent:           #0f6cbd;   /* Fluent "Communication Blue" */
-  --fluent-accent-hover:     #115ea3;
-  --fluent-accent-active:    #0e4f8a;
-  --fluent-accent-subtle:    #eff6fc;   /* tint for tags, badges */
+  /* Font size scale (Fluent type ramp) */
+  --fluent-font-size-caption:  12px;
+  --fluent-font-size-sm:       13px;
+  --fluent-font-size-body:     14px;
+  --fluent-font-size-base:     16px;
+  --fluent-font-size-lg:       18px;   /* lead paragraph, large body */
+  --fluent-font-size-subtitle: 20px;
+  --fluent-font-size-title:    24px;
+  --fluent-font-size-title-lg: 28px;
+  --fluent-font-size-xl:       32px;
+  --fluent-font-size-display:  40px;
+
+  /* Line heights */
+  --fluent-line-height:         1.6;
+  --fluent-line-height-tight:   1.25;
+  --fluent-line-height-heading: 1.3;
+
+  /* Font weights */
+  --fluent-font-weight-base:    400;
+  --fluent-font-weight-medium:  500;
+  --fluent-font-weight-semi:    600;
+  --fluent-font-weight-bold:    700;
+
+  /* Letter spacing */
+  --fluent-tracking-tight:   -0.01em;
+  --fluent-tracking-normal:   0em;
+  --fluent-tracking-wide:     0.05em;
+  --fluent-tracking-wider:    0.10em;
+
+  /* --- Accent / Brand colors --- */
+  --fluent-accent:             #0f6cbd;   /* Fluent "Communication Blue" */
+  --fluent-accent-hover:       #115ea3;
+  --fluent-accent-active:      #0e4f8a;
+  --fluent-accent-subtle:      #eff6fc;   /* tint for tags, badges */
+  --fluent-accent-subtle-hover:#dce9f8;
+
+  /* Semantic status colors */
+  --fluent-color-success:      #107c10;
+  --fluent-color-success-bg:   #dff6dd;
+  --fluent-color-warning:      #f7630c;
+  --fluent-color-warning-bg:   #fff4ce;
+  --fluent-color-danger:       #c50f1f;
+  --fluent-color-danger-bg:    #fde7e9;
+  --fluent-color-danger-hover: #a80000;
+  --fluent-color-info:         #0f6cbd;
+  --fluent-color-info-bg:      #eff6fc;
+
+  /* Neutral palette */
+  --fluent-neutral-4:          #f8f8f8;
+  --fluent-neutral-8:          #f0f0f0;
+  --fluent-neutral-16:         #e0e0e0;
+  --fluent-neutral-32:         #c4c4c4;
+  --fluent-neutral-64:         #888888;
+  --fluent-neutral-96:         #1c1c1c;
 
   /* --- Surface / Background --- */
   --fluent-bg:               #f3f3f3;   /* page background */
   --fluent-surface:          #ffffff;   /* card / panel surface */
   --fluent-surface-alt:      #fafafa;   /* alternate surface (e.g. table rows) */
+  --fluent-surface-raised:   #ffffff;   /* elevated surface */
   --fluent-overlay:          rgba(255, 255, 255, 0.85);
+  --fluent-scrim:            rgba(0, 0, 0, 0.40);  /* drawer backdrop */
 
   /* --- Text --- */
   --fluent-text:             #1b1a19;   /* primary text */
   --fluent-text-secondary:   #605e5c;   /* meta, captions */
+  --fluent-text-tertiary:    #8a8886;   /* placeholders */
   --fluent-text-disabled:    #a19f9d;
+  --fluent-text-on-accent:   #ffffff;   /* text on filled accent bg */
 
   /* --- Stroke / Border --- */
   --fluent-stroke:           1px solid rgba(0, 0, 0, 0.08);
   --fluent-stroke-strong:    1px solid rgba(0, 0, 0, 0.18);
+  --fluent-stroke-focus:     2px solid var(--fluent-accent);
 
   /* --- Corner Radius --- */
+  --fluent-radius-xs:        2px;
   --fluent-radius-sm:        4px;
   --fluent-radius-md:        8px;
   --fluent-radius-lg:        12px;
+  --fluent-radius-xl:        16px;
+  --fluent-radius-2xl:       20px;
   --fluent-radius-pill:      9999px;
 
   /* --- Elevation Shadows --- */
-  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.05);
-  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.07);
-  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.10), 0 16px 36px rgba(0, 0, 0, 0.09);
+  --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.05);
+  --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.07);
+  --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.10), 0 16px 36px rgba(0, 0, 0, 0.09);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.14), 0 32px 56px rgba(0, 0, 0, 0.12);
+  /* Legacy aliases (keep backward compat) */
+  --fluent-shadow-1: var(--fluent-shadow-2);
 
   /* --- Spacing scale (base 4 px grid) --- */
-  --fluent-space-1: 4px;
-  --fluent-space-2: 8px;
-  --fluent-space-3: 12px;
-  --fluent-space-4: 16px;
-  --fluent-space-5: 20px;
-  --fluent-space-6: 24px;
-  --fluent-space-8: 32px;
+  --fluent-space-px: 1px;
+  --fluent-space-1:  4px;
+  --fluent-space-2:  8px;
+  --fluent-space-3:  12px;
+  --fluent-space-4:  16px;
+  --fluent-space-5:  20px;
+  --fluent-space-6:  24px;
+  --fluent-space-7:  28px;
+  --fluent-space-8:  32px;
   --fluent-space-10: 40px;
+  --fluent-space-12: 48px;
+  --fluent-space-16: 64px;
 
-  /* --- Transition --- */
-  --fluent-transition: 120ms cubic-bezier(0.33, 1, 0.68, 1);
+  /* --- Sizing --- */
+  --fluent-size-icon-sm:   16px;
+  --fluent-size-icon-md:   20px;
+  --fluent-size-icon-lg:   24px;
+  --fluent-btn-height-sm:  28px;
+  --fluent-btn-height-md:  32px;
+  --fluent-btn-height-lg:  40px;
+
+  /* --- Z-index scale --- */
+  --fluent-z-base:    0;
+  --fluent-z-raised:  10;
+  --fluent-z-sticky:  100;
+  --fluent-z-overlay: 200;
+  --fluent-z-drawer:  300;
+  --fluent-z-modal:   400;
+  --fluent-z-tooltip: 500;
+
+  /* --- Transitions --- */
+  --fluent-transition:        120ms cubic-bezier(0.33, 1, 0.68, 1);
+  --fluent-transition-slow:   240ms cubic-bezier(0.33, 1, 0.68, 1);
+  --fluent-transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --fluent-drawer-transition: 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
    2. DARK MODE TOKENS
    Argon uses the "darkmode" class on <html> for its dark theme.
    We mirror the same selector so tokens update automatically.
+   Also supports prefers-color-scheme for users without Argon's
+   toggle when the body has no explicit darkmode class.
    ============================================================ */
+html.darkmode,
+@media (prefers-color-scheme: dark) {
+  html:not(.lightmode) {
+    --fluent-bg:               #1f1f1f;
+    --fluent-surface:          #2b2b2b;
+    --fluent-surface-alt:      #323232;
+    --fluent-surface-raised:   #363636;
+    --fluent-overlay:          rgba(43, 43, 43, 0.90);
+    --fluent-scrim:            rgba(0, 0, 0, 0.60);
+
+    --fluent-text:             #f3f2f1;
+    --fluent-text-secondary:   #c8c6c4;
+    --fluent-text-tertiary:    #a09e9c;
+    --fluent-text-disabled:    #7a7878;
+    --fluent-text-on-accent:   #ffffff;
+
+    --fluent-stroke:           1px solid rgba(255, 255, 255, 0.10);
+    --fluent-stroke-strong:    1px solid rgba(255, 255, 255, 0.20);
+
+    --fluent-accent:           #479ef5;
+    --fluent-accent-hover:     #62abf5;
+    --fluent-accent-active:    #2886de;
+    --fluent-accent-subtle:    #1a3a5c;
+    --fluent-accent-subtle-hover: #1e4570;
+
+    --fluent-color-success:      #54b054;
+    --fluent-color-success-bg:   #1a3a1a;
+    --fluent-color-warning:      #f7890c;
+    --fluent-color-warning-bg:   #3a2e10;
+    --fluent-color-danger:       #e84747;
+    --fluent-color-danger-bg:    #3a1515;
+    --fluent-color-danger-hover: #f55a5a;
+    --fluent-color-info:         #479ef5;
+    --fluent-color-info-bg:      #1a3a5c;
+
+    --fluent-neutral-4:          #262626;
+    --fluent-neutral-8:          #303030;
+    --fluent-neutral-16:         #404040;
+    --fluent-neutral-32:         #585858;
+    --fluent-neutral-64:         #8a8a8a;
+    --fluent-neutral-96:         #f0f0f0;
+
+    --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
+    --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
+    --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+    --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 32px 56px rgba(0, 0, 0, 0.45);
+    --fluent-shadow-1:  var(--fluent-shadow-2);
+  }
+}
+
+/* Explicit class override (always wins regardless of OS preference) */
 html.darkmode {
-  --fluent-bg:             #1f1f1f;
-  --fluent-surface:        #2b2b2b;
-  --fluent-surface-alt:    #323232;
-  --fluent-overlay:        rgba(43, 43, 43, 0.90);
+  --fluent-bg:               #1f1f1f;
+  --fluent-surface:          #2b2b2b;
+  --fluent-surface-alt:      #323232;
+  --fluent-surface-raised:   #363636;
+  --fluent-overlay:          rgba(43, 43, 43, 0.90);
+  --fluent-scrim:            rgba(0, 0, 0, 0.60);
 
-  --fluent-text:           #f3f2f1;
-  --fluent-text-secondary: #c8c6c4;
-  --fluent-text-disabled:  #7a7878;
+  --fluent-text:             #f3f2f1;
+  --fluent-text-secondary:   #c8c6c4;
+  --fluent-text-tertiary:    #a09e9c;
+  --fluent-text-disabled:    #7a7878;
+  --fluent-text-on-accent:   #ffffff;
 
-  --fluent-stroke:         1px solid rgba(255, 255, 255, 0.10);
-  --fluent-stroke-strong:  1px solid rgba(255, 255, 255, 0.20);
+  --fluent-stroke:           1px solid rgba(255, 255, 255, 0.10);
+  --fluent-stroke-strong:    1px solid rgba(255, 255, 255, 0.20);
 
-  --fluent-accent:         #479ef5;    /* lighter blue looks better on dark */
-  --fluent-accent-hover:   #62abf5;
-  --fluent-accent-subtle:  #1a3a5c;
+  --fluent-accent:           #479ef5;
+  --fluent-accent-hover:     #62abf5;
+  --fluent-accent-active:    #2886de;
+  --fluent-accent-subtle:    #1a3a5c;
+  --fluent-accent-subtle-hover: #1e4570;
 
-  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
-  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
-  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+  --fluent-color-success:      #54b054;
+  --fluent-color-success-bg:   #1a3a1a;
+  --fluent-color-warning:      #f7890c;
+  --fluent-color-warning-bg:   #3a2e10;
+  --fluent-color-danger:       #e84747;
+  --fluent-color-danger-bg:    #3a1515;
+  --fluent-color-danger-hover: #f55a5a;
+  --fluent-color-info:         #479ef5;
+  --fluent-color-info-bg:      #1a3a5c;
+
+  --fluent-neutral-4:          #262626;
+  --fluent-neutral-8:          #303030;
+  --fluent-neutral-16:         #404040;
+  --fluent-neutral-32:         #585858;
+  --fluent-neutral-64:         #8a8a8a;
+  --fluent-neutral-96:         #f0f0f0;
+
+  --fluent-shadow-2:  0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
+  --fluent-shadow-4:  0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
+  --fluent-shadow-8:  0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 32px 56px rgba(0, 0, 0, 0.45);
+  --fluent-shadow-1:  var(--fluent-shadow-2);
 }
 
 /* ============================================================
    3. BASE / RESET
    ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--fluent-font) !important;
   font-size: var(--fluent-font-size-base);
@@ -115,6 +453,12 @@ body {
   color: var(--fluent-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ============================================================
@@ -140,15 +484,128 @@ a:focus {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--fluent-font);
   font-weight: var(--fluent-font-weight-semi);
-  line-height: 1.3;
+  line-height: var(--fluent-line-height-heading);
   color: var(--fluent-text);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--fluent-tracking-tight);
+  margin-top: 0;
 }
 
 h1 { font-size: var(--fluent-font-size-xl); }
-h2 { font-size: 22px; }
-h3 { font-size: 18px; }
+h2 { font-size: var(--fluent-font-size-title); }
+h3 { font-size: var(--fluent-font-size-subtitle); }
 h4 { font-size: var(--fluent-font-size-base); font-weight: var(--fluent-font-weight-bold); }
+h5 { font-size: var(--fluent-font-size-body); font-weight: var(--fluent-font-weight-bold); }
+h6 { font-size: var(--fluent-font-size-sm); font-weight: var(--fluent-font-weight-bold); }
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--fluent-space-4);
+  color: var(--fluent-text);
+  line-height: var(--fluent-line-height);
+}
+
+/* ============================================================
+   5a. FLUENT TEXT UTILITY CLASSES
+   Use these anywhere to apply Fluent type ramp styles without
+   relying on the HTML element. Mix with color utilities below.
+
+   Usage: <p class="fluent-text--display">Hero heading</p>
+   ============================================================ */
+
+/* Display — hero / marketing headers */
+.fluent-text--display {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-display);
+  font-weight: var(--fluent-font-weight-bold);
+  line-height: var(--fluent-line-height-tight);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Large title — page headings */
+.fluent-text--title-lg {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-title-lg);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Title — section headings */
+.fluent-text--title {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-title);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  letter-spacing: var(--fluent-tracking-tight);
+  color: var(--fluent-text);
+}
+
+/* Subtitle — card / widget titles */
+.fluent-text--subtitle {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  color: var(--fluent-text);
+}
+
+/* Body strong — emphasized body copy */
+.fluent-text--body-strong {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Body — default reading text */
+.fluent-text--body {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Body small — compact lists, helper text */
+.fluent-text--body-sm {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-body);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.5;
+  color: var(--fluent-text);
+}
+
+/* Caption — dates, bylines, labels */
+.fluent-text--caption {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.5;
+  color: var(--fluent-text-secondary);
+}
+
+/* Overline — section labels above headings */
+.fluent-text--overline {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.5;
+  letter-spacing: var(--fluent-tracking-wider);
+  text-transform: uppercase;
+  color: var(--fluent-text-secondary);
+}
+
+/* Color modifier utilities */
+.fluent-text--secondary  { color: var(--fluent-text-secondary) !important; }
+.fluent-text--tertiary   { color: var(--fluent-text-tertiary)  !important; }
+.fluent-text--disabled   { color: var(--fluent-text-disabled)  !important; }
+.fluent-text--accent     { color: var(--fluent-accent)         !important; }
+.fluent-text--success    { color: var(--fluent-color-success)  !important; }
+.fluent-text--warning    { color: var(--fluent-color-warning)  !important; }
+.fluent-text--danger     { color: var(--fluent-color-danger)   !important; }
 
 /* ============================================================
    6. CARD / SURFACE ELEMENTS
@@ -244,49 +701,112 @@ h1.entry-title {
 }
 
 /* ============================================================
-   8. BUTTONS
+   8. BUTTONS — Fluent Design button system
+   ============================================================
+
+   Base class: .fluent-btn
+   Variants:   --primary   (accent fill — default CTA)
+               --subtle    (low emphasis, tinted fill)
+               --outline   (ghost / secondary)
+               --transparent (no bg, no border)
+               --danger    (destructive action)
+               --success   (confirmation action)
+   Modifiers:  --sm / --lg (size)
+               --icon      (square icon-only button)
+               --compound  (title + description layout)
+               --disabled  (or use the [disabled] attr)
+
+   Also patches WP / Argon native classes for drop-in compat.
    ============================================================ */
+
+/* --- Base token layer (all buttons inherit these) --- */
+.fluent-btn,
 button,
 .btn,
 input[type="submit"],
 input[type="button"],
 input[type="reset"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fluent-space-2);
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-5);
   font-family: var(--fluent-font);
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-semi);
+  line-height: 1;
+  white-space: nowrap;
   border-radius: var(--fluent-radius-md);
   border: var(--fluent-stroke-strong);
-  padding: var(--fluent-space-2) var(--fluent-space-5);
   cursor: pointer;
-  transition: background var(--fluent-transition),
-              border-color var(--fluent-transition),
-              box-shadow var(--fluent-transition);
+  text-decoration: none;
+  vertical-align: middle;
+  transition:
+    background var(--fluent-transition),
+    border-color var(--fluent-transition),
+    color var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition);
+  /* Default appearance: transparent with border */
+  background: transparent;
+  color: var(--fluent-text);
 }
 
-/* Primary (accent) button */
+.fluent-btn:focus-visible,
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible {
+  outline: var(--fluent-stroke-focus);
+  outline-offset: 2px;
+}
+
+/* --- Primary (accent fill) --- */
+.fluent-btn--primary,
 .btn-primary,
 input[type="submit"] {
   background: var(--fluent-accent) !important;
   border-color: var(--fluent-accent) !important;
-  color: #ffffff !important;
-  box-shadow: var(--fluent-shadow-1);
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: var(--fluent-shadow-2);
 }
 
+.fluent-btn--primary:hover,
 .btn-primary:hover,
 input[type="submit"]:hover {
   background: var(--fluent-accent-hover) !important;
   border-color: var(--fluent-accent-hover) !important;
-  box-shadow: var(--fluent-shadow-2);
+  box-shadow: var(--fluent-shadow-4);
 }
 
+.fluent-btn--primary:active,
 .btn-primary:active,
 input[type="submit"]:active {
   background: var(--fluent-accent-active) !important;
   border-color: var(--fluent-accent-active) !important;
   transform: scale(0.98);
+  box-shadow: none;
 }
 
-/* Secondary (ghost) button */
+/* --- Subtle (low-emphasis tinted fill) --- */
+.fluent-btn--subtle {
+  background: var(--fluent-accent-subtle) !important;
+  border-color: transparent !important;
+  color: var(--fluent-accent) !important;
+}
+
+.fluent-btn--subtle:hover {
+  background: var(--fluent-accent-subtle-hover) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.fluent-btn--subtle:active {
+  background: var(--fluent-accent-subtle) !important;
+  transform: scale(0.98);
+}
+
+/* --- Outline (ghost / secondary) --- */
+.fluent-btn--outline,
 .btn-secondary,
 .btn-outline {
   background: transparent !important;
@@ -294,14 +814,158 @@ input[type="submit"]:active {
   color: var(--fluent-text) !important;
 }
 
+.fluent-btn--outline:hover,
 .btn-secondary:hover,
 .btn-outline:hover {
   background: rgba(0, 0, 0, 0.04) !important;
+  box-shadow: var(--fluent-shadow-2);
 }
 
+html.darkmode .fluent-btn--outline:hover,
 html.darkmode .btn-secondary:hover,
 html.darkmode .btn-outline:hover {
   background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.fluent-btn--outline:active,
+.btn-secondary:active {
+  background: rgba(0, 0, 0, 0.07) !important;
+  transform: scale(0.98);
+}
+
+/* --- Transparent (no background, no border — for in-content use) --- */
+.fluent-btn--transparent {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--fluent-text) !important;
+}
+
+.fluent-btn--transparent:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.darkmode .fluent-btn--transparent:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* --- Danger (destructive) --- */
+.fluent-btn--danger {
+  background: var(--fluent-color-danger-bg) !important;
+  border-color: var(--fluent-color-danger) !important;
+  color: var(--fluent-color-danger) !important;
+}
+
+.fluent-btn--danger:hover {
+  background: var(--fluent-color-danger) !important;
+  border-color: var(--fluent-color-danger) !important;
+  color: #ffffff !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.fluent-btn--danger:active {
+  background: var(--fluent-color-danger-hover) !important;
+  border-color: var(--fluent-color-danger-hover) !important;
+  color: #ffffff !important;
+  transform: scale(0.98);
+}
+
+/* --- Success (confirmation) --- */
+.fluent-btn--success {
+  background: var(--fluent-color-success-bg) !important;
+  border-color: var(--fluent-color-success) !important;
+  color: var(--fluent-color-success) !important;
+}
+
+.fluent-btn--success:hover {
+  background: var(--fluent-color-success) !important;
+  border-color: var(--fluent-color-success) !important;
+  color: #ffffff !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* --- Size modifiers --- */
+.fluent-btn--sm {
+  height: var(--fluent-btn-height-sm) !important;
+  padding: 0 var(--fluent-space-3) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  border-radius: var(--fluent-radius-sm) !important;
+}
+
+.fluent-btn--lg {
+  height: var(--fluent-btn-height-lg) !important;
+  padding: 0 var(--fluent-space-6) !important;
+  font-size: var(--fluent-font-size-subtitle) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+}
+
+/* --- Icon-only (square, no text) --- */
+.fluent-btn--icon {
+  width: var(--fluent-btn-height-md);
+  height: var(--fluent-btn-height-md);
+  padding: 0 !important;
+  border-radius: var(--fluent-radius-sm);
+  font-size: var(--fluent-size-icon-md);
+  line-height: 1;
+}
+
+.fluent-btn--icon.fluent-btn--sm {
+  width: var(--fluent-btn-height-sm);
+  height: var(--fluent-btn-height-sm);
+  font-size: var(--fluent-size-icon-sm);
+}
+
+.fluent-btn--icon.fluent-btn--lg {
+  width: var(--fluent-btn-height-lg);
+  height: var(--fluent-btn-height-lg);
+  font-size: var(--fluent-size-icon-lg);
+}
+
+/* --- Compound (title + one-line description) ---
+   Usage:
+   <button class="fluent-btn fluent-btn--compound fluent-btn--primary">
+     <span class="fluent-btn__title">Go to settings</span>
+     <span class="fluent-btn__desc">Manage your profile</span>
+   </button>
+--- */
+.fluent-btn--compound {
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  padding: var(--fluent-space-3) var(--fluent-space-5);
+  min-width: 180px;
+  gap: 2px;
+}
+
+.fluent-btn__title {
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.25;
+}
+
+.fluent-btn__desc {
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-base);
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+/* --- Disabled state --- */
+.fluent-btn:disabled,
+.fluent-btn[disabled],
+.fluent-btn--disabled,
+button:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* --- Pill button convenience modifier --- */
+.fluent-btn--pill {
+  border-radius: var(--fluent-radius-pill) !important;
 }
 
 /* ============================================================
@@ -548,4 +1212,3559 @@ html.darkmode ::-webkit-scrollbar-thumb {
   outline: 2px solid var(--fluent-accent);
   outline-offset: 2px;
   border-radius: var(--fluent-radius-sm);
+}
+
+/* ============================================================
+   20. DRAWER — Fluent Design System slide-out panel
+   ============================================================
+
+   TWO APPROACHES — both supported by this theme:
+
+   ── Approach A: <fluent-drawer> Web Component ───────────────
+   The official Fluent UI v3 web component, loaded via CDN in
+   functions.php. Uses a native <dialog> internally and exposes
+   .show() / .hide() methods plus beforetoggle / toggle events.
+
+   Spec: https://github.com/microsoft/fluentui/tree/master/
+         packages/web-components/src/drawer
+
+   Attributes:
+     type     = "modal" (default) | "non-modal" | "inline"
+     position = "start" (left, LTR default) | "end" (right)
+     size     = "small" | "medium" (default) | "large" | "full"
+
+   CSS variable:
+     --drawer-width  — override panel width (default 592px / medium)
+
+   Sub-component:
+     <drawer-body>  — grid layout: title slot, content, footer slot
+
+   fluent-drawer.js adds data-attribute trigger support:
+     data-fluent-drawer-toggle="id"
+     data-fluent-drawer-close="id"
+
+   ── Approach B: <dialog class="fluent-drawer-dialog"> ───────
+   Native HTML fallback — no CDN dependency. Style and structure
+   exactly mirrors Approach A. Controlled by fluent-drawer.js
+   which calls showModal() / show() / close() on the <dialog>.
+
+   Attributes (data-* on <dialog>):
+     data-position = "start" (default) | "end"
+     data-size     = "small" | "medium" (default) | "large" | "full"
+
+   Inner markup mirrors <drawer-body>:
+     .fluent-drawer-body                 — grid wrapper
+       .fluent-drawer-body__header       — title row
+       .fluent-drawer-body__content      — scrollable area
+       .fluent-drawer-body__footer       — action row
+   ============================================================ */
+
+/* ─── A.1 <fluent-drawer> web component: CSS variable theme ─── */
+
+/* Map our design tokens into the component's custom properties  */
+fluent-drawer {
+  --drawer-width:     592px;     /* medium (default) */
+  --drawer-elevation: var(--fluent-z-drawer);
+}
+
+fluent-drawer[size="small"] { --drawer-width: 320px; }
+fluent-drawer[size="large"] { --drawer-width: 940px; }
+fluent-drawer[size="full"]  { --drawer-width: 100%;  }
+
+/* The component exposes ::part(dialog) for direct styling       */
+fluent-drawer::part(dialog) {
+  font-family:    var(--fluent-font);
+  font-size:      var(--fluent-font-size-base);
+  color:          var(--fluent-text);
+  background:     var(--fluent-surface);
+  border-inline-end: var(--fluent-stroke);
+}
+
+fluent-drawer[position="end"]::part(dialog) {
+  border-inline-end:   none;
+  border-inline-start: var(--fluent-stroke);
+}
+
+/* ─── A.2 <drawer-body> sub-component ──────────────────────── */
+
+drawer-body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--fluent-space-6);
+  font-family: var(--fluent-font);
+  color: var(--fluent-text);
+  background: var(--fluent-surface);
+  max-height: 100svh;
+}
+
+/* Title slot (rendered by the browser as [slot="title"] child)  */
+drawer-body .header,
+drawer-body [slot="title"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size:   var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  padding: 0;
+  margin: 0 0 var(--fluent-space-4) 0;
+}
+
+/* Footer slot */
+drawer-body .footer,
+drawer-body [slot="footer"] {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--fluent-space-3);
+  padding-top: var(--fluent-space-4);
+}
+
+/* ─── B. <dialog class="fluent-drawer-dialog"> fallback ─────── */
+
+/* Reset browser default dialog positioning/border               */
+dialog.fluent-drawer-dialog {
+  --drawer-width: 592px;        /* medium — override with data-size */
+
+  display: flex;                /* shown via JS showModal() / show() */
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: var(--drawer-width);
+  max-width: min(var(--drawer-width), 100vw);
+  height: 100%;
+  max-height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: var(--fluent-surface);
+  color: var(--fluent-text);
+  font-family: var(--fluent-font);
+  box-shadow: var(--fluent-shadow-16);
+  overflow: hidden;
+  /* start (left) — default */
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  inset-block: 0;
+  border-inline-end: var(--fluent-stroke);
+  /* Smooth open via @starting-style where supported */
+  transition:
+    transform var(--fluent-drawer-transition),
+    opacity   var(--fluent-drawer-transition),
+    display   var(--fluent-drawer-transition) allow-discrete,
+    overlay   var(--fluent-drawer-transition) allow-discrete;
+}
+
+/* ── Size variants (via data-size attribute) ── */
+dialog.fluent-drawer-dialog[data-size="small"] { --drawer-width: 320px; }
+dialog.fluent-drawer-dialog[data-size="large"] { --drawer-width: 940px; }
+dialog.fluent-drawer-dialog[data-size="full"]  { --drawer-width: 100vw; }
+
+/* ── Position: end (right / inline-end) ── */
+dialog.fluent-drawer-dialog[data-position="end"] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  border-inline-end:   none;
+  border-inline-start: var(--fluent-stroke);
+}
+
+/* ── Backdrop (native <dialog> ::backdrop pseudo-element) ── */
+dialog.fluent-drawer-dialog::backdrop {
+  background: var(--fluent-scrim);
+  opacity: 0;
+  transition:
+    opacity  var(--fluent-drawer-transition),
+    display  var(--fluent-drawer-transition) allow-discrete,
+    overlay  var(--fluent-drawer-transition) allow-discrete;
+}
+
+/* ── Animations (modern browsers supporting @starting-style) ── */
+@layer fluent-drawer-animations {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* Entering: start/left — slide in from left */
+    dialog.fluent-drawer-dialog:not([data-position="end"]) {
+      transform: translateX(0);
+    }
+    /* Entering: end/right — slide in from right */
+    dialog.fluent-drawer-dialog[data-position="end"] {
+      transform: translateX(0);
+    }
+
+    /* Exiting (not open):  browsers that do NOT support @starting-style
+       fall through to a simple instant hide (no transform set).
+       Browsers with @starting-style get smooth slides. */
+    @starting-style {
+      dialog.fluent-drawer-dialog:not([data-position="end"])[open] {
+        transform: translateX(-100%);
+      }
+      dialog.fluent-drawer-dialog[data-position="end"][open] {
+        transform: translateX(100%);
+      }
+      dialog.fluent-drawer-dialog[open]::backdrop {
+        opacity: 0;
+      }
+    }
+
+    /* Fade in backdrop when open */
+    dialog.fluent-drawer-dialog[open]::backdrop {
+      opacity: 1;
+    }
+  }
+}
+
+/* ── .fluent-drawer-body (inner layout, mirrors <drawer-body>) ── */
+.fluent-drawer-body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--fluent-space-6);
+  box-sizing: border-box;
+  max-height: 100svh;
+}
+
+.fluent-drawer-body__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--fluent-space-3);
+  padding-bottom: var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke);
+  margin-bottom: var(--fluent-space-4);
+  font-size:   var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+}
+
+.fluent-drawer-body__content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-block: var(--fluent-space-1);
+}
+
+.fluent-drawer-body__footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--fluent-space-3);
+  padding-top: var(--fluent-space-4);
+  border-top: var(--fluent-stroke);
+  margin-top: var(--fluent-space-4);
+}
+
+/* ── Reduce motion: instant show/hide, no transforms ── */
+@media (prefers-reduced-motion: reduce) {
+  dialog.fluent-drawer-dialog,
+  dialog.fluent-drawer-dialog::backdrop {
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ============================================================
+   21. STATUS / ALERT BANNERS — Fluent notification strips
+   ============================================================
+
+   Usage:
+   <div class="fluent-alert fluent-alert--info">
+     <strong>Info:</strong> Your changes have been saved.
+   </div>
+   ============================================================ */
+.fluent-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fluent-space-3);
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-radius: var(--fluent-radius-md);
+  border-left: 4px solid;
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-line-height);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.fluent-alert--info {
+  background: var(--fluent-color-info-bg);
+  border-color: var(--fluent-color-info);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--success {
+  background: var(--fluent-color-success-bg);
+  border-color: var(--fluent-color-success);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--warning {
+  background: var(--fluent-color-warning-bg);
+  border-color: var(--fluent-color-warning);
+  color: var(--fluent-text);
+}
+
+.fluent-alert--danger {
+  background: var(--fluent-color-danger-bg);
+  border-color: var(--fluent-color-danger);
+  color: var(--fluent-text);
+}
+
+/* ============================================================
+   22. BADGE / CHIP — inline status labels
+   ============================================================
+
+   Usage:
+   <span class="fluent-badge">Default</span>
+   <span class="fluent-badge fluent-badge--accent">New</span>
+   <span class="fluent-badge fluent-badge--success">Published</span>
+   <span class="fluent-badge fluent-badge--danger">Draft</span>
+   ============================================================ */
+.fluent-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--fluent-space-2);
+  border-radius: var(--fluent-radius-pill);
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.4;
+  background: var(--fluent-neutral-16);
+  color: var(--fluent-text);
+  white-space: nowrap;
+}
+
+.fluent-badge--accent  { background: var(--fluent-accent-subtle); color: var(--fluent-accent); }
+.fluent-badge--success { background: var(--fluent-color-success-bg); color: var(--fluent-color-success); }
+.fluent-badge--warning { background: var(--fluent-color-warning-bg); color: var(--fluent-color-warning); }
+.fluent-badge--danger  { background: var(--fluent-color-danger-bg);  color: var(--fluent-color-danger); }
+
+/* ============================================================
+   23. CARD COMPONENT — standalone Fluent card
+   ============================================================
+
+   Usage:
+   <div class="fluent-card">
+     <div class="fluent-card__media">
+       <img src="…" alt="…">
+     </div>
+     <div class="fluent-card__body">
+       <span class="fluent-text--overline">Category</span>
+       <h3 class="fluent-text--subtitle">Card title</h3>
+       <p class="fluent-text--body">Description text.</p>
+     </div>
+     <div class="fluent-card__footer">
+       <button class="fluent-btn fluent-btn--primary fluent-btn--sm">Read more</button>
+     </div>
+   </div>
+   ============================================================ */
+.fluent-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-2);
+  overflow: hidden;
+  transition:
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition);
+}
+
+.fluent-card:hover {
+  box-shadow: var(--fluent-shadow-4);
+  transform: translateY(-2px);
+}
+
+.fluent-card__media img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.fluent-card__body {
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-2);
+}
+
+.fluent-card__footer {
+  padding: var(--fluent-space-3) var(--fluent-space-5);
+  border-top: var(--fluent-stroke);
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-3);
+}
+
+/* ============================================================
+   24. DIVIDER UTILITY
+   ============================================================ */
+.fluent-divider {
+  border: none;
+  border-top: var(--fluent-stroke);
+  margin: var(--fluent-space-4) 0;
+}
+
+.fluent-divider--strong {
+  /* Reuse the existing strong stroke token (rgba(0,0,0,0.18) in light mode,
+     rgba(255,255,255,0.20) in dark mode — auto-updated by token overrides) */
+  border-top: var(--fluent-stroke-strong);
+}
+
+/* ============================================================
+   25. SPACING UTILITY CLASSES
+   Fluent-aligned padding and margin helpers.
+   e.g. class="fluent-p-4 fluent-mt-2"
+   ============================================================ */
+.fluent-p-1  { padding: var(--fluent-space-1)  !important; }
+.fluent-p-2  { padding: var(--fluent-space-2)  !important; }
+.fluent-p-3  { padding: var(--fluent-space-3)  !important; }
+.fluent-p-4  { padding: var(--fluent-space-4)  !important; }
+.fluent-p-5  { padding: var(--fluent-space-5)  !important; }
+.fluent-p-6  { padding: var(--fluent-space-6)  !important; }
+.fluent-p-8  { padding: var(--fluent-space-8)  !important; }
+
+.fluent-px-1 { padding-inline: var(--fluent-space-1) !important; }
+.fluent-px-2 { padding-inline: var(--fluent-space-2) !important; }
+.fluent-px-3 { padding-inline: var(--fluent-space-3) !important; }
+.fluent-px-4 { padding-inline: var(--fluent-space-4) !important; }
+.fluent-px-5 { padding-inline: var(--fluent-space-5) !important; }
+.fluent-px-6 { padding-inline: var(--fluent-space-6) !important; }
+
+.fluent-py-1 { padding-block: var(--fluent-space-1) !important; }
+.fluent-py-2 { padding-block: var(--fluent-space-2) !important; }
+.fluent-py-3 { padding-block: var(--fluent-space-3) !important; }
+.fluent-py-4 { padding-block: var(--fluent-space-4) !important; }
+.fluent-py-5 { padding-block: var(--fluent-space-5) !important; }
+.fluent-py-6 { padding-block: var(--fluent-space-6) !important; }
+
+.fluent-mt-0 { margin-top: 0            !important; }
+.fluent-mt-1 { margin-top: var(--fluent-space-1)  !important; }
+.fluent-mt-2 { margin-top: var(--fluent-space-2)  !important; }
+.fluent-mt-3 { margin-top: var(--fluent-space-3)  !important; }
+.fluent-mt-4 { margin-top: var(--fluent-space-4)  !important; }
+.fluent-mt-6 { margin-top: var(--fluent-space-6)  !important; }
+.fluent-mt-8 { margin-top: var(--fluent-space-8)  !important; }
+
+.fluent-mb-0 { margin-bottom: 0            !important; }
+.fluent-mb-1 { margin-bottom: var(--fluent-space-1)  !important; }
+.fluent-mb-2 { margin-bottom: var(--fluent-space-2)  !important; }
+.fluent-mb-3 { margin-bottom: var(--fluent-space-3)  !important; }
+.fluent-mb-4 { margin-bottom: var(--fluent-space-4)  !important; }
+.fluent-mb-6 { margin-bottom: var(--fluent-space-6)  !important; }
+.fluent-mb-8 { margin-bottom: var(--fluent-space-8)  !important; }
+
+/* ============================================================
+   26. CONTENT TYPOGRAPHY — Lists
+   Fluent-styled ordered and unordered lists for post content.
+   ============================================================ */
+ul,
+ol {
+  padding-inline-start: var(--fluent-space-6);
+  margin-top: 0;
+  margin-bottom: var(--fluent-space-4);
+}
+
+li {
+  margin-bottom: var(--fluent-space-1);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Nested lists — tighter spacing */
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin-top: var(--fluent-space-1);
+  margin-bottom: var(--fluent-space-1);
+}
+
+/* Unordered list markers — Fluent accent dot */
+ul { list-style-type: disc; }
+ul li::marker { color: var(--fluent-accent); }
+
+/* Ordered list markers */
+ol { list-style-type: decimal; }
+ol li::marker {
+  color: var(--fluent-accent);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* Definition lists */
+dl { margin-bottom: var(--fluent-space-4); }
+
+dt {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-top: var(--fluent-space-3);
+}
+
+dd {
+  margin-inline-start: var(--fluent-space-5);
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   27. CONTENT TYPOGRAPHY — Tables
+   Fluent-styled tables with alternating row tints.
+   ============================================================ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  overflow: hidden;
+  font-size: var(--fluent-font-size-base);
+  background: var(--fluent-surface);
+  box-shadow: var(--fluent-shadow-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+caption {
+  caption-side: bottom;
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: start;
+}
+
+thead {
+  background: var(--fluent-accent-subtle);
+}
+
+th {
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-accent);
+  text-align: start;
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke-strong);
+  white-space: nowrap;
+}
+
+td {
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke);
+  color: var(--fluent-text);
+  vertical-align: top;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Zebra striping */
+tbody tr:nth-child(even) {
+  background: var(--fluent-surface-alt);
+}
+
+tbody tr:hover {
+  background: var(--fluent-accent-subtle);
+  transition: background var(--fluent-transition);
+}
+
+/* ============================================================
+   28. CONTENT TYPOGRAPHY — Blockquotes
+   Fluent accent-bar pullquote style.
+   ============================================================ */
+blockquote {
+  border-inline-start: 4px solid var(--fluent-accent);
+  background: var(--fluent-surface-alt);
+  padding: var(--fluent-space-4) var(--fluent-space-6);
+  margin: var(--fluent-space-6) 0;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0;
+  color: var(--fluent-text-secondary);
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+blockquote cite,
+blockquote footer {
+  display: block;
+  font-size: var(--fluent-font-size-sm);
+  font-style: normal;
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text-secondary);
+  margin-top: var(--fluent-space-3);
+}
+
+blockquote cite::before { content: "— "; }
+
+/* ============================================================
+   29. CONTENT TYPOGRAPHY — Figures & Captions
+   ============================================================ */
+figure {
+  margin: var(--fluent-space-6) 0;
+}
+
+figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  font-style: italic;
+}
+
+/* ============================================================
+   30. INLINE TEXT ELEMENTS
+   ============================================================ */
+
+/* Highlighted / marked text */
+mark {
+  background: var(--fluent-color-warning-bg);
+  color: var(--fluent-text);
+  border-radius: var(--fluent-radius-xs);
+  padding: 0 3px;
+}
+
+/* Keyboard shortcut */
+kbd {
+  display: inline-block;
+  font-family: var(--fluent-font-mono);
+  font-size: 0.85em;
+  padding: 1px 6px;
+  background: var(--fluent-surface-alt);
+  border: var(--fluent-stroke-strong);
+  border-radius: var(--fluent-radius-sm);
+  box-shadow: 0 1px 0 var(--fluent-neutral-32);
+  color: var(--fluent-text);
+}
+
+/* Abbreviations */
+abbr[title] {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+/* Address block */
+address {
+  font-style: normal;
+  color: var(--fluent-text-secondary);
+  border-inline-start: 3px solid var(--fluent-neutral-32);
+  padding-inline-start: var(--fluent-space-4);
+  margin-bottom: var(--fluent-space-4);
+}
+
+/* Details / summary — Fluent disclosure component */
+details {
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  background: var(--fluent-surface);
+  padding: 0;
+  margin-bottom: var(--fluent-space-4);
+  overflow: hidden;
+  box-shadow: var(--fluent-shadow-2);
+  transition: box-shadow var(--fluent-transition);
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-2);
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-base);
+  color: var(--fluent-text);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background var(--fluent-transition);
+}
+
+summary::-webkit-details-marker { display: none; }
+
+summary::before {
+  content: "›";
+  display: inline-block;
+  font-size: 1.2em;
+  line-height: 1;
+  transition: transform var(--fluent-transition);
+  color: var(--fluent-accent);
+  flex-shrink: 0;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+summary:hover {
+  background: var(--fluent-accent-subtle);
+}
+
+details > *:not(summary) {
+  padding: var(--fluent-space-4);
+  border-top: var(--fluent-stroke);
+}
+
+/* Superscript / subscript */
+sub, sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+/* ============================================================
+   31. WORDPRESS IMAGE & ALIGNMENT HELPERS
+   ============================================================ */
+
+/* Alignment utilities (classic editor + blocks) */
+.alignleft,
+.alignright {
+  max-width: 50%;
+}
+
+.alignleft {
+  float: left;
+  margin-inline-end: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.alignright {
+  float: right;
+  margin-inline-start: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.aligncenter {
+  display: block;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Wide and full alignment breakout helpers */
+.alignwide {
+  margin-inline: calc(-1 * var(--fluent-space-8));
+  max-width: calc(100% + var(--fluent-space-8) * 2);
+}
+
+.alignfull {
+  margin-inline: calc(-50vw + 50%);
+  max-width: 100vw;
+  width: 100vw;
+}
+
+/* Classic editor image caption */
+.wp-caption {
+  max-width: 100%;
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-caption img {
+  display: block;
+  border-radius: var(--fluent-radius-md);
+}
+
+.wp-caption-text {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding: var(--fluent-space-2) 0;
+}
+
+/* Featured / post thumbnail */
+.wp-post-image,
+.attachment-post-thumbnail,
+.size-thumbnail,
+.size-medium,
+.size-large,
+.size-full,
+.size-medium-large {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--fluent-radius-md);
+}
+
+/* Clearfix after floated images */
+.wp-block-image img,
+.entry-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ============================================================
+   32. GUTENBERG BLOCKS — Buttons
+   ============================================================ */
+
+/* Block button wrapper */
+.wp-block-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-3);
+  align-items: center;
+}
+
+/* Individual button block */
+.wp-block-button__link,
+.wp-element-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-5) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  line-height: 1 !important;
+  border-radius: var(--fluent-radius-md) !important;
+  text-decoration: none !important;
+  transition:
+    background var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition) !important;
+  cursor: pointer;
+}
+
+/* Default / filled button */
+.wp-block-button:not(.is-style-outline) .wp-block-button__link,
+.wp-block-button:not(.is-style-outline) .wp-element-button {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover,
+.wp-block-button:not(.is-style-outline) .wp-element-button:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4);
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:active,
+.wp-block-button:not(.is-style-outline) .wp-element-button:active {
+  background: var(--fluent-accent-active) !important;
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* Outline button */
+.wp-block-button.is-style-outline .wp-block-button__link,
+.wp-block-button.is-style-outline .wp-element-button {
+  background: transparent !important;
+  color: var(--fluent-accent) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  box-shadow: none;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:hover,
+.wp-block-button.is-style-outline .wp-element-button:hover {
+  background: var(--fluent-accent-subtle) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* ============================================================
+   33. GUTENBERG BLOCKS — Quote & Pullquote
+   ============================================================ */
+
+/* wp-block-quote */
+.wp-block-quote {
+  border-inline-start: 4px solid var(--fluent-accent) !important;
+  background: var(--fluent-surface-alt) !important;
+  padding: var(--fluent-space-4) var(--fluent-space-6) !important;
+  margin: var(--fluent-space-6) 0 !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0 !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-quote p {
+  font-style: italic;
+  color: var(--fluent-text-secondary);
+  margin-bottom: var(--fluent-space-3) !important;
+}
+
+.wp-block-quote cite,
+.wp-block-quote__citation {
+  font-size: var(--fluent-font-size-sm) !important;
+  font-style: normal !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Large style quote */
+.wp-block-quote.is-style-large {
+  padding: var(--fluent-space-8) var(--fluent-space-8) !important;
+  border-inline-start-width: 6px !important;
+}
+
+.wp-block-quote.is-style-large p {
+  font-size: var(--fluent-font-size-subtitle) !important;
+}
+
+/* wp-block-pullquote */
+.wp-block-pullquote {
+  border-block: 2px solid var(--fluent-accent);
+  padding: var(--fluent-space-8) var(--fluent-space-6);
+  margin: var(--fluent-space-8) 0;
+  text-align: center;
+}
+
+.wp-block-pullquote blockquote {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.wp-block-pullquote p {
+  font-size: var(--fluent-font-size-subtitle);
+  font-style: italic;
+  color: var(--fluent-text);
+  line-height: var(--fluent-line-height-heading);
+}
+
+.wp-block-pullquote cite,
+.wp-block-pullquote__citation {
+  display: block;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-style: normal;
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text-secondary);
+  margin-top: var(--fluent-space-4);
+}
+
+/* ============================================================
+   34. GUTENBERG BLOCKS — Table
+   ============================================================ */
+
+.wp-block-table {
+  margin-bottom: var(--fluent-space-6);
+  overflow-x: auto;
+}
+
+.wp-block-table table {
+  margin-bottom: 0;
+}
+
+.wp-block-table figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* Striped style */
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) {
+  background: var(--fluent-surface-alt);
+}
+
+/* ============================================================
+   35. GUTENBERG BLOCKS — Separator
+   ============================================================ */
+
+.wp-block-separator,
+hr.wp-block-separator {
+  border: none !important;
+  border-top: var(--fluent-stroke) !important;
+  margin: var(--fluent-space-8) auto !important;
+  opacity: 1 !important;
+}
+
+.wp-block-separator.is-style-wide {
+  width: 100%;
+}
+
+.wp-block-separator.is-style-dots {
+  border: none !important;
+  text-align: center;
+  line-height: 1;
+  height: auto;
+}
+
+.wp-block-separator.is-style-dots::before {
+  content: "· · ·";
+  font-size: var(--fluent-font-size-subtitle);
+  letter-spacing: 0.5em;
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   36. GUTENBERG BLOCKS — Image & Gallery
+   ============================================================ */
+
+.wp-block-image {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-image img {
+  border-radius: var(--fluent-radius-md);
+  box-shadow: var(--fluent-shadow-2);
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.wp-block-image figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* Gallery */
+.wp-block-gallery {
+  display: grid;
+  gap: var(--fluent-space-3);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-gallery .wp-block-image,
+.blocks-gallery-item {
+  margin: 0;
+}
+
+.wp-block-gallery .wp-block-image img,
+.blocks-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   37. GUTENBERG BLOCKS — Cover (hero/banner)
+   ============================================================ */
+
+.wp-block-cover {
+  position: relative;
+  border-radius: var(--fluent-radius-lg);
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--fluent-space-10) var(--fluent-space-8);
+  margin-bottom: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-8);
+}
+
+.wp-block-cover .wp-block-cover__inner-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #ffffff;
+  max-width: 720px;
+  width: 100%;
+}
+
+.wp-block-cover .wp-block-cover__inner-container * {
+  color: inherit;
+}
+
+.wp-block-cover__background {
+  border-radius: inherit;
+}
+
+/* ============================================================
+   38. GUTENBERG BLOCKS — Columns & Group
+   ============================================================ */
+
+.wp-block-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-6);
+  align-items: flex-start;
+}
+
+.wp-block-column {
+  flex: 1 1 0%;
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .wp-block-columns {
+    flex-direction: column;
+  }
+  .wp-block-column {
+    width: 100%;
+  }
+}
+
+/* Group block (container) */
+.wp-block-group {
+  padding: var(--fluent-space-6);
+  border-radius: var(--fluent-radius-lg);
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  box-shadow: var(--fluent-shadow-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-group.has-background {
+  padding: var(--fluent-space-6);
+}
+
+/* ============================================================
+   39. GUTENBERG BLOCKS — Media & Text
+   ============================================================ */
+
+.wp-block-media-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fluent-space-6);
+  align-items: center;
+  margin-bottom: var(--fluent-space-6);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  overflow: hidden;
+  background: var(--fluent-surface);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-media-text__media img,
+.wp-block-media-text__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.wp-block-media-text__content {
+  padding: var(--fluent-space-6) var(--fluent-space-5);
+}
+
+.wp-block-media-text.has-media-on-the-right {
+  grid-template-columns: 1fr 1fr;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__media {
+  order: 2;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {
+  order: 1;
+}
+
+@media (max-width: 600px) {
+  .wp-block-media-text {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   40. GUTENBERG BLOCKS — Code & Preformatted & Verse
+   ============================================================ */
+
+/* Code block */
+.wp-block-code {
+  background: var(--fluent-surface-alt) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  padding: var(--fluent-space-4) !important;
+  overflow-x: auto;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-code code {
+  font-family: var(--fluent-font-mono) !important;
+  font-size: 0.875em !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  white-space: pre;
+  color: var(--fluent-text);
+}
+
+/* Preformatted text */
+.wp-block-preformatted {
+  font-family: var(--fluent-font-mono) !important;
+  font-size: 0.875em !important;
+  background: var(--fluent-surface-alt) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  padding: var(--fluent-space-4) !important;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  color: var(--fluent-text);
+}
+
+/* Verse / poetry — preserve whitespace, monospace-free */
+.wp-block-verse {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-style: italic;
+  background: var(--fluent-surface-alt);
+  border-inline-start: 3px solid var(--fluent-accent);
+  padding: var(--fluent-space-4) var(--fluent-space-5) !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0;
+  white-space: pre-wrap;
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   41. GUTENBERG BLOCKS — Search
+   ============================================================ */
+
+.wp-block-search {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-search__inside-wrapper {
+  display: flex;
+  gap: var(--fluent-space-2);
+  align-items: stretch;
+}
+
+.wp-block-search__input {
+  flex: 1 1 auto;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  background: var(--fluent-surface) !important;
+  color: var(--fluent-text) !important;
+  border: var(--fluent-stroke-strong) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  outline: none;
+  transition: border-color var(--fluent-transition), box-shadow var(--fluent-transition);
+}
+
+.wp-block-search__input:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.20) !important;
+}
+
+.wp-block-search__button {
+  font-family: var(--fluent-font) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border: none !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  padding: 0 var(--fluent-space-5) !important;
+  cursor: pointer !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  height: 40px;
+}
+
+.wp-block-search__button:hover {
+  background: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-search__label {
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-base);
+  margin-bottom: var(--fluent-space-2);
+  display: block;
+  color: var(--fluent-text);
+}
+
+/* ============================================================
+   42. GUTENBERG BLOCKS — Latest Posts
+   ============================================================ */
+
+.wp-block-latest-posts,
+.wp-block-latest-posts__list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--fluent-space-6) !important;
+}
+
+.wp-block-latest-posts li {
+  padding: var(--fluent-space-3) 0;
+  border-bottom: var(--fluent-stroke);
+}
+
+.wp-block-latest-posts li:last-child {
+  border-bottom: none;
+}
+
+.wp-block-latest-posts li a {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text) !important;
+  text-decoration: none;
+  transition: color var(--fluent-transition);
+}
+
+.wp-block-latest-posts li a:hover {
+  color: var(--fluent-accent) !important;
+}
+
+.wp-block-latest-posts__post-date,
+.wp-block-latest-posts .wp-block-latest-posts__post-author {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  display: block;
+  margin-top: 2px;
+}
+
+/* Grid layout */
+.wp-block-latest-posts.is-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--fluent-space-4);
+}
+
+.wp-block-latest-posts.is-grid li {
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-4) !important;
+  box-shadow: var(--fluent-shadow-2);
+  transition: box-shadow var(--fluent-transition), transform var(--fluent-transition);
+}
+
+.wp-block-latest-posts.is-grid li:hover {
+  box-shadow: var(--fluent-shadow-4);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   43. GUTENBERG BLOCKS — Tag Cloud
+   ============================================================ */
+
+.wp-block-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-tag-cloud a,
+.tag-cloud-link {
+  display: inline-block;
+  padding: var(--fluent-space-1) var(--fluent-space-3) !important;
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  transition: background var(--fluent-transition), color var(--fluent-transition) !important;
+  border: 1px solid transparent;
+}
+
+.wp-block-tag-cloud a:hover,
+.tag-cloud-link:hover {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+}
+
+/* ============================================================
+   44. GUTENBERG BLOCKS — Social Links
+   ============================================================ */
+
+.wp-block-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-2);
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--fluent-space-6) !important;
+}
+
+.wp-block-social-link {
+  list-style: none;
+}
+
+.wp-block-social-link a {
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-2);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--fluent-radius-md);
+  background: var(--fluent-neutral-16);
+  color: var(--fluent-text) !important;
+  text-decoration: none !important;
+  justify-content: center;
+  transition:
+    background var(--fluent-transition),
+    transform var(--fluent-transition),
+    box-shadow var(--fluent-transition);
+}
+
+.wp-block-social-link a:hover {
+  background: var(--fluent-accent-subtle);
+  color: var(--fluent-accent) !important;
+  transform: scale(1.08);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* "logos-only" and "pill-shape" style adjustments */
+.wp-block-social-links.is-style-pill-shape .wp-block-social-link a {
+  border-radius: var(--fluent-radius-pill);
+  padding: 0 var(--fluent-space-3);
+  width: auto;
+}
+
+/* ============================================================
+   45. GUTENBERG BLOCKS — Details (accordion)
+   ============================================================ */
+
+.wp-block-details {
+  /* Inherits native <details> styles from section 30 */
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-details > summary {
+  /* Inherits native <summary> styles */
+}
+
+/* ============================================================
+   46. GUTENBERG BLOCKS — File Download
+   ============================================================ */
+
+.wp-block-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fluent-space-4);
+  flex-wrap: wrap;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+  margin-bottom: var(--fluent-space-4);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-file .wp-block-file__textlink {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent) !important;
+}
+
+.wp-block-file .wp-block-file__button,
+.wp-block-file a.wp-block-file__button {
+  display: inline-flex !important;
+  align-items: center;
+  height: var(--fluent-btn-height-sm) !important;
+  padding: 0 var(--fluent-space-4) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-file .wp-block-file__button:hover,
+.wp-block-file a.wp-block-file__button:hover {
+  background: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4);
+}
+
+/* ============================================================
+   47. GUTENBERG BLOCKS — Audio & Video
+   ============================================================ */
+
+.wp-block-audio {
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-block-audio audio {
+  width: 100%;
+  border-radius: var(--fluent-radius-md);
+  accent-color: var(--fluent-accent);
+}
+
+.wp-block-video {
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-block-video video {
+  width: 100%;
+  border-radius: var(--fluent-radius-md);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* ============================================================
+   48. GUTENBERG BLOCKS — Embed (iframes: YouTube, Vimeo, etc.)
+   ============================================================ */
+
+.wp-block-embed {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-embed__wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-4);
+}
+
+/* Responsive aspect ratio */
+.wp-block-embed.is-type-video .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.wp-block-embed__wrapper iframe,
+.wp-block-embed__wrapper video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: inherit;
+}
+
+.wp-embed-responsive .wp-block-embed__wrapper {
+  position: relative;
+}
+
+.wp-block-embed figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* ============================================================
+   49. GUTENBERG BLOCKS — Spacer
+   ============================================================ */
+
+.wp-block-spacer {
+  display: block;
+}
+
+/* ============================================================
+   50. WORDPRESS ADMIN BAR
+   Fluent-styled admin bar for logged-in users.
+   ============================================================ */
+
+#wpadminbar {
+  background: var(--fluent-surface) !important;
+  border-bottom: var(--fluent-stroke) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  font-family: var(--fluent-font) !important;
+}
+
+#wpadminbar *,
+#wpadminbar .ab-item,
+#wpadminbar a,
+#wpadminbar .ab-top-menu > li > .ab-item {
+  font-family: var(--fluent-font) !important;
+  color: var(--fluent-text) !important;
+}
+
+#wpadminbar .ab-top-menu > li:hover > .ab-item,
+#wpadminbar .ab-top-menu > li.hover > .ab-item {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+#wpadminbar #wp-admin-bar-root-default .ab-sub-wrapper,
+#wpadminbar .menupop .ab-sub-wrapper {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: 0 0 var(--fluent-radius-md) var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-8) !important;
+}
+
+#wpadminbar .ab-submenu a,
+#wpadminbar .ab-submenu .ab-item {
+  color: var(--fluent-text) !important;
+}
+
+#wpadminbar .ab-submenu a:hover {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+/* Adjust body offset for admin bar */
+.admin-bar body {
+  padding-top: 32px;
+}
+
+/* ============================================================
+   51. WORDPRESS LOGIN PAGE
+   Fluent-styled /wp-login.php
+   ============================================================ */
+
+body.login {
+  background: var(--fluent-bg) !important;
+  font-family: var(--fluent-font) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+body.login #login {
+  width: 100%;
+  max-width: 360px;
+  padding: var(--fluent-space-4);
+}
+
+/* WordPress logo on login page */
+body.login #login h1 a {
+  background-size: contain !important;
+  border-radius: var(--fluent-radius-md);
+  transition: opacity var(--fluent-transition);
+}
+
+body.login #login h1 a:hover {
+  opacity: 0.8;
+}
+
+/* Login form card */
+body.login #loginform,
+body.login #lostpasswordform,
+body.login #registerform {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+  padding: var(--fluent-space-8) !important;
+  font-family: var(--fluent-font);
+}
+
+body.login #loginform label,
+body.login #lostpasswordform label,
+body.login #registerform label {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+}
+
+body.login #user_login,
+body.login #user_pass,
+body.login #user_email {
+  font-family: var(--fluent-font) !important;
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke-strong) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  color: var(--fluent-text) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-3) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  transition: border-color var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+}
+
+body.login #user_login:focus,
+body.login #user_pass:focus,
+body.login #user_email:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.20) !important;
+  outline: none !important;
+}
+
+/* Login submit button */
+body.login #wp-submit,
+body.login .button-primary {
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-6) !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  text-shadow: none !important;
+}
+
+body.login #wp-submit:hover,
+body.login .button-primary:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* "Remember me" checkbox */
+body.login .forgetmenot {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Login footer links */
+body.login #nav,
+body.login #backtoblog {
+  text-align: center;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+}
+
+body.login #nav a,
+body.login #backtoblog a {
+  color: var(--fluent-accent) !important;
+}
+
+/* Login error/success notices */
+body.login .message,
+body.login #login_error {
+  background: var(--fluent-surface) !important;
+  border-inline-start: 4px solid var(--fluent-accent) !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0 !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  padding: var(--fluent-space-3) var(--fluent-space-4) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  color: var(--fluent-text) !important;
+}
+
+body.login #login_error {
+  border-inline-start-color: var(--fluent-color-danger) !important;
+}
+
+/* ============================================================
+   52. ERROR & SPECIAL PAGES
+   Fluent-styled 404, no-results, and not-found pages.
+   ============================================================ */
+
+.error-404,
+.no-results,
+.not-found {
+  text-align: center;
+  padding: var(--fluent-space-16) var(--fluent-space-6);
+}
+
+.error-404 .page-title,
+.no-results .page-title,
+.not-found .page-title {
+  font-size: var(--fluent-font-size-display);
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-4);
+  letter-spacing: var(--fluent-tracking-tight);
+}
+
+/* Large "404" numeral */
+.error-404 .page-title::before {
+  content: "404";
+  display: block;
+  font-size: 120px;
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-accent);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: var(--fluent-space-2);
+}
+
+.error-404 .page-content,
+.no-results .page-content {
+  max-width: 480px;
+  margin-inline: auto;
+  color: var(--fluent-text-secondary);
+}
+
+.no-results .search-form {
+  max-width: 400px;
+  margin: var(--fluent-space-6) auto 0;
+}
+
+/* ============================================================
+   53. COMMENT FORM
+   Full Fluent styling for wp-comments-post.php output.
+   ============================================================ */
+
+.comment-respond {
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-2);
+  margin-top: var(--fluent-space-8);
+}
+
+.comment-respond .comment-reply-title {
+  font-size: var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.comment-respond .comment-reply-title small a {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  font-weight: var(--fluent-font-weight-base);
+}
+
+#commentform,
+.comment-form {
+  display: grid;
+  gap: var(--fluent-space-4);
+}
+
+.comment-form-author,
+.comment-form-email,
+.comment-form-url,
+.comment-form-comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-1);
+}
+
+.comment-form label {
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+  width: 100%;
+}
+
+.comment-form .required {
+  color: var(--fluent-color-danger);
+  margin-inline-start: 2px;
+}
+
+/* Submit button */
+.comment-form #submit,
+#commentform #submit {
+  justify-self: flex-start;
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-6) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  cursor: pointer;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+}
+
+.comment-form #submit:hover,
+#commentform #submit:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Comment privacy / cookie notice */
+.comment-form .comment-notes,
+.comment-form .comment-form-cookies-consent {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   54. POST EXTRAS — Sticky, Author, Bypostauthor
+   ============================================================ */
+
+/* Sticky post indicator */
+.sticky {
+  position: relative;
+}
+
+.sticky::before {
+  content: "📌 Pinned";
+  display: inline-block;
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent);
+  background: var(--fluent-accent-subtle);
+  border-radius: var(--fluent-radius-pill);
+  padding: 2px var(--fluent-space-3);
+  margin-bottom: var(--fluent-space-2);
+  letter-spacing: var(--fluent-tracking-wide);
+}
+
+/* Highlight the post author's own comment */
+.bypostauthor > .comment-body {
+  border-inline-start: 3px solid var(--fluent-accent) !important;
+  background: var(--fluent-accent-subtle) !important;
+}
+
+.bypostauthor .comment-author .fn::after {
+  content: " (Author)";
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent);
+  background: var(--fluent-accent-subtle);
+  border-radius: var(--fluent-radius-pill);
+  padding: 1px var(--fluent-space-2);
+  margin-inline-start: var(--fluent-space-2);
+  vertical-align: middle;
+}
+
+/* Author bio / box */
+.author-box,
+.author-bio,
+.post-author-box {
+  display: flex;
+  gap: var(--fluent-space-5);
+  align-items: flex-start;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-2);
+  margin: var(--fluent-space-8) 0;
+}
+
+.author-box img,
+.author-bio img,
+.post-author-box img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--fluent-radius-pill);
+  flex-shrink: 0;
+  border: 2px solid var(--fluent-accent);
+  object-fit: cover;
+}
+
+.author-box .author-name,
+.author-bio .author-name,
+.post-author-box .author-name {
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-1);
+}
+
+.author-box .author-description,
+.author-bio .author-description,
+.post-author-box .author-description {
+  font-size: var(--fluent-font-size-base);
+  color: var(--fluent-text-secondary);
+  line-height: var(--fluent-line-height);
+}
+
+/* ============================================================
+   55. BREADCRUMBS
+   ============================================================ */
+
+.breadcrumb,
+.breadcrumbs,
+nav.breadcrumb,
+.woocommerce-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-1);
+  align-items: center;
+  list-style: none;
+  padding: var(--fluent-space-2) 0;
+  margin: 0 0 var(--fluent-space-4);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+}
+
+.breadcrumb a,
+.breadcrumbs a,
+.woocommerce-breadcrumb a {
+  color: var(--fluent-accent) !important;
+  text-decoration: none;
+  transition: color var(--fluent-transition);
+}
+
+.breadcrumb a:hover,
+.breadcrumbs a:hover {
+  color: var(--fluent-accent-hover) !important;
+}
+
+/* Separator between breadcrumb items */
+.breadcrumb-item + .breadcrumb-item::before,
+.breadcrumbs > *:not(:last-child)::after {
+  content: "›";
+  margin-inline: var(--fluent-space-1);
+  color: var(--fluent-text-secondary);
+}
+
+.breadcrumb-item.active {
+  color: var(--fluent-text);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* ============================================================
+   56. DROPDOWN MENUS (Argon navbar)
+   ============================================================ */
+
+.dropdown-menu,
+.sub-menu,
+.nav-dropdown {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-8) !important;
+  padding: var(--fluent-space-1) 0 !important;
+  min-width: 200px;
+  z-index: var(--fluent-z-overlay);
+}
+
+.dropdown-menu a,
+.sub-menu a,
+.nav-dropdown a {
+  display: block;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  color: var(--fluent-text) !important;
+  text-decoration: none;
+  transition: background var(--fluent-transition);
+  border-radius: 0;
+}
+
+.dropdown-menu a:hover,
+.sub-menu a:hover,
+.nav-dropdown a:hover,
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+.dropdown-divider,
+.menu-item-divider {
+  border-top: var(--fluent-stroke);
+  margin: var(--fluent-space-1) 0;
+}
+
+/* ============================================================
+   57. WORDPRESS NOTICES (editor notices on front-end)
+   ============================================================ */
+
+.notice,
+.updated,
+.update-nag,
+.wp-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fluent-space-3);
+  padding: var(--fluent-space-3) var(--fluent-space-4) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  border-left: 4px solid var(--fluent-color-info) !important;
+  background: var(--fluent-color-info-bg) !important;
+  color: var(--fluent-text) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  margin-bottom: var(--fluent-space-4) !important;
+}
+
+.notice-success,
+.updated { border-left-color: var(--fluent-color-success) !important; background: var(--fluent-color-success-bg) !important; }
+.notice-warning,
+.update-nag { border-left-color: var(--fluent-color-warning) !important; background: var(--fluent-color-warning-bg) !important; }
+.notice-error    { border-left-color: var(--fluent-color-danger)  !important; background: var(--fluent-color-danger-bg)  !important; }
+
+/* ============================================================
+   58. ACCESSIBILITY UTILITIES
+   ============================================================ */
+
+/* Screen-reader-only text (visually hidden but accessible) */
+.screen-reader-text,
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip navigation link — visible only when focused */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--fluent-space-4);
+  z-index: var(--fluent-z-tooltip);
+  background: var(--fluent-accent);
+  color: var(--fluent-text-on-accent) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4);
+  border-radius: 0 0 var(--fluent-radius-md) var(--fluent-radius-md);
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  text-decoration: none;
+  box-shadow: var(--fluent-shadow-4);
+  transition: top var(--fluent-transition);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: none;
+}
+
+/* WordPress accessibility "screen-reader-text" that should become
+   visible on focus (e.g. skip to content) */
+.screen-reader-text:focus {
+  clip: auto !important;
+  display: block !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  height: auto !important;
+  left: var(--fluent-space-4) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  top: var(--fluent-space-4) !important;
+  width: auto !important;
+  z-index: var(--fluent-z-tooltip) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+  overflow: visible !important;
+  clip-path: none !important;
+}
+
+/* Live regions — no visible change, but ensure layout isn't broken */
+[aria-live] {
+  display: block;
+}
+
+/* ============================================================
+   59. VISUAL POLISH & BEAUTY
+   协调美丽漂亮 — Harmonious · Beautiful · Pretty
+
+   This section layers Fluent Mica material, gradient accents,
+   micro-interactions, and refined aesthetics across every visible
+   element, making the theme feel like a premium Microsoft product.
+   ============================================================ */
+
+/* ── 59.1 Smooth page-load entrance ── */
+@keyframes fluent-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  animation: fluent-fade-in 280ms var(--fluent-transition) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+}
+
+/* ── 59.2 Mica material — page background texture ── */
+/* Mica simulates a frosted-glass window behind the OS wallpaper.
+   We approximate it with a subtle noise texture and a soft radial
+   gradient that adds luminance variation. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(15,108,189,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(15,108,189,0.05) 0%, transparent 55%);
+}
+
+html.darkmode body::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(71,158,245,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(71,158,245,0.07) 0%, transparent 55%);
+}
+
+/* ── 59.3 Glassmorphism / Mica sticky header ── */
+.site-header,
+#site-header,
+.navbar,
+header.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: var(--fluent-z-sticky) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  background: rgba(243, 243, 243, 0.82) !important;
+  border-bottom: var(--fluent-stroke) !important;
+  transition:
+    background var(--fluent-transition-slow),
+    box-shadow var(--fluent-transition-slow) !important;
+}
+
+html.darkmode .site-header,
+html.darkmode #site-header,
+html.darkmode .navbar {
+  background: rgba(31, 31, 31, 0.85) !important;
+}
+
+/* Scrolled state — deeper shadow */
+.site-header.is-scrolled,
+#site-header.is-scrolled {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* ── 59.4 Refined post cards & surface cards ── */
+.card,
+.post,
+.blog-post,
+.page-information-card,
+.fluent-card {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  transition:
+    box-shadow var(--fluent-transition-slow),
+    transform  var(--fluent-transition-slow),
+    border-color var(--fluent-transition-slow) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.card:hover,
+.post:hover,
+.blog-post:hover,
+.fluent-card:hover {
+  box-shadow: var(--fluent-shadow-8) !important;
+  transform: translateY(-3px) !important;
+  border-color: rgba(15, 108, 189, 0.25) !important;
+}
+
+html.darkmode .card:hover,
+html.darkmode .post:hover,
+html.darkmode .blog-post:hover {
+  border-color: rgba(71, 158, 245, 0.30) !important;
+}
+
+/* Subtle inner glow on card hover */
+.card::after,
+.blog-post::after,
+.fluent-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(15,108,189,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--fluent-transition-slow);
+  pointer-events: none;
+}
+
+.card:hover::after,
+.blog-post:hover::after,
+.fluent-card:hover::after {
+  opacity: 1;
+}
+
+/* ── 59.5 Featured image — smooth scale on hover ── */
+.card img,
+.blog-post img,
+.post-thumbnail img,
+.wp-block-image img,
+.fluent-card__media img,
+.wp-post-image {
+  transition: transform 360ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 360ms ease !important;
+  will-change: transform;
+}
+
+.card:hover img,
+.blog-post:hover img,
+.post-thumbnail:hover img {
+  transform: scale(1.03) !important;
+  filter: brightness(1.03) !important;
+}
+
+/* Clip images inside their card container */
+.card .post-thumbnail,
+.blog-post .post-thumbnail,
+.card .featured-image-wrapper {
+  overflow: hidden;
+  border-radius: var(--fluent-radius-md) var(--fluent-radius-md) 0 0;
+}
+
+/* ── 59.6 Gradient accent buttons ── */
+/* Add a subtle gradient to primary buttons for a premium feel */
+.fluent-btn--primary,
+.btn-primary,
+input[type="submit"],
+.wp-block-button:not(.is-style-outline) .wp-block-button__link {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent) 0%,
+    color-mix(in srgb, var(--fluent-accent) 85%, #004e8c) 100%
+  ) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 2px 8px rgba(15,108,189,0.30) !important;
+}
+
+.fluent-btn--primary:hover,
+.btn-primary:hover,
+input[type="submit"]:hover,
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent-hover) 0%,
+    color-mix(in srgb, var(--fluent-accent-hover) 85%, #004e8c) 100%
+  ) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.14), 0 4px 16px rgba(15,108,189,0.35) !important;
+}
+
+/* Dark mode — lighter accent glow */
+html.darkmode .fluent-btn--primary,
+html.darkmode .btn-primary,
+html.darkmode input[type="submit"] {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent) 0%,
+    color-mix(in srgb, var(--fluent-accent) 80%, #1a6eb8) 100%
+  ) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.30), 0 2px 12px rgba(71,158,245,0.35) !important;
+}
+
+/* Danger button gradient */
+.fluent-btn--danger:hover {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-color-danger) 0%,
+    color-mix(in srgb, var(--fluent-color-danger) 85%, #7a0000) 100%
+  ) !important;
+  box-shadow: 0 2px 8px rgba(197,15,31,0.35) !important;
+}
+
+/* ── 59.7 Beautiful animated link underlines ── */
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers) {
+  text-decoration: none;
+  background-image: linear-gradient(var(--fluent-accent), var(--fluent-accent));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    color var(--fluent-transition),
+    background-size var(--fluent-transition);
+  padding-bottom: 1px;
+}
+
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers):hover,
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers):focus {
+  color: var(--fluent-accent);
+  background-size: 100% 1.5px;
+}
+
+/* Nav links — keep classic hover, no underline animation */
+.nav-link,
+.navbar a,
+.nav-menu a,
+.main-nav a,
+.site-nav a {
+  background-image: none !important;
+}
+
+/* ── 59.8 Navigation link hover — Fluent pill indicator ── */
+.nav-menu a,
+.main-nav a,
+.site-nav a,
+.navbar-nav a {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-menu a::after,
+.main-nav a::after,
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--fluent-accent);
+  border-radius: var(--fluent-radius-pill);
+  transform: translateX(-50%);
+  transition: width var(--fluent-transition);
+}
+
+.nav-menu a:hover::after,
+.nav-menu li.current-menu-item > a::after,
+.main-nav a:hover::after,
+.site-nav a:hover::after {
+  width: 70%;
+}
+
+/* ── 59.9 Refined post title typography ── */
+.post-title,
+.entry-title,
+h1.page-title,
+.single-post-content h1 {
+  letter-spacing: var(--fluent-tracking-tight) !important;
+  line-height: var(--fluent-line-height-heading) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+}
+
+/* Post title hover accent on list pages */
+.post-title a:hover,
+.entry-title a:hover {
+  color: var(--fluent-accent) !important;
+  background-size: 0% !important; /* disable underline animation for headings */
+}
+
+/* Drop cap for long-form posts */
+.single-post-content .entry-content > p:first-of-type::first-letter,
+.post-content > p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5em;
+  line-height: 0.8;
+  padding-right: var(--fluent-space-2);
+  padding-top: 4px;
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-accent);
+}
+
+/* ── 59.10 Refined blockquote — decorative opening mark ── */
+blockquote {
+  position: relative;
+  padding-top: var(--fluent-space-6) !important;
+}
+
+blockquote::before {
+  content: "\201C"; /* " */
+  position: absolute;
+  top: -8px;
+  left: var(--fluent-space-4);
+  font-size: 72px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: var(--fluent-accent);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.wp-block-pullquote {
+  position: relative;
+  overflow: hidden;
+}
+
+.wp-block-pullquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 160px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: var(--fluent-accent);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* ── 59.11 Code block — beautiful syntax-neutral styling ── */
+pre,
+.wp-block-code,
+.wp-block-preformatted {
+  position: relative;
+  /* Subtle gradient top bar */
+  border-top: 3px solid var(--fluent-accent) !important;
+}
+
+pre::before,
+.wp-block-code::before {
+  content: "• • •";
+  position: absolute;
+  top: -2.2em;
+  left: var(--fluent-space-4);
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--fluent-text-secondary);
+  pointer-events: none;
+}
+
+pre {
+  padding-top: calc(var(--fluent-space-4) + 1.5em) !important;
+}
+
+/* ── 59.12 Beautiful table — header gradient ── */
+thead {
+  background: linear-gradient(
+    135deg,
+    var(--fluent-accent-subtle) 0%,
+    color-mix(in srgb, var(--fluent-accent-subtle) 50%, var(--fluent-surface)) 100%
+  ) !important;
+}
+
+html.darkmode thead {
+  background: linear-gradient(
+    135deg,
+    var(--fluent-accent-subtle) 0%,
+    color-mix(in srgb, var(--fluent-accent-subtle) 60%, var(--fluent-surface)) 100%
+  ) !important;
+}
+
+/* ── 59.13 Form inputs — floating glow focus ring ── */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 3px rgba(15, 108, 189, 0.18),
+              0 1px 4px rgba(15, 108, 189, 0.10) !important;
+  outline: none !important;
+}
+
+html.darkmode input[type="text"]:focus,
+html.darkmode input[type="email"]:focus,
+html.darkmode input[type="password"]:focus,
+html.darkmode textarea:focus,
+html.darkmode select:focus {
+  box-shadow: 0 0 0 3px rgba(71, 158, 245, 0.25),
+              0 1px 4px rgba(71, 158, 245, 0.12) !important;
+}
+
+/* ── 59.14 Pagination — Fluent segmented style ── */
+.pagination,
+.post-navigation,
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fluent-space-2);
+}
+
+.page-numbers,
+.pagination .page-numbers {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 0 var(--fluent-space-2) !important;
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-medium) !important;
+  color: var(--fluent-text) !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  transition:
+    background var(--fluent-transition),
+    border-color var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    color var(--fluent-transition) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+}
+
+.page-numbers:hover:not(.current),
+.pagination .page-numbers:hover:not(.current) {
+  background: var(--fluent-accent-subtle) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+.page-numbers.current,
+.pagination .page-numbers.current {
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: 0 2px 8px rgba(15, 108, 189, 0.30) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+}
+
+.page-numbers.dots {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* ── 59.15 Tags & category badges — pill style ── */
+.post-tag,
+.tag,
+a[rel="tag"],
+.cat-links a,
+.wp-block-tag-cloud a,
+.label,
+.badge:not(.fluent-badge) {
+  display: inline-block !important;
+  padding: 2px var(--fluent-space-3) !important;
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  font-size: var(--fluent-font-size-caption) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  border: 1px solid rgba(15, 108, 189, 0.18) !important;
+  transition:
+    background var(--fluent-transition),
+    color var(--fluent-transition),
+    box-shadow var(--fluent-transition) !important;
+  letter-spacing: var(--fluent-tracking-wide) !important;
+}
+
+.post-tag:hover,
+.tag:hover,
+a[rel="tag"]:hover,
+.cat-links a:hover {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  background-size: 0% !important;
+}
+
+/* ── 59.16 Sidebar widgets — subtle depth ── */
+.widget,
+.sidebar-widget {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  padding: var(--fluent-space-5) !important;
+  margin-bottom: var(--fluent-space-5) !important;
+  transition: box-shadow var(--fluent-transition-slow) !important;
+}
+
+.widget:hover,
+.sidebar-widget:hover {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+.widget-title,
+.sidebar-widget-title {
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+  padding-bottom: var(--fluent-space-3) !important;
+  border-bottom: 2px solid var(--fluent-accent) !important;
+  margin-bottom: var(--fluent-space-4) !important;
+  /* Accent gradient underline */
+  background: linear-gradient(var(--fluent-accent), var(--fluent-accent)) no-repeat left bottom / 32px 2px;
+  border-bottom: none !important;
+  padding-bottom: var(--fluent-space-3) !important;
+}
+
+/* ── 59.17 Comments — beautiful thread styling ── */
+.comment-list .comment {
+  margin-bottom: var(--fluent-space-4) !important;
+}
+
+.comment-list .comment-body {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  padding: var(--fluent-space-5) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  position: relative;
+  transition: box-shadow var(--fluent-transition-slow) !important;
+}
+
+.comment-list .comment-body:hover {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Avatar circle border */
+.comment-list .comment-author img,
+.comment .avatar {
+  border-radius: var(--fluent-radius-pill) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  padding: 1px !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+}
+
+/* ── 59.18 Footer — layered gradient ── */
+.site-footer,
+#site-footer {
+  background: linear-gradient(
+    180deg,
+    var(--fluent-surface-alt) 0%,
+    var(--fluent-bg) 100%
+  ) !important;
+  border-top: var(--fluent-stroke) !important;
+  padding: var(--fluent-space-10) var(--fluent-space-6) var(--fluent-space-6) !important;
+}
+
+html.darkmode .site-footer,
+html.darkmode #site-footer {
+  background: linear-gradient(
+    180deg,
+    var(--fluent-surface-alt) 0%,
+    var(--fluent-bg) 100%
+  ) !important;
+}
+
+/* ── 59.19 Single post reading experience ── */
+.single-post-content,
+.entry-content,
+.post-content {
+  /* Ideal reading line length */
+  max-width: 72ch;
+}
+
+/* Generous inter-element spacing inside post content */
+.entry-content > * + *,
+.post-content > * + *,
+.single-post-content > * + * {
+  margin-top: var(--fluent-space-5);
+}
+
+/* Beautiful lead paragraph */
+.entry-content > p:first-of-type,
+.post-content > p:first-of-type {
+  font-size: var(--fluent-font-size-lg, 18px);
+  line-height: 1.7;
+  color: var(--fluent-text);
+  font-weight: var(--fluent-font-weight-base);
+}
+
+/* ── 59.20 Beautiful cover/hero block ── */
+.wp-block-cover {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(15,108,189,0.25) 0%, transparent 60%) !important;
+}
+
+.wp-block-cover .wp-block-cover__inner-container h1,
+.wp-block-cover .wp-block-cover__inner-container h2,
+.wp-block-cover .wp-block-cover__inner-container h3 {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+/* ── 59.21 Beautiful audio accent-color ── */
+audio {
+  accent-color: var(--fluent-accent);
+  color-scheme: light dark;
+}
+
+video {
+  border-radius: var(--fluent-radius-md);
+}
+
+/* ── 59.22 Selection highlight — Fluent accent tint ── */
+::selection {
+  background: rgba(15, 108, 189, 0.20);
+  color: var(--fluent-text);
+}
+
+html.darkmode ::selection {
+  background: rgba(71, 158, 245, 0.28);
+}
+
+/* ── 59.23 Scrollbar — refined Fluent thin style ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--fluent-neutral-32);
+  border-radius: var(--fluent-radius-pill);
+  transition: background var(--fluent-transition);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--fluent-accent); }
+
+/* ── 59.24 Focus ring — beautiful blue glow ── */
+:focus-visible {
+  outline: 2px solid var(--fluent-accent) !important;
+  outline-offset: 3px !important;
+  border-radius: var(--fluent-radius-sm) !important;
+  box-shadow: 0 0 0 4px rgba(15, 108, 189, 0.18) !important;
+}
+
+html.darkmode :focus-visible {
+  box-shadow: 0 0 0 4px rgba(71, 158, 245, 0.25) !important;
+}
+
+/* ── 59.25 Dark mode — premium rich dark ── */
+html.darkmode body {
+  background: var(--fluent-bg) !important;
+}
+
+/* Dark mode cards get a top-edge highlight (Fluent Mica shimmer) */
+html.darkmode .card,
+html.darkmode .blog-post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .fluent-card {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Dark mode: headings slightly lighter for contrast pop */
+html.darkmode h1,
+html.darkmode h2,
+html.darkmode h3 {
+  color: #ffffff !important;
+}
+
+/* Dark mode: code blocks */
+html.darkmode pre,
+html.darkmode code,
+html.darkmode .wp-block-code {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Dark mode: table striping */
+html.darkmode tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html.darkmode tbody tr:hover {
+  background: rgba(71, 158, 245, 0.08) !important;
+}
+
+/* Dark mode: blockquote */
+html.darkmode blockquote {
+  background: rgba(71, 158, 245, 0.06) !important;
+  border-inline-start-color: var(--fluent-accent) !important;
+}
+
+/* Dark mode: mark */
+html.darkmode mark {
+  background: rgba(247, 99, 12, 0.20) !important;
+  color: var(--fluent-text) !important;
+}
+
+/* Dark mode: summary/details */
+html.darkmode summary:hover {
+  background: rgba(71, 158, 245, 0.10) !important;
+}
+
+/* ── 59.26 Responsive refinements ── */
+@media (max-width: 768px) {
+  /* Stack author box on mobile */
+  .author-box,
+  .author-bio {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Disable alignment breakout on small screens */
+  .alignwide,
+  .alignfull {
+    margin-inline: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Smaller display headings on mobile */
+  .fluent-text--display { font-size: var(--fluent-font-size-xl) !important; }
+  .fluent-text--title-lg { font-size: var(--fluent-font-size-title) !important; }
+
+  /* Make post cards full width */
+  .wp-block-columns { flex-direction: column !important; }
+
+  /* Comment form single column */
+  #commentform { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  /* Login page — full width on very small screens */
+  body.login #login {
+    max-width: 100% !important;
+    padding: var(--fluent-space-3) !important;
+  }
+
+  body.login #loginform,
+  body.login #lostpasswordform {
+    padding: var(--fluent-space-5) !important;
+    border-radius: var(--fluent-radius-md) !important;
+  }
+
+  /* Drawer full width on mobile */
+  dialog.fluent-drawer-dialog {
+    --drawer-width: 100vw !important;
+  }
+
+  dialog.fluent-drawer-dialog[data-size="small"],
+  dialog.fluent-drawer-dialog[data-size="medium"] {
+    --drawer-width: 100vw !important;
+  }
+}
+
+/* ── 59.27 Print styles — clean, ink-saving ── */
+@media print {
+  .site-header,
+  #site-header,
+  .site-footer,
+  #site-footer,
+  .sidebar,
+  .widget-area,
+  .nav-menu,
+  .pagination,
+  .comment-respond,
+  .post-navigation {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555555;
+  }
+
+  .card,
+  .blog-post {
+    box-shadow: none !important;
+    border: 1px solid #cccccc !important;
+    break-inside: avoid;
+  }
+}
+
+/* ============================================================
+   60. RESPONSIVE HARMONY & MOBILE OPTIMIZATION
+   目标：整体协调 + 小屏可读 + 触控友好 + 避免溢出
+   ============================================================ */
+
+/* --- 60.1 Global overflow safety --- */
+html,
+body {
+  overflow-x: clip;
+}
+
+.entry-content,
+.post-content,
+.single-post-content,
+.comment-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Long URLs / long code lines */
+a,
+code,
+kbd,
+pre {
+  word-wrap: break-word;
+}
+
+/* --- 60.2 Tablet refinement (<= 1024px) --- */
+@media (max-width: 1024px) {
+  :root {
+    --fluent-font-size-display: 34px;
+    --fluent-font-size-xl: 30px;
+    --fluent-font-size-title-lg: 26px;
+    --fluent-font-size-title: 22px;
+  }
+
+  /* Reduce horizontal pressure */
+  .entry-content,
+  .post-content,
+  .single-post-content {
+    max-width: 68ch;
+    padding-inline: var(--fluent-space-4);
+  }
+
+  /* Card spacing tighter for medium screens */
+  .card,
+  .post,
+  .blog-post,
+  .widget,
+  .sidebar-widget {
+    padding: var(--fluent-space-4) !important;
+  }
+
+  /* Media-text becomes more balanced */
+  .wp-block-media-text {
+    gap: var(--fluent-space-4) !important;
+  }
+}
+
+/* --- 60.3 Mobile main breakpoint (<= 768px) --- */
+@media (max-width: 768px) {
+  :root {
+    --fluent-font-size-display: 30px;
+    --fluent-font-size-xl: 28px;
+    --fluent-font-size-title-lg: 24px;
+    --fluent-font-size-title: 21px;
+    --fluent-font-size-subtitle: 18px;
+    --fluent-font-size-base: 15px;
+    --fluent-line-height: 1.65;
+  }
+
+  body {
+    font-size: var(--fluent-font-size-base);
+  }
+
+  /* Container breathing room */
+  .site,
+  .site-content,
+  .content-area,
+  .entry-content,
+  .post-content,
+  .single-post-content,
+  .comment-respond,
+  .widget,
+  .sidebar-widget {
+    padding-inline: var(--fluent-space-3);
+  }
+
+  /* Header: less visual noise on mobile */
+  .site-header,
+  #site-header,
+  .navbar {
+    backdrop-filter: blur(14px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  }
+
+  /* Nav links become tap-friendly */
+  .nav-menu a,
+  .main-nav a,
+  .site-nav a,
+  .navbar a {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--fluent-space-2) var(--fluent-space-3) !important;
+    border-radius: var(--fluent-radius-md);
+  }
+
+  /* Buttons: larger touch targets */
+  .fluent-btn,
+  .btn,
+  button,
+  input[type="submit"],
+  input[type="button"],
+  .wp-block-button__link,
+  .wp-element-button {
+    min-height: 42px !important;
+    padding-inline: var(--fluent-space-4) !important;
+    font-size: var(--fluent-font-size-base) !important;
+  }
+
+  .fluent-btn--icon {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  /* Hero / title compression */
+  .fluent-text--display,
+  .error-404 .page-title,
+  .no-results .page-title,
+  .not-found .page-title {
+    font-size: clamp(1.7rem, 7vw, 2.1rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .error-404 .page-title::before {
+    font-size: clamp(64px, 20vw, 92px) !important;
+  }
+
+  /* Drop cap too heavy on mobile: disable */
+  .single-post-content .entry-content > p:first-of-type::first-letter,
+  .post-content > p:first-of-type::first-letter {
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Tables: horizontal scrolling wrapper behavior */
+  .wp-block-table,
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  /* Code blocks: enable smooth horizontal swipe */
+  pre,
+  .wp-block-code,
+  .wp-block-preformatted {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.82rem !important;
+  }
+
+  /* Quotes less decorative on small devices */
+  blockquote::before,
+  .wp-block-pullquote::before {
+    opacity: 0.05;
+    font-size: 96px;
+  }
+
+  /* Comments layout tidy */
+  .comment-list .comment-body {
+    padding: var(--fluent-space-4) !important;
+  }
+
+  .comment-list .comment-author img,
+  .comment .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Author bio stack */
+  .author-box,
+  .author-bio,
+  .post-author-box {
+    gap: var(--fluent-space-3);
+    padding: var(--fluent-space-4);
+  }
+
+  /* Gallery spacing reduction */
+  .wp-block-gallery {
+    gap: var(--fluent-space-2) !important;
+  }
+
+  /* Cover block padding reduction */
+  .wp-block-cover {
+    min-height: 220px;
+    padding: var(--fluent-space-6) var(--fluent-space-4);
+  }
+
+  /* Drawer body tighter padding */
+  .fluent-drawer-body,
+  drawer-body {
+    padding: var(--fluent-space-4) !important;
+  }
+}
+
+/* --- 60.4 Small phone breakpoint (<= 480px) --- */
+@media (max-width: 480px) {
+  :root {
+    --fluent-font-size-display: 26px;
+    --fluent-font-size-xl: 24px;
+    --fluent-font-size-title-lg: 22px;
+    --fluent-font-size-title: 20px;
+    --fluent-font-size-base: 15px;
+  }
+
+  /* Extra safe side padding */
+  .entry-content,
+  .post-content,
+  .single-post-content,
+  .comment-respond,
+  .widget,
+  .sidebar-widget {
+    padding-inline: var(--fluent-space-2) !important;
+  }
+
+  /* Full-width visual blocks */
+  .card,
+  .post,
+  .blog-post,
+  .wp-block-group,
+  .comment-respond,
+  .author-box,
+  .author-bio {
+    border-radius: var(--fluent-radius-md) !important;
+  }
+
+  /* Buttons full width when stacked in forms */
+  .comment-form #submit,
+  #commentform #submit,
+  .wp-block-search__button,
+  body.login #wp-submit {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .wp-block-search__inside-wrapper {
+    flex-direction: column;
+    gap: var(--fluent-space-2);
+  }
+
+  .wp-block-search__button {
+    height: 42px;
+  }
+
+  /* Social links easier to tap */
+  .wp-block-social-link a {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Breadcrumb wrapping */
+  .breadcrumb,
+  .breadcrumbs {
+    row-gap: var(--fluent-space-1);
+    font-size: var(--fluent-font-size-caption);
+  }
+
+  /* Keep floating images from crushing text */
+  .alignleft,
+  .alignright {
+    float: none;
+    max-width: 100%;
+    margin: 0 0 var(--fluent-space-3) 0;
+  }
+
+  /* Drawer always edge-to-edge on small phone */
+  dialog.fluent-drawer-dialog {
+    --drawer-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+
+  dialog.fluent-drawer-dialog[data-position="end"],
+  dialog.fluent-drawer-dialog[data-position="start"] {
+    inset-inline: 0;
+  }
+}
+
+/* --- 60.5 Safe area support (iPhone notch/home bar) --- */
+@supports (padding: max(0px)) {
+  .site-header,
+  #site-header,
+  .navbar {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+
+  .site-footer,
+  #site-footer,
+  .fluent-drawer-body,
+  drawer-body {
+    padding-bottom: max(var(--fluent-space-4), env(safe-area-inset-bottom));
+  }
+
+  .skip-link:focus {
+    top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* --- 60.6 Mobile admin-bar offset fixes --- */
+@media (max-width: 782px) {
+  html.admin-bar .site-header,
+  html.admin-bar #site-header,
+  html.admin-bar .navbar {
+    top: 46px !important;
+  }
+
+  .admin-bar body {
+    padding-top: 46px;
+  }
+}
+
+/* --- 60.7 Reduced motion polish on mobile --- */
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .card,
+  .post,
+  .blog-post,
+  .fluent-card,
+  .fluent-btn,
+  .wp-block-button__link,
+  .site-header,
+  .nav-menu a {
+    transition-duration: 1ms !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   61. MICROSOFT FLUENT VISUAL REFINEMENT
+   目标：整体更“微软风格”——克制、清晰层级、柔和深度、Acrylic/Mica
+   ============================================================ */
+
+/* --- 61.1 Fluent neutral hierarchy consistency --- */
+body,
+.entry-content,
+.post-content,
+.single-post-content {
+  color: var(--fluent-text);
+}
+
+/* Secondary text统一弱化，不抢主信息 */
+.post-meta,
+.post-meta-detail,
+.entry-meta,
+.comment-metadata,
+.wp-caption-text,
+figcaption,
+.fluent-text--secondary,
+.fluent-text--caption {
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Tertiary hints */
+.comment-notes,
+.comment-form-cookies-consent,
+small,
+small *,
+.fluent-text--tertiary {
+  color: var(--fluent-text-tertiary) !important;
+}
+
+/* --- 61.2 Acrylic-style subtle surfaces --- */
+/* 让不同层面材质关系更微软：page < surface < raised */
+.card,
+.post,
+.blog-post,
+.widget,
+.sidebar-widget,
+.comment-list .comment-body,
+.fluent-card,
+.wp-block-group,
+.comment-respond {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 100%),
+    var(--fluent-surface) !important;
+}
+
+html.darkmode .card,
+html.darkmode .post,
+html.darkmode .blog-post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .comment-list .comment-body,
+html.darkmode .fluent-card,
+html.darkmode .wp-block-group,
+html.darkmode .comment-respond {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%),
+    var(--fluent-surface) !important;
+}
+
+/* --- 61.3 Primary accent discipline (CTA only) --- */
+/* 避免全页蓝色泛滥：只有按钮/交互焦点/重要链接用强accent */
+a {
+  color: color-mix(in srgb, var(--fluent-accent) 90%, #0a4d82);
+}
+
+a:hover,
+a:focus {
+  color: var(--fluent-accent-hover);
+}
+
+/* 内容区普通链接更克制，避免视觉噪音 */
+.entry-content a:not(.fluent-btn):not(.wp-block-button__link),
+.post-content a:not(.fluent-btn):not(.wp-block-button__link),
+.single-post-content a:not(.fluent-btn):not(.wp-block-button__link) {
+  text-decoration-thickness: 1px;
+}
+
+/* --- 61.4 Microsoft-style control radii and depth --- */
+/* Fluent 2 常见中小圆角，避免过度“胶囊化” */
+.fluent-btn,
+.btn,
+input[type="submit"],
+input[type="button"],
+.wp-block-button__link,
+.wp-element-button,
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+textarea,
+select,
+.wp-block-search__input {
+  border-radius: var(--fluent-radius-md) !important;
+}
+
+/* 仅特定组件保留pill */
+.fluent-btn--pill,
+.search-field,
+.search-form input[type="search"],
+.wp-block-search__input {
+  border-radius: var(--fluent-radius-pill) !important;
+}
+
+/* --- 61.5 Input & form Fluent polish --- */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.form-control,
+.wp-block-search__input {
+  background: color-mix(in srgb, var(--fluent-surface) 95%, var(--fluent-neutral-8) 5%) !important;
+  border: var(--fluent-stroke-strong) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--fluent-text-tertiary) !important;
+  opacity: 1;
+}
+
+/* --- 61.6 Fluent button emotional hierarchy --- */
+/* Primary: strong, Subtle:轻, Outline:中性, Danger:风险 */
+.fluent-btn--primary,
+.btn-primary,
+input[type="submit"],
+.wp-block-button:not(.is-style-outline) .wp-block-button__link {
+  letter-spacing: 0.01em;
+}
+
+.fluent-btn--subtle {
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 88%, var(--fluent-surface) 12%) !important;
+}
+
+.fluent-btn--outline,
+.btn-secondary,
+.btn-outline,
+.wp-block-button.is-style-outline .wp-block-button__link {
+  border-color: color-mix(in srgb, var(--fluent-text) 18%, transparent) !important;
+  color: var(--fluent-text) !important;
+}
+
+.fluent-btn--outline:hover,
+.btn-secondary:hover,
+.btn-outline:hover,
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 60%, var(--fluent-surface) 40%) !important;
+}
+
+/* --- 61.7 Fluent navigation clarity --- */
+.nav-menu a,
+.main-nav a,
+.site-nav a,
+.navbar a {
+  font-weight: var(--fluent-font-weight-medium) !important;
+}
+
+.nav-menu li.current-menu-item > a,
+.main-nav li.current-menu-item > a,
+.site-nav li.current-menu-item > a {
+  color: var(--fluent-accent) !important;
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 72%, var(--fluent-surface) 28%) !important;
+}
+
+/* --- 61.8 Fluent typography rhythm --- */
+h1, h2, h3, h4, h5, h6,
+.fluent-text--display,
+.fluent-text--title-lg,
+.fluent-text--title,
+.fluent-text--subtitle {
+  text-wrap: balance;
+}
+
+p,
+li,
+dd,
+.comment-content {
+  text-wrap: pretty;
+}
+
+/* --- 61.9 Elevated key regions --- */
+/* 搜索框、评论区、作者区作为“功能容器”给更明确层次 */
+.search-form,
+.wp-block-search,
+.comment-respond,
+.author-box,
+.author-bio,
+.post-author-box {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* --- 61.10 Fluent divider consistency --- */
+hr,
+.fluent-divider,
+.wp-block-separator {
+  border-top-color: color-mix(in srgb, var(--fluent-text) 14%, transparent) !important;
+}
+
+/* --- 61.11 Soft highlight for selected/current entities --- */
+.current-menu-item > a,
+.page-numbers.current,
+.pagination .current,
+.breadcrumb-item.active,
+.wp-block-latest-posts li.current-post a {
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* --- 61.12 Harmonize dark mode contrast (微软式不刺眼) --- */
+html.darkmode {
+  color-scheme: dark;
+}
+
+html.darkmode a {
+  color: color-mix(in srgb, var(--fluent-accent) 92%, #cce7ff 8%);
+}
+
+html.darkmode a:hover,
+html.darkmode a:focus {
+  color: #8cc4ff;
+}
+
+/* 深色模式下减少过亮白边 */
+html.darkmode .card,
+html.darkmode .post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .comment-body,
+html.darkmode .fluent-card,
+html.darkmode .wp-block-group,
+html.darkmode .comment-respond {
+  border-color: rgba(255,255,255,0.09) !important;
+}
+
+/* --- 61.13 Mobile Fluent aesthetics continuity --- */
+@media (max-width: 768px) {
+  /* 移动端减轻阴影，保留层次不臃肿 */
+  .card,
+  .post,
+  .blog-post,
+  .widget,
+  .sidebar-widget,
+  .comment-body,
+  .fluent-card,
+  .wp-block-group,
+  .comment-respond {
+    box-shadow: var(--fluent-shadow-2) !important;
+  }
+
+  /* 移动端导航当前项更清晰 */
+  .nav-menu li.current-menu-item > a,
+  .main-nav li.current-menu-item > a,
+  .site-nav li.current-menu-item > a {
+    border: 1px solid color-mix(in srgb, var(--fluent-accent) 35%, transparent);
+  }
+
+  /* 内容区避免过窄导致文字密度不舒适 */
+  .entry-content,
+  .post-content,
+  .single-post-content {
+    max-width: 100%;
+  }
+}
+
+/* --- 61.14 Slight polish on Fluent web components --- */
+fluent-button::part(control) {
+  border-radius: var(--fluent-radius-md);
+  font-family: var(--fluent-font);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+fluent-button[appearance="accent"]::part(control) {
+  box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 2px 8px rgba(15,108,189,.30);
+}
+
+fluent-text-input::part(root),
+fluent-text-input::part(control) {
+  border-radius: var(--fluent-radius-md);
+}
+
+fluent-card::part(control) {
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* --- 61.15 Finishing touches: smooth but restrained --- */
+* {
+  text-rendering: optimizeLegibility;
+}
+
+/* 避免动画过度影响微软风格的“安静感” */
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .card,
+  .post,
+  .fluent-card,
+  .fluent-btn,
+  a {
+    transition-duration: 1ms !important;
+  }
 }

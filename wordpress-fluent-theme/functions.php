@@ -79,6 +79,19 @@ function wft_enqueue_assets() {
         null,       // version handled by the CDN URL
         true        // load in footer to avoid blocking page render
     );
+
+    // ------------------------------------------------------------------
+    // Fluent Drawer — slide-out panel component
+    // Provides open/close/toggle behaviour for .fluent-drawer elements.
+    // See fluent-drawer.js and style.css (section 20) for usage docs.
+    // ------------------------------------------------------------------
+    wp_enqueue_script(
+        'fluent-drawer',
+        get_stylesheet_directory_uri() . '/fluent-drawer.js',
+        array(),    // no JS dependencies (vanilla JS, no jQuery required)
+        '0.2.0',
+        true        // load in footer
+    );
 }
 
 // ---------------------------------------------------------------------------
