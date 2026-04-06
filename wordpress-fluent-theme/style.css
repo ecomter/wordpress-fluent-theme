@@ -1651,3 +1651,1671 @@ dialog.fluent-drawer-dialog::backdrop {
 .fluent-mb-4 { margin-bottom: var(--fluent-space-4)  !important; }
 .fluent-mb-6 { margin-bottom: var(--fluent-space-6)  !important; }
 .fluent-mb-8 { margin-bottom: var(--fluent-space-8)  !important; }
+
+/* ============================================================
+   26. CONTENT TYPOGRAPHY — Lists
+   Fluent-styled ordered and unordered lists for post content.
+   ============================================================ */
+ul,
+ol {
+  padding-inline-start: var(--fluent-space-6);
+  margin-top: 0;
+  margin-bottom: var(--fluent-space-4);
+}
+
+li {
+  margin-bottom: var(--fluent-space-1);
+  line-height: var(--fluent-line-height);
+  color: var(--fluent-text);
+}
+
+/* Nested lists — tighter spacing */
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin-top: var(--fluent-space-1);
+  margin-bottom: var(--fluent-space-1);
+}
+
+/* Unordered list markers — Fluent accent dot */
+ul { list-style-type: disc; }
+ul li::marker { color: var(--fluent-accent); }
+
+/* Ordered list markers */
+ol { list-style-type: decimal; }
+ol li::marker {
+  color: var(--fluent-accent);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* Definition lists */
+dl { margin-bottom: var(--fluent-space-4); }
+
+dt {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-top: var(--fluent-space-3);
+}
+
+dd {
+  margin-inline-start: var(--fluent-space-5);
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   27. CONTENT TYPOGRAPHY — Tables
+   Fluent-styled tables with alternating row tints.
+   ============================================================ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  overflow: hidden;
+  font-size: var(--fluent-font-size-base);
+  background: var(--fluent-surface);
+  box-shadow: var(--fluent-shadow-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+caption {
+  caption-side: bottom;
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: start;
+}
+
+thead {
+  background: var(--fluent-accent-subtle);
+}
+
+th {
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-accent);
+  text-align: start;
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke-strong);
+  white-space: nowrap;
+}
+
+td {
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke);
+  color: var(--fluent-text);
+  vertical-align: top;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Zebra striping */
+tbody tr:nth-child(even) {
+  background: var(--fluent-surface-alt);
+}
+
+tbody tr:hover {
+  background: var(--fluent-accent-subtle);
+  transition: background var(--fluent-transition);
+}
+
+/* ============================================================
+   28. CONTENT TYPOGRAPHY — Blockquotes
+   Fluent accent-bar pullquote style.
+   ============================================================ */
+blockquote {
+  border-inline-start: 4px solid var(--fluent-accent);
+  background: var(--fluent-surface-alt);
+  padding: var(--fluent-space-4) var(--fluent-space-6);
+  margin: var(--fluent-space-6) 0;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0;
+  color: var(--fluent-text-secondary);
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+blockquote cite,
+blockquote footer {
+  display: block;
+  font-size: var(--fluent-font-size-sm);
+  font-style: normal;
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text-secondary);
+  margin-top: var(--fluent-space-3);
+}
+
+blockquote cite::before { content: "— "; }
+
+/* ============================================================
+   29. CONTENT TYPOGRAPHY — Figures & Captions
+   ============================================================ */
+figure {
+  margin: var(--fluent-space-6) 0;
+}
+
+figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  font-style: italic;
+}
+
+/* ============================================================
+   30. INLINE TEXT ELEMENTS
+   ============================================================ */
+
+/* Highlighted / marked text */
+mark {
+  background: var(--fluent-color-warning-bg);
+  color: var(--fluent-text);
+  border-radius: var(--fluent-radius-xs);
+  padding: 0 3px;
+}
+
+/* Keyboard shortcut */
+kbd {
+  display: inline-block;
+  font-family: var(--fluent-font-mono);
+  font-size: 0.85em;
+  padding: 1px 6px;
+  background: var(--fluent-surface-alt);
+  border: var(--fluent-stroke-strong);
+  border-radius: var(--fluent-radius-sm);
+  box-shadow: 0 1px 0 var(--fluent-neutral-32);
+  color: var(--fluent-text);
+}
+
+/* Abbreviations */
+abbr[title] {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+/* Address block */
+address {
+  font-style: normal;
+  color: var(--fluent-text-secondary);
+  border-inline-start: 3px solid var(--fluent-neutral-32);
+  padding-inline-start: var(--fluent-space-4);
+  margin-bottom: var(--fluent-space-4);
+}
+
+/* Details / summary — Fluent disclosure component */
+details {
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  background: var(--fluent-surface);
+  padding: 0;
+  margin-bottom: var(--fluent-space-4);
+  overflow: hidden;
+  box-shadow: var(--fluent-shadow-2);
+  transition: box-shadow var(--fluent-transition);
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-2);
+  padding: var(--fluent-space-3) var(--fluent-space-4);
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-base);
+  color: var(--fluent-text);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background var(--fluent-transition);
+}
+
+summary::-webkit-details-marker { display: none; }
+
+summary::before {
+  content: "›";
+  display: inline-block;
+  font-size: 1.2em;
+  line-height: 1;
+  transition: transform var(--fluent-transition);
+  color: var(--fluent-accent);
+  flex-shrink: 0;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+summary:hover {
+  background: var(--fluent-accent-subtle);
+}
+
+details > *:not(summary) {
+  padding: var(--fluent-space-4);
+  border-top: var(--fluent-stroke);
+}
+
+/* Superscript / subscript */
+sub, sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+/* ============================================================
+   31. WORDPRESS IMAGE & ALIGNMENT HELPERS
+   ============================================================ */
+
+/* Alignment utilities (classic editor + blocks) */
+.alignleft,
+.alignright {
+  max-width: 50%;
+}
+
+.alignleft {
+  float: left;
+  margin-inline-end: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.alignright {
+  float: right;
+  margin-inline-start: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.aligncenter {
+  display: block;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Wide and full alignment breakout helpers */
+.alignwide {
+  margin-inline: calc(-1 * var(--fluent-space-8));
+  max-width: calc(100% + var(--fluent-space-8) * 2);
+}
+
+.alignfull {
+  margin-inline: calc(-50vw + 50%);
+  max-width: 100vw;
+  width: 100vw;
+}
+
+/* Classic editor image caption */
+.wp-caption {
+  max-width: 100%;
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-caption img {
+  display: block;
+  border-radius: var(--fluent-radius-md);
+}
+
+.wp-caption-text {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding: var(--fluent-space-2) 0;
+}
+
+/* Featured / post thumbnail */
+.wp-post-image,
+.attachment-post-thumbnail,
+.size-thumbnail,
+.size-medium,
+.size-large,
+.size-full,
+.size-medium-large {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--fluent-radius-md);
+}
+
+/* Clearfix after floated images */
+.wp-block-image img,
+.entry-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ============================================================
+   32. GUTENBERG BLOCKS — Buttons
+   ============================================================ */
+
+/* Block button wrapper */
+.wp-block-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-3);
+  align-items: center;
+}
+
+/* Individual button block */
+.wp-block-button__link,
+.wp-element-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-5) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  line-height: 1 !important;
+  border-radius: var(--fluent-radius-md) !important;
+  text-decoration: none !important;
+  transition:
+    background var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    transform var(--fluent-transition) !important;
+  cursor: pointer;
+}
+
+/* Default / filled button */
+.wp-block-button:not(.is-style-outline) .wp-block-button__link,
+.wp-block-button:not(.is-style-outline) .wp-element-button {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover,
+.wp-block-button:not(.is-style-outline) .wp-element-button:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4);
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:active,
+.wp-block-button:not(.is-style-outline) .wp-element-button:active {
+  background: var(--fluent-accent-active) !important;
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* Outline button */
+.wp-block-button.is-style-outline .wp-block-button__link,
+.wp-block-button.is-style-outline .wp-element-button {
+  background: transparent !important;
+  color: var(--fluent-accent) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  box-shadow: none;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:hover,
+.wp-block-button.is-style-outline .wp-element-button:hover {
+  background: var(--fluent-accent-subtle) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* ============================================================
+   33. GUTENBERG BLOCKS — Quote & Pullquote
+   ============================================================ */
+
+/* wp-block-quote */
+.wp-block-quote {
+  border-inline-start: 4px solid var(--fluent-accent) !important;
+  background: var(--fluent-surface-alt) !important;
+  padding: var(--fluent-space-4) var(--fluent-space-6) !important;
+  margin: var(--fluent-space-6) 0 !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0 !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-quote p {
+  font-style: italic;
+  color: var(--fluent-text-secondary);
+  margin-bottom: var(--fluent-space-3) !important;
+}
+
+.wp-block-quote cite,
+.wp-block-quote__citation {
+  font-size: var(--fluent-font-size-sm) !important;
+  font-style: normal !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Large style quote */
+.wp-block-quote.is-style-large {
+  padding: var(--fluent-space-8) var(--fluent-space-8) !important;
+  border-inline-start-width: 6px !important;
+}
+
+.wp-block-quote.is-style-large p {
+  font-size: var(--fluent-font-size-subtitle) !important;
+}
+
+/* wp-block-pullquote */
+.wp-block-pullquote {
+  border-block: 2px solid var(--fluent-accent);
+  padding: var(--fluent-space-8) var(--fluent-space-6);
+  margin: var(--fluent-space-8) 0;
+  text-align: center;
+}
+
+.wp-block-pullquote blockquote {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.wp-block-pullquote p {
+  font-size: var(--fluent-font-size-subtitle);
+  font-style: italic;
+  color: var(--fluent-text);
+  line-height: var(--fluent-line-height-heading);
+}
+
+.wp-block-pullquote cite,
+.wp-block-pullquote__citation {
+  display: block;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-style: normal;
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text-secondary);
+  margin-top: var(--fluent-space-4);
+}
+
+/* ============================================================
+   34. GUTENBERG BLOCKS — Table
+   ============================================================ */
+
+.wp-block-table {
+  margin-bottom: var(--fluent-space-6);
+  overflow-x: auto;
+}
+
+.wp-block-table table {
+  margin-bottom: 0;
+}
+
+.wp-block-table figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* Striped style */
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) {
+  background: var(--fluent-surface-alt);
+}
+
+/* ============================================================
+   35. GUTENBERG BLOCKS — Separator
+   ============================================================ */
+
+.wp-block-separator,
+hr.wp-block-separator {
+  border: none !important;
+  border-top: var(--fluent-stroke) !important;
+  margin: var(--fluent-space-8) auto !important;
+  opacity: 1 !important;
+}
+
+.wp-block-separator.is-style-wide {
+  width: 100%;
+}
+
+.wp-block-separator.is-style-dots {
+  border: none !important;
+  text-align: center;
+  line-height: 1;
+  height: auto;
+}
+
+.wp-block-separator.is-style-dots::before {
+  content: "· · ·";
+  font-size: var(--fluent-font-size-subtitle);
+  letter-spacing: 0.5em;
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   36. GUTENBERG BLOCKS — Image & Gallery
+   ============================================================ */
+
+.wp-block-image {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-image img {
+  border-radius: var(--fluent-radius-md);
+  box-shadow: var(--fluent-shadow-2);
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.wp-block-image figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* Gallery */
+.wp-block-gallery {
+  display: grid;
+  gap: var(--fluent-space-3);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-gallery .wp-block-image,
+.blocks-gallery-item {
+  margin: 0;
+}
+
+.wp-block-gallery .wp-block-image img,
+.blocks-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   37. GUTENBERG BLOCKS — Cover (hero/banner)
+   ============================================================ */
+
+.wp-block-cover {
+  position: relative;
+  border-radius: var(--fluent-radius-lg);
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--fluent-space-10) var(--fluent-space-8);
+  margin-bottom: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-8);
+}
+
+.wp-block-cover .wp-block-cover__inner-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #ffffff;
+  max-width: 720px;
+  width: 100%;
+}
+
+.wp-block-cover .wp-block-cover__inner-container * {
+  color: inherit;
+}
+
+.wp-block-cover__background {
+  border-radius: inherit;
+}
+
+/* ============================================================
+   38. GUTENBERG BLOCKS — Columns & Group
+   ============================================================ */
+
+.wp-block-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-6);
+  margin-bottom: var(--fluent-space-6);
+  align-items: flex-start;
+}
+
+.wp-block-column {
+  flex: 1 1 0%;
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .wp-block-columns {
+    flex-direction: column;
+  }
+  .wp-block-column {
+    width: 100%;
+  }
+}
+
+/* Group block (container) */
+.wp-block-group {
+  padding: var(--fluent-space-6);
+  border-radius: var(--fluent-radius-lg);
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  box-shadow: var(--fluent-shadow-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-group.has-background {
+  padding: var(--fluent-space-6);
+}
+
+/* ============================================================
+   39. GUTENBERG BLOCKS — Media & Text
+   ============================================================ */
+
+.wp-block-media-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fluent-space-6);
+  align-items: center;
+  margin-bottom: var(--fluent-space-6);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  overflow: hidden;
+  background: var(--fluent-surface);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-media-text__media img,
+.wp-block-media-text__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.wp-block-media-text__content {
+  padding: var(--fluent-space-6) var(--fluent-space-5);
+}
+
+.wp-block-media-text.has-media-on-the-right {
+  grid-template-columns: 1fr 1fr;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__media {
+  order: 2;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {
+  order: 1;
+}
+
+@media (max-width: 600px) {
+  .wp-block-media-text {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   40. GUTENBERG BLOCKS — Code & Preformatted & Verse
+   ============================================================ */
+
+/* Code block */
+.wp-block-code {
+  background: var(--fluent-surface-alt) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  padding: var(--fluent-space-4) !important;
+  overflow-x: auto;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-code code {
+  font-family: var(--fluent-font-mono) !important;
+  font-size: 0.875em !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  white-space: pre;
+  color: var(--fluent-text);
+}
+
+/* Preformatted text */
+.wp-block-preformatted {
+  font-family: var(--fluent-font-mono) !important;
+  font-size: 0.875em !important;
+  background: var(--fluent-surface-alt) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  padding: var(--fluent-space-4) !important;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  color: var(--fluent-text);
+}
+
+/* Verse / poetry — preserve whitespace, monospace-free */
+.wp-block-verse {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-style: italic;
+  background: var(--fluent-surface-alt);
+  border-inline-start: 3px solid var(--fluent-accent);
+  padding: var(--fluent-space-4) var(--fluent-space-5) !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0;
+  white-space: pre-wrap;
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   41. GUTENBERG BLOCKS — Search
+   ============================================================ */
+
+.wp-block-search {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-search__inside-wrapper {
+  display: flex;
+  gap: var(--fluent-space-2);
+  align-items: stretch;
+}
+
+.wp-block-search__input {
+  flex: 1 1 auto;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  background: var(--fluent-surface) !important;
+  color: var(--fluent-text) !important;
+  border: var(--fluent-stroke-strong) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  outline: none;
+  transition: border-color var(--fluent-transition), box-shadow var(--fluent-transition);
+}
+
+.wp-block-search__input:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.20) !important;
+}
+
+.wp-block-search__button {
+  font-family: var(--fluent-font) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border: none !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  padding: 0 var(--fluent-space-5) !important;
+  cursor: pointer !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  height: 40px;
+}
+
+.wp-block-search__button:hover {
+  background: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-search__label {
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-base);
+  margin-bottom: var(--fluent-space-2);
+  display: block;
+  color: var(--fluent-text);
+}
+
+/* ============================================================
+   42. GUTENBERG BLOCKS — Latest Posts
+   ============================================================ */
+
+.wp-block-latest-posts,
+.wp-block-latest-posts__list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--fluent-space-6) !important;
+}
+
+.wp-block-latest-posts li {
+  padding: var(--fluent-space-3) 0;
+  border-bottom: var(--fluent-stroke);
+}
+
+.wp-block-latest-posts li:last-child {
+  border-bottom: none;
+}
+
+.wp-block-latest-posts li a {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text) !important;
+  text-decoration: none;
+  transition: color var(--fluent-transition);
+}
+
+.wp-block-latest-posts li a:hover {
+  color: var(--fluent-accent) !important;
+}
+
+.wp-block-latest-posts__post-date,
+.wp-block-latest-posts .wp-block-latest-posts__post-author {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  display: block;
+  margin-top: 2px;
+}
+
+/* Grid layout */
+.wp-block-latest-posts.is-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--fluent-space-4);
+}
+
+.wp-block-latest-posts.is-grid li {
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-4) !important;
+  box-shadow: var(--fluent-shadow-2);
+  transition: box-shadow var(--fluent-transition), transform var(--fluent-transition);
+}
+
+.wp-block-latest-posts.is-grid li:hover {
+  box-shadow: var(--fluent-shadow-4);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   43. GUTENBERG BLOCKS — Tag Cloud
+   ============================================================ */
+
+.wp-block-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-2);
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-tag-cloud a,
+.tag-cloud-link {
+  display: inline-block;
+  padding: var(--fluent-space-1) var(--fluent-space-3) !important;
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  transition: background var(--fluent-transition), color var(--fluent-transition) !important;
+  border: 1px solid transparent;
+}
+
+.wp-block-tag-cloud a:hover,
+.tag-cloud-link:hover {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+}
+
+/* ============================================================
+   44. GUTENBERG BLOCKS — Social Links
+   ============================================================ */
+
+.wp-block-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-2);
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--fluent-space-6) !important;
+}
+
+.wp-block-social-link {
+  list-style: none;
+}
+
+.wp-block-social-link a {
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-2);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--fluent-radius-md);
+  background: var(--fluent-neutral-16);
+  color: var(--fluent-text) !important;
+  text-decoration: none !important;
+  justify-content: center;
+  transition:
+    background var(--fluent-transition),
+    transform var(--fluent-transition),
+    box-shadow var(--fluent-transition);
+}
+
+.wp-block-social-link a:hover {
+  background: var(--fluent-accent-subtle);
+  color: var(--fluent-accent) !important;
+  transform: scale(1.08);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* "logos-only" and "pill-shape" style adjustments */
+.wp-block-social-links.is-style-pill-shape .wp-block-social-link a {
+  border-radius: var(--fluent-radius-pill);
+  padding: 0 var(--fluent-space-3);
+  width: auto;
+}
+
+/* ============================================================
+   45. GUTENBERG BLOCKS — Details (accordion)
+   ============================================================ */
+
+.wp-block-details {
+  /* Inherits native <details> styles from section 30 */
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-details > summary {
+  /* Inherits native <summary> styles */
+}
+
+/* ============================================================
+   46. GUTENBERG BLOCKS — File Download
+   ============================================================ */
+
+.wp-block-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fluent-space-4);
+  flex-wrap: wrap;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-md);
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+  margin-bottom: var(--fluent-space-4);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-file .wp-block-file__textlink {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent) !important;
+}
+
+.wp-block-file .wp-block-file__button,
+.wp-block-file a.wp-block-file__button {
+  display: inline-flex !important;
+  align-items: center;
+  height: var(--fluent-btn-height-sm) !important;
+  padding: 0 var(--fluent-space-4) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.wp-block-file .wp-block-file__button:hover,
+.wp-block-file a.wp-block-file__button:hover {
+  background: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4);
+}
+
+/* ============================================================
+   47. GUTENBERG BLOCKS — Audio & Video
+   ============================================================ */
+
+.wp-block-audio {
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-block-audio audio {
+  width: 100%;
+  border-radius: var(--fluent-radius-md);
+  accent-color: var(--fluent-accent);
+}
+
+.wp-block-video {
+  margin-bottom: var(--fluent-space-4);
+}
+
+.wp-block-video video {
+  width: 100%;
+  border-radius: var(--fluent-radius-md);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* ============================================================
+   48. GUTENBERG BLOCKS — Embed (iframes: YouTube, Vimeo, etc.)
+   ============================================================ */
+
+.wp-block-embed {
+  margin-bottom: var(--fluent-space-6);
+}
+
+.wp-block-embed__wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-4);
+}
+
+/* Responsive aspect ratio */
+.wp-block-embed.is-type-video .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.wp-block-embed__wrapper iframe,
+.wp-block-embed__wrapper video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: inherit;
+}
+
+.wp-embed-responsive .wp-block-embed__wrapper {
+  position: relative;
+}
+
+.wp-block-embed figcaption {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  text-align: center;
+  font-style: italic;
+  padding-top: var(--fluent-space-2);
+}
+
+/* ============================================================
+   49. GUTENBERG BLOCKS — Spacer
+   ============================================================ */
+
+.wp-block-spacer {
+  display: block;
+}
+
+/* ============================================================
+   50. WORDPRESS ADMIN BAR
+   Fluent-styled admin bar for logged-in users.
+   ============================================================ */
+
+#wpadminbar {
+  background: var(--fluent-surface) !important;
+  border-bottom: var(--fluent-stroke) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  font-family: var(--fluent-font) !important;
+}
+
+#wpadminbar *,
+#wpadminbar .ab-item,
+#wpadminbar a,
+#wpadminbar .ab-top-menu > li > .ab-item {
+  font-family: var(--fluent-font) !important;
+  color: var(--fluent-text) !important;
+}
+
+#wpadminbar .ab-top-menu > li:hover > .ab-item,
+#wpadminbar .ab-top-menu > li.hover > .ab-item {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+#wpadminbar #wp-admin-bar-root-default .ab-sub-wrapper,
+#wpadminbar .menupop .ab-sub-wrapper {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: 0 0 var(--fluent-radius-md) var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-8) !important;
+}
+
+#wpadminbar .ab-submenu a,
+#wpadminbar .ab-submenu .ab-item {
+  color: var(--fluent-text) !important;
+}
+
+#wpadminbar .ab-submenu a:hover {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+/* Adjust body offset for admin bar */
+.admin-bar body {
+  padding-top: 32px;
+}
+
+/* ============================================================
+   51. WORDPRESS LOGIN PAGE
+   Fluent-styled /wp-login.php
+   ============================================================ */
+
+body.login {
+  background: var(--fluent-bg) !important;
+  font-family: var(--fluent-font) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+body.login #login {
+  width: 100%;
+  max-width: 360px;
+  padding: var(--fluent-space-4);
+}
+
+/* WordPress logo on login page */
+body.login #login h1 a {
+  background-size: contain !important;
+  border-radius: var(--fluent-radius-md);
+  transition: opacity var(--fluent-transition);
+}
+
+body.login #login h1 a:hover {
+  opacity: 0.8;
+}
+
+/* Login form card */
+body.login #loginform,
+body.login #lostpasswordform,
+body.login #registerform {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+  padding: var(--fluent-space-8) !important;
+  font-family: var(--fluent-font);
+}
+
+body.login #loginform label,
+body.login #lostpasswordform label,
+body.login #registerform label {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+}
+
+body.login #user_login,
+body.login #user_pass,
+body.login #user_email {
+  font-family: var(--fluent-font) !important;
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke-strong) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  color: var(--fluent-text) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-3) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  transition: border-color var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+}
+
+body.login #user_login:focus,
+body.login #user_pass:focus,
+body.login #user_email:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.20) !important;
+  outline: none !important;
+}
+
+/* Login submit button */
+body.login #wp-submit,
+body.login .button-primary {
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-6) !important;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+  text-shadow: none !important;
+}
+
+body.login #wp-submit:hover,
+body.login .button-primary:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* "Remember me" checkbox */
+body.login .forgetmenot {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Login footer links */
+body.login #nav,
+body.login #backtoblog {
+  text-align: center;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+}
+
+body.login #nav a,
+body.login #backtoblog a {
+  color: var(--fluent-accent) !important;
+}
+
+/* Login error/success notices */
+body.login .message,
+body.login #login_error {
+  background: var(--fluent-surface) !important;
+  border-inline-start: 4px solid var(--fluent-accent) !important;
+  border-radius: 0 var(--fluent-radius-md) var(--fluent-radius-md) 0 !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  padding: var(--fluent-space-3) var(--fluent-space-4) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  color: var(--fluent-text) !important;
+}
+
+body.login #login_error {
+  border-inline-start-color: var(--fluent-color-danger) !important;
+}
+
+/* ============================================================
+   52. ERROR & SPECIAL PAGES
+   Fluent-styled 404, no-results, and not-found pages.
+   ============================================================ */
+
+.error-404,
+.no-results,
+.not-found {
+  text-align: center;
+  padding: var(--fluent-space-16) var(--fluent-space-6);
+}
+
+.error-404 .page-title,
+.no-results .page-title,
+.not-found .page-title {
+  font-size: var(--fluent-font-size-display);
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-4);
+  letter-spacing: var(--fluent-tracking-tight);
+}
+
+/* Large "404" numeral */
+.error-404 .page-title::before {
+  content: "404";
+  display: block;
+  font-size: 120px;
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-accent);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: var(--fluent-space-2);
+}
+
+.error-404 .page-content,
+.no-results .page-content {
+  max-width: 480px;
+  margin-inline: auto;
+  color: var(--fluent-text-secondary);
+}
+
+.no-results .search-form {
+  max-width: 400px;
+  margin: var(--fluent-space-6) auto 0;
+}
+
+/* ============================================================
+   53. COMMENT FORM
+   Full Fluent styling for wp-comments-post.php output.
+   ============================================================ */
+
+.comment-respond {
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-2);
+  margin-top: var(--fluent-space-8);
+}
+
+.comment-respond .comment-reply-title {
+  font-size: var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-4);
+}
+
+.comment-respond .comment-reply-title small a {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  font-weight: var(--fluent-font-weight-base);
+}
+
+#commentform,
+.comment-form {
+  display: grid;
+  gap: var(--fluent-space-4);
+}
+
+.comment-form-author,
+.comment-form-email,
+.comment-form-url,
+.comment-form-comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-1);
+}
+
+.comment-form label {
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+  width: 100%;
+}
+
+.comment-form .required {
+  color: var(--fluent-color-danger);
+  margin-inline-start: 2px;
+}
+
+/* Submit button */
+.comment-form #submit,
+#commentform #submit {
+  justify-self: flex-start;
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  height: var(--fluent-btn-height-md);
+  padding: 0 var(--fluent-space-6) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  cursor: pointer;
+  transition: background var(--fluent-transition), box-shadow var(--fluent-transition) !important;
+}
+
+.comment-form #submit:hover,
+#commentform #submit:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Comment privacy / cookie notice */
+.comment-form .comment-notes,
+.comment-form .comment-form-cookies-consent {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+}
+
+/* ============================================================
+   54. POST EXTRAS — Sticky, Author, Bypostauthor
+   ============================================================ */
+
+/* Sticky post indicator */
+.sticky {
+  position: relative;
+}
+
+.sticky::before {
+  content: "📌 Pinned";
+  display: inline-block;
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent);
+  background: var(--fluent-accent-subtle);
+  border-radius: var(--fluent-radius-pill);
+  padding: 2px var(--fluent-space-3);
+  margin-bottom: var(--fluent-space-2);
+  letter-spacing: var(--fluent-tracking-wide);
+}
+
+/* Highlight the post author's own comment */
+.bypostauthor > .comment-body {
+  border-inline-start: 3px solid var(--fluent-accent) !important;
+  background: var(--fluent-accent-subtle) !important;
+}
+
+.bypostauthor .comment-author .fn::after {
+  content: " (Author)";
+  font-size: var(--fluent-font-size-caption);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-accent);
+  background: var(--fluent-accent-subtle);
+  border-radius: var(--fluent-radius-pill);
+  padding: 1px var(--fluent-space-2);
+  margin-inline-start: var(--fluent-space-2);
+  vertical-align: middle;
+}
+
+/* Author bio / box */
+.author-box,
+.author-bio,
+.post-author-box {
+  display: flex;
+  gap: var(--fluent-space-5);
+  align-items: flex-start;
+  background: var(--fluent-surface);
+  border: var(--fluent-stroke);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-6);
+  box-shadow: var(--fluent-shadow-2);
+  margin: var(--fluent-space-8) 0;
+}
+
+.author-box img,
+.author-bio img,
+.post-author-box img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--fluent-radius-pill);
+  flex-shrink: 0;
+  border: 2px solid var(--fluent-accent);
+  object-fit: cover;
+}
+
+.author-box .author-name,
+.author-bio .author-name,
+.post-author-box .author-name {
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+  margin-bottom: var(--fluent-space-1);
+}
+
+.author-box .author-description,
+.author-bio .author-description,
+.post-author-box .author-description {
+  font-size: var(--fluent-font-size-base);
+  color: var(--fluent-text-secondary);
+  line-height: var(--fluent-line-height);
+}
+
+/* ============================================================
+   55. BREADCRUMBS
+   ============================================================ */
+
+.breadcrumb,
+.breadcrumbs,
+nav.breadcrumb,
+.woocommerce-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fluent-space-1);
+  align-items: center;
+  list-style: none;
+  padding: var(--fluent-space-2) 0;
+  margin: 0 0 var(--fluent-space-4);
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+}
+
+.breadcrumb a,
+.breadcrumbs a,
+.woocommerce-breadcrumb a {
+  color: var(--fluent-accent) !important;
+  text-decoration: none;
+  transition: color var(--fluent-transition);
+}
+
+.breadcrumb a:hover,
+.breadcrumbs a:hover {
+  color: var(--fluent-accent-hover) !important;
+}
+
+/* Separator between breadcrumb items */
+.breadcrumb-item + .breadcrumb-item::before,
+.breadcrumbs > *:not(:last-child)::after {
+  content: "›";
+  margin-inline: var(--fluent-space-1);
+  color: var(--fluent-text-secondary);
+}
+
+.breadcrumb-item.active {
+  color: var(--fluent-text);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* ============================================================
+   56. DROPDOWN MENUS (Argon navbar)
+   ============================================================ */
+
+.dropdown-menu,
+.sub-menu,
+.nav-dropdown {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-8) !important;
+  padding: var(--fluent-space-1) 0 !important;
+  min-width: 200px;
+  z-index: var(--fluent-z-overlay);
+}
+
+.dropdown-menu a,
+.sub-menu a,
+.nav-dropdown a {
+  display: block;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base) !important;
+  color: var(--fluent-text) !important;
+  text-decoration: none;
+  transition: background var(--fluent-transition);
+  border-radius: 0;
+}
+
+.dropdown-menu a:hover,
+.sub-menu a:hover,
+.nav-dropdown a:hover,
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+}
+
+.dropdown-divider,
+.menu-item-divider {
+  border-top: var(--fluent-stroke);
+  margin: var(--fluent-space-1) 0;
+}
+
+/* ============================================================
+   57. WORDPRESS NOTICES (editor notices on front-end)
+   ============================================================ */
+
+.notice,
+.updated,
+.update-nag,
+.wp-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fluent-space-3);
+  padding: var(--fluent-space-3) var(--fluent-space-4) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  border-left: 4px solid var(--fluent-color-info) !important;
+  background: var(--fluent-color-info-bg) !important;
+  color: var(--fluent-text) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  margin-bottom: var(--fluent-space-4) !important;
+}
+
+.notice-success,
+.updated { border-left-color: var(--fluent-color-success) !important; background: var(--fluent-color-success-bg) !important; }
+.notice-warning,
+.update-nag { border-left-color: var(--fluent-color-warning) !important; background: var(--fluent-color-warning-bg) !important; }
+.notice-error    { border-left-color: var(--fluent-color-danger)  !important; background: var(--fluent-color-danger-bg)  !important; }
+
+/* ============================================================
+   58. ACCESSIBILITY UTILITIES
+   ============================================================ */
+
+/* Screen-reader-only text (visually hidden but accessible) */
+.screen-reader-text,
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip navigation link — visible only when focused */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--fluent-space-4);
+  z-index: var(--fluent-z-tooltip);
+  background: var(--fluent-accent);
+  color: var(--fluent-text-on-accent) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4);
+  border-radius: 0 0 var(--fluent-radius-md) var(--fluent-radius-md);
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  text-decoration: none;
+  box-shadow: var(--fluent-shadow-4);
+  transition: top var(--fluent-transition);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: none;
+}
+
+/* WordPress accessibility "screen-reader-text" that should become
+   visible on focus (e.g. skip to content) */
+.screen-reader-text:focus {
+  clip: auto !important;
+  display: block !important;
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  height: auto !important;
+  left: var(--fluent-space-4) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-4) !important;
+  top: var(--fluent-space-4) !important;
+  width: auto !important;
+  z-index: var(--fluent-z-tooltip) !important;
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+  overflow: visible !important;
+  clip-path: none !important;
+}
+
+/* Live regions — no visible change, but ensure layout isn't broken */
+[aria-live] {
+  display: block;
+}
