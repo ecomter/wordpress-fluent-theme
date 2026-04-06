@@ -61,20 +61,20 @@ function wft_enqueue_assets() {
 
     // ------------------------------------------------------------------
     // Fluent UI Web Components (Microsoft)
-    // CDN: jsDelivr mirror of @fluentui/web-components
+    // Source: https://github.com/microsoft/fluentui/tree/master/packages/web-components
+    // CDN:    jsDelivr mirror of @fluentui/web-components
     //
-    // The bundle registers custom elements such as <fluent-button>,
-    // <fluent-card>, <fluent-text-input>, etc. which can be used
-    // in theme templates, widgets, or the block editor without any
-    // build step on your server.
+    // The bundle is an ES module (type="module") that registers all
+    // custom elements — <fluent-button>, <fluent-text-input>,
+    // <fluent-card>, etc. — so they work in any theme template,
+    // widget, or the block editor with zero build tooling on your server.
     //
-    // Version pin: update the version string here when you want to
-    // upgrade. Check https://github.com/microsoft/fluentui/releases
-    // for the latest @fluentui/web-components release.
+    // Version pin: bump the version string below when upgrading.
+    // Latest releases: https://github.com/microsoft/fluentui/releases?q=%40fluentui%2Fweb-components
     // ------------------------------------------------------------------
     wp_enqueue_script(
         'fluent-web-components',
-        'https://cdn.jsdelivr.net/npm/@fluentui/web-components@3/dist/web-components.min.js',
+        'https://cdn.jsdelivr.net/npm/@fluentui/web-components@3.0.0-rc.10/dist/web-components.min.js',
         array(),    // no JS dependencies
         null,       // version handled by the CDN URL
         true        // load in footer to avoid blocking page render

@@ -37,19 +37,19 @@ A WordPress **child theme** for [Argon Theme](https://github.com/solstice23/argo
 
 **Option A — upload via WP Admin (easiest)**
 
-1. Zip the `argon-fluent-child/` folder:
+1. Zip the `wordpress-fluent-theme/` folder:
    ```bash
-   zip -r argon-fluent-child.zip argon-fluent-child/
+   zip -r wordpress-fluent-theme.zip wordpress-fluent-theme/
    ```
-2. In WP Admin → **Appearance → Themes → Add New → Upload Theme**, upload `argon-fluent-child.zip`.
+2. In WP Admin → **Appearance → Themes → Add New → Upload Theme**, upload `wordpress-fluent-theme.zip`.
 
 **Option B — copy via FTP / SSH**
 
-Copy the entire `argon-fluent-child/` folder to `/wp-content/themes/` on your server.
+Copy the entire `wordpress-fluent-theme/` folder to `/wp-content/themes/` on your server.
 
 ### Step 3 — Activate
 
-In WP Admin → **Appearance → Themes**, find **Argon Fluent Child** and click **Activate**.
+In WP Admin → **Appearance → Themes**, find **WordPress Fluent Theme** and click **Activate**.
 
 ---
 
@@ -91,8 +91,8 @@ custom elements anywhere in your theme templates or Text/HTML widgets:
 <fluent-text-input placeholder="Search…"></fluent-text-input>
 ```
 
-See the full component catalogue at  
-<https://fluent2.microsoft.design/components/web/web-components/>
+See the full component catalogue and source at  
+<https://github.com/microsoft/fluentui/tree/master/packages/web-components>
 
 ### Upgrade Fluent UI Web Components
 
@@ -100,7 +100,7 @@ The CDN URL in `functions.php` is pinned to major version `3`.
 To pin to an exact version (recommended for production), edit the script URL:
 
 ```php
-'https://cdn.jsdelivr.net/npm/@fluentui/web-components@3.0.0/dist/web-components.min.js',
+'https://cdn.jsdelivr.net/npm/@fluentui/web-components@3.0.0-rc.10/dist/web-components.min.js',
 ```
 
 Check the latest release at  
@@ -111,7 +111,7 @@ Check the latest release at
 ## File structure
 
 ```
-argon-fluent-child/
+wordpress-fluent-theme/
 ├── style.css        ← Child theme headers + all Fluent Design CSS overrides
 ├── functions.php    ← Enqueues parent styles and Fluent Web Components CDN
 └── README.md        ← This file

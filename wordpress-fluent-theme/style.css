@@ -380,12 +380,11 @@ a[rel="tag"]:hover {
 .site-header,
 .navbar,
 #site-header {
-  background: var(--fluent-surface) !important;
+  background: var(--fluent-overlay) !important; /* semi-transparent surface for backdrop-filter blur */
   border-bottom: var(--fluent-stroke) !important;
   box-shadow: var(--fluent-shadow-1) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  background: var(--fluent-overlay) !important;
 }
 
 .nav-menu a,
