@@ -1,0 +1,551 @@
+/*
+ * Theme Name:   WordPress Fluent Theme
+ * Theme URI:    https://github.com/ecomter/wordpress-fluent-theme
+ * Description:  Child theme of Argon (https://github.com/solstice23/argon-theme) with
+ *               Fluent Design System visual language: Segoe UI typography, layered surfaces,
+ *               soft radii, depth shadows, and Fluent accent colors. Fluent UI Web Components
+ *               are loaded via CDN for interactive elements.
+ * Author:       ecomter
+ * Author URI:   https://github.com/ecomter
+ * Template:     argon
+ * Version:      0.1.0
+ * License:      GPL-2.0-or-later
+ * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:  wordpress-fluent-theme
+ */
+
+/* ============================================================
+   1. FLUENT DESIGN TOKENS
+   These CSS custom properties map Fluent Design System values
+   so every component below stays consistent and easy to change.
+   ============================================================ */
+:root {
+  /* --- Typography --- */
+  --fluent-font: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+  --fluent-font-size-base:   16px;
+  --fluent-font-size-sm:     13px;
+  --fluent-font-size-lg:     20px;
+  --fluent-font-size-xl:     28px;
+  --fluent-line-height:      1.6;
+  --fluent-font-weight-base: 400;
+  --fluent-font-weight-semi: 600;
+  --fluent-font-weight-bold: 700;
+
+  /* --- Accent / Brand --- */
+  --fluent-accent:           #0f6cbd;   /* Fluent "Communication Blue" */
+  --fluent-accent-hover:     #115ea3;
+  --fluent-accent-active:    #0e4f8a;
+  --fluent-accent-subtle:    #eff6fc;   /* tint for tags, badges */
+
+  /* --- Surface / Background --- */
+  --fluent-bg:               #f3f3f3;   /* page background */
+  --fluent-surface:          #ffffff;   /* card / panel surface */
+  --fluent-surface-alt:      #fafafa;   /* alternate surface (e.g. table rows) */
+  --fluent-overlay:          rgba(255, 255, 255, 0.85);
+
+  /* --- Text --- */
+  --fluent-text:             #1b1a19;   /* primary text */
+  --fluent-text-secondary:   #605e5c;   /* meta, captions */
+  --fluent-text-disabled:    #a19f9d;
+
+  /* --- Stroke / Border --- */
+  --fluent-stroke:           1px solid rgba(0, 0, 0, 0.08);
+  --fluent-stroke-strong:    1px solid rgba(0, 0, 0, 0.18);
+
+  /* --- Corner Radius --- */
+  --fluent-radius-sm:        4px;
+  --fluent-radius-md:        8px;
+  --fluent-radius-lg:        12px;
+  --fluent-radius-pill:      9999px;
+
+  /* --- Elevation Shadows --- */
+  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.05);
+  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.07);
+  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.10), 0 16px 36px rgba(0, 0, 0, 0.09);
+
+  /* --- Spacing scale (base 4 px grid) --- */
+  --fluent-space-1: 4px;
+  --fluent-space-2: 8px;
+  --fluent-space-3: 12px;
+  --fluent-space-4: 16px;
+  --fluent-space-5: 20px;
+  --fluent-space-6: 24px;
+  --fluent-space-8: 32px;
+  --fluent-space-10: 40px;
+
+  /* --- Transition --- */
+  --fluent-transition: 120ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* ============================================================
+   2. DARK MODE TOKENS
+   Argon uses the "darkmode" class on <html> for its dark theme.
+   We mirror the same selector so tokens update automatically.
+   ============================================================ */
+html.darkmode {
+  --fluent-bg:             #1f1f1f;
+  --fluent-surface:        #2b2b2b;
+  --fluent-surface-alt:    #323232;
+  --fluent-overlay:        rgba(43, 43, 43, 0.90);
+
+  --fluent-text:           #f3f2f1;
+  --fluent-text-secondary: #c8c6c4;
+  --fluent-text-disabled:  #7a7878;
+
+  --fluent-stroke:         1px solid rgba(255, 255, 255, 0.10);
+  --fluent-stroke-strong:  1px solid rgba(255, 255, 255, 0.20);
+
+  --fluent-accent:         #479ef5;    /* lighter blue looks better on dark */
+  --fluent-accent-hover:   #62abf5;
+  --fluent-accent-subtle:  #1a3a5c;
+
+  --fluent-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px rgba(0, 0, 0, 0.25);
+  --fluent-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.30);
+  --fluent-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.40), 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================================
+   3. BASE / RESET
+   ============================================================ */
+body {
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-line-height);
+  background: var(--fluent-bg) !important;
+  color: var(--fluent-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   4. LINKS
+   ============================================================ */
+a {
+  color: var(--fluent-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color var(--fluent-transition);
+}
+
+a:hover,
+a:focus {
+  color: var(--fluent-accent-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* ============================================================
+   5. TYPOGRAPHY — headings
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fluent-font);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: 1.3;
+  color: var(--fluent-text);
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: var(--fluent-font-size-xl); }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+h4 { font-size: var(--fluent-font-size-base); font-weight: var(--fluent-font-weight-bold); }
+
+/* ============================================================
+   6. CARD / SURFACE ELEMENTS
+   Argon uses several card selectors; we cover them all.
+   ============================================================ */
+.card,
+.post,
+.blog-post,
+.single-post-content,
+.page-information-card,
+.widget,
+.sidebar-widget,
+.comment-list .comment-body {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-1) !important;
+  transition: box-shadow var(--fluent-transition),
+              transform var(--fluent-transition);
+}
+
+/* Lift card on hover (subtle Fluent hover elevation) */
+.card:hover,
+.post:hover,
+.blog-post:hover {
+  box-shadow: var(--fluent-shadow-2) !important;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   7. POST LIST
+   ============================================================ */
+/* Post title */
+.post-title,
+.entry-title,
+h2.post-title a,
+h1.entry-title {
+  font-size: var(--fluent-font-size-lg);
+  font-weight: var(--fluent-font-weight-semi);
+  letter-spacing: -0.01em;
+  color: var(--fluent-text) !important;
+}
+
+.post-title a,
+.entry-title a {
+  text-decoration: none;
+  transition: color var(--fluent-transition);
+}
+
+.post-title a:hover,
+.entry-title a:hover {
+  color: var(--fluent-accent) !important;
+}
+
+/* Post metadata (date, author, category) */
+.post-meta,
+.post-meta-detail,
+.entry-meta,
+.post-date,
+.post-author {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+  opacity: 1;
+}
+
+/* Post excerpt */
+.post-excerpt,
+.entry-summary {
+  color: var(--fluent-text-secondary);
+  font-size: var(--fluent-font-size-base);
+  margin-top: var(--fluent-space-2);
+}
+
+/* "Read more" link */
+.more-link,
+.read-more-btn {
+  display: inline-block;
+  margin-top: var(--fluent-space-3);
+  padding: var(--fluent-space-1) var(--fluent-space-4);
+  background: var(--fluent-accent-subtle);
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill);
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-semi);
+  text-decoration: none;
+  transition: background var(--fluent-transition), color var(--fluent-transition);
+}
+
+.more-link:hover,
+.read-more-btn:hover {
+  background: var(--fluent-accent);
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   8. BUTTONS
+   ============================================================ */
+button,
+.btn,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-semi);
+  border-radius: var(--fluent-radius-md);
+  border: var(--fluent-stroke-strong);
+  padding: var(--fluent-space-2) var(--fluent-space-5);
+  cursor: pointer;
+  transition: background var(--fluent-transition),
+              border-color var(--fluent-transition),
+              box-shadow var(--fluent-transition);
+}
+
+/* Primary (accent) button */
+.btn-primary,
+input[type="submit"] {
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  color: #ffffff !important;
+  box-shadow: var(--fluent-shadow-1);
+}
+
+.btn-primary:hover,
+input[type="submit"]:hover {
+  background: var(--fluent-accent-hover) !important;
+  border-color: var(--fluent-accent-hover) !important;
+  box-shadow: var(--fluent-shadow-2);
+}
+
+.btn-primary:active,
+input[type="submit"]:active {
+  background: var(--fluent-accent-active) !important;
+  border-color: var(--fluent-accent-active) !important;
+  transform: scale(0.98);
+}
+
+/* Secondary (ghost) button */
+.btn-secondary,
+.btn-outline {
+  background: transparent !important;
+  border: var(--fluent-stroke-strong) !important;
+  color: var(--fluent-text) !important;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+html.darkmode .btn-secondary:hover,
+html.darkmode .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ============================================================
+   9. FORMS & INPUTS
+   ============================================================ */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.form-control {
+  font-family: var(--fluent-font);
+  font-size: var(--fluent-font-size-base);
+  background: var(--fluent-surface) !important;
+  color: var(--fluent-text) !important;
+  border: var(--fluent-stroke-strong) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  outline: none;
+  transition: border-color var(--fluent-transition),
+              box-shadow var(--fluent-transition);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.20) !important;
+}
+
+/* Search bar */
+.search-field,
+.search-form input[type="search"] {
+  border-radius: var(--fluent-radius-pill) !important;
+  padding-left: var(--fluent-space-5) !important;
+}
+
+/* ============================================================
+   10. TAGS / CATEGORIES — Fluent badge style
+   ============================================================ */
+.post-tag,
+.tag,
+a[rel="tag"],
+.label,
+.badge {
+  display: inline-block;
+  padding: 2px var(--fluent-space-3);
+  background: var(--fluent-accent-subtle);
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill);
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-semi);
+  text-decoration: none;
+  transition: background var(--fluent-transition);
+}
+
+.post-tag:hover,
+.tag:hover,
+a[rel="tag"]:hover {
+  background: var(--fluent-accent);
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   11. NAVIGATION / HEADER
+   ============================================================ */
+.site-header,
+.navbar,
+#site-header {
+  background: var(--fluent-overlay) !important; /* semi-transparent surface for backdrop-filter blur */
+  border-bottom: var(--fluent-stroke) !important;
+  box-shadow: var(--fluent-shadow-1) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-menu a,
+.main-nav a,
+.site-nav a {
+  font-family: var(--fluent-font);
+  font-weight: var(--fluent-font-weight-semi);
+  font-size: var(--fluent-font-size-base);
+  color: var(--fluent-text);
+  padding: var(--fluent-space-2) var(--fluent-space-3);
+  border-radius: var(--fluent-radius-sm);
+  text-decoration: none;
+  transition: background var(--fluent-transition), color var(--fluent-transition);
+}
+
+.nav-menu a:hover,
+.main-nav a:hover,
+.site-nav a:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--fluent-accent);
+}
+
+html.darkmode .nav-menu a:hover,
+html.darkmode .main-nav a:hover,
+html.darkmode .site-nav a:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ============================================================
+   12. FOOTER
+   ============================================================ */
+.site-footer,
+#site-footer {
+  background: var(--fluent-surface) !important;
+  border-top: var(--fluent-stroke) !important;
+  color: var(--fluent-text-secondary);
+  font-size: var(--fluent-font-size-sm);
+  padding: var(--fluent-space-8) var(--fluent-space-6);
+}
+
+/* ============================================================
+   13. SIDEBAR WIDGETS
+   ============================================================ */
+.widget-title,
+.sidebar-widget-title {
+  font-size: var(--fluent-font-size-base);
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-text);
+  padding-bottom: var(--fluent-space-2);
+  border-bottom: 2px solid var(--fluent-accent);
+  margin-bottom: var(--fluent-space-4);
+}
+
+/* ============================================================
+   14. COMMENTS
+   ============================================================ */
+.comment-list .comment-body {
+  padding: var(--fluent-space-4) var(--fluent-space-5);
+}
+
+.comment-author .fn {
+  font-weight: var(--fluent-font-weight-semi);
+  color: var(--fluent-text);
+}
+
+.comment-metadata,
+.comment-date {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-secondary);
+}
+
+.comment-reply-link {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-accent);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* ============================================================
+   15. PAGINATION
+   ============================================================ */
+.pagination .page-numbers,
+.post-navigation a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--fluent-space-3);
+  border: var(--fluent-stroke-strong);
+  border-radius: var(--fluent-radius-md);
+  background: var(--fluent-surface);
+  color: var(--fluent-text);
+  text-decoration: none;
+  font-weight: var(--fluent-font-weight-semi);
+  transition: background var(--fluent-transition), color var(--fluent-transition);
+}
+
+.pagination .page-numbers.current,
+.pagination .page-numbers:hover,
+.post-navigation a:hover {
+  background: var(--fluent-accent);
+  color: #ffffff;
+  border-color: var(--fluent-accent);
+}
+
+/* ============================================================
+   16. CODE BLOCKS — Fluent-neutral surface
+   ============================================================ */
+pre,
+code {
+  font-family: "Cascadia Code", "Cascadia Mono", "Consolas", monospace;
+  font-size: 0.875em;
+  background: var(--fluent-surface-alt) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-sm) !important;
+}
+
+pre {
+  padding: var(--fluent-space-4) !important;
+  overflow-x: auto;
+}
+
+code {
+  padding: 1px 5px;
+}
+
+/* ============================================================
+   17. DIVIDERS / HR
+   ============================================================ */
+hr {
+  border: none;
+  border-top: var(--fluent-stroke);
+  margin: var(--fluent-space-6) 0;
+}
+
+/* ============================================================
+   18. SCROLLBAR (Chromium — Fluent-style thin scrollbar)
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.20);
+  border-radius: var(--fluent-radius-pill);
+}
+
+html.darkmode ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ============================================================
+   19. FOCUS VISIBLE — accessibility (Fluent focus indicator)
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--fluent-accent);
+  outline-offset: 2px;
+  border-radius: var(--fluent-radius-sm);
+}
