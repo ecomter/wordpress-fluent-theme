@@ -4112,3 +4112,349 @@ html.darkmode summary:hover {
     break-inside: avoid;
   }
 }
+
+/* ============================================================
+   60. RESPONSIVE HARMONY & MOBILE OPTIMIZATION
+   目标：整体协调 + 小屏可读 + 触控友好 + 避免溢出
+   ============================================================ */
+
+/* --- 60.1 Global overflow safety --- */
+html,
+body {
+  overflow-x: clip;
+}
+
+.entry-content,
+.post-content,
+.single-post-content,
+.comment-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Long URLs / long code lines */
+a,
+code,
+kbd,
+pre {
+  word-wrap: break-word;
+}
+
+/* --- 60.2 Tablet refinement (<= 1024px) --- */
+@media (max-width: 1024px) {
+  :root {
+    --fluent-font-size-display: 34px;
+    --fluent-font-size-xl: 30px;
+    --fluent-font-size-title-lg: 26px;
+    --fluent-font-size-title: 22px;
+  }
+
+  /* Reduce horizontal pressure */
+  .entry-content,
+  .post-content,
+  .single-post-content {
+    max-width: 68ch;
+    padding-inline: var(--fluent-space-4);
+  }
+
+  /* Card spacing tighter for medium screens */
+  .card,
+  .post,
+  .blog-post,
+  .widget,
+  .sidebar-widget {
+    padding: var(--fluent-space-4) !important;
+  }
+
+  /* Media-text becomes more balanced */
+  .wp-block-media-text {
+    gap: var(--fluent-space-4) !important;
+  }
+}
+
+/* --- 60.3 Mobile main breakpoint (<= 768px) --- */
+@media (max-width: 768px) {
+  :root {
+    --fluent-font-size-display: 30px;
+    --fluent-font-size-xl: 28px;
+    --fluent-font-size-title-lg: 24px;
+    --fluent-font-size-title: 21px;
+    --fluent-font-size-subtitle: 18px;
+    --fluent-font-size-base: 15px;
+    --fluent-line-height: 1.65;
+  }
+
+  body {
+    font-size: var(--fluent-font-size-base);
+  }
+
+  /* Container breathing room */
+  .site,
+  .site-content,
+  .content-area,
+  .entry-content,
+  .post-content,
+  .single-post-content,
+  .comment-respond,
+  .widget,
+  .sidebar-widget {
+    padding-inline: var(--fluent-space-3);
+  }
+
+  /* Header: less visual noise on mobile */
+  .site-header,
+  #site-header,
+  .navbar {
+    backdrop-filter: blur(14px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  }
+
+  /* Nav links become tap-friendly */
+  .nav-menu a,
+  .main-nav a,
+  .site-nav a,
+  .navbar a {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--fluent-space-2) var(--fluent-space-3) !important;
+    border-radius: var(--fluent-radius-md);
+  }
+
+  /* Buttons: larger touch targets */
+  .fluent-btn,
+  .btn,
+  button,
+  input[type="submit"],
+  input[type="button"],
+  .wp-block-button__link,
+  .wp-element-button {
+    min-height: 42px !important;
+    padding-inline: var(--fluent-space-4) !important;
+    font-size: var(--fluent-font-size-base) !important;
+  }
+
+  .fluent-btn--icon {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  /* Hero / title compression */
+  .fluent-text--display,
+  .error-404 .page-title,
+  .no-results .page-title,
+  .not-found .page-title {
+    font-size: clamp(1.7rem, 7vw, 2.1rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .error-404 .page-title::before {
+    font-size: clamp(64px, 20vw, 92px) !important;
+  }
+
+  /* Drop cap too heavy on mobile: disable */
+  .single-post-content .entry-content > p:first-of-type::first-letter,
+  .post-content > p:first-of-type::first-letter {
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Tables: horizontal scrolling wrapper behavior */
+  .wp-block-table,
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  /* Code blocks: enable smooth horizontal swipe */
+  pre,
+  .wp-block-code,
+  .wp-block-preformatted {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.82rem !important;
+  }
+
+  /* Quotes less decorative on small devices */
+  blockquote::before,
+  .wp-block-pullquote::before {
+    opacity: 0.05;
+    font-size: 96px;
+  }
+
+  /* Comments layout tidy */
+  .comment-list .comment-body {
+    padding: var(--fluent-space-4) !important;
+  }
+
+  .comment-list .comment-author img,
+  .comment .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Author bio stack */
+  .author-box,
+  .author-bio,
+  .post-author-box {
+    gap: var(--fluent-space-3);
+    padding: var(--fluent-space-4);
+  }
+
+  /* Gallery spacing reduction */
+  .wp-block-gallery {
+    gap: var(--fluent-space-2) !important;
+  }
+
+  /* Cover block padding reduction */
+  .wp-block-cover {
+    min-height: 220px;
+    padding: var(--fluent-space-6) var(--fluent-space-4);
+  }
+
+  /* Drawer body tighter padding */
+  .fluent-drawer-body,
+  drawer-body {
+    padding: var(--fluent-space-4) !important;
+  }
+}
+
+/* --- 60.4 Small phone breakpoint (<= 480px) --- */
+@media (max-width: 480px) {
+  :root {
+    --fluent-font-size-display: 26px;
+    --fluent-font-size-xl: 24px;
+    --fluent-font-size-title-lg: 22px;
+    --fluent-font-size-title: 20px;
+    --fluent-font-size-base: 15px;
+  }
+
+  /* Extra safe side padding */
+  .entry-content,
+  .post-content,
+  .single-post-content,
+  .comment-respond,
+  .widget,
+  .sidebar-widget {
+    padding-inline: var(--fluent-space-2) !important;
+  }
+
+  /* Full-width visual blocks */
+  .card,
+  .post,
+  .blog-post,
+  .wp-block-group,
+  .comment-respond,
+  .author-box,
+  .author-bio {
+    border-radius: var(--fluent-radius-md) !important;
+  }
+
+  /* Buttons full width when stacked in forms */
+  .comment-form #submit,
+  #commentform #submit,
+  .wp-block-search__button,
+  body.login #wp-submit {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .wp-block-search__inside-wrapper {
+    flex-direction: column;
+    gap: var(--fluent-space-2);
+  }
+
+  .wp-block-search__button {
+    height: 42px;
+  }
+
+  /* Social links easier to tap */
+  .wp-block-social-link a {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Breadcrumb wrapping */
+  .breadcrumb,
+  .breadcrumbs {
+    row-gap: var(--fluent-space-1);
+    font-size: var(--fluent-font-size-caption);
+  }
+
+  /* Keep floating images from crushing text */
+  .alignleft,
+  .alignright {
+    float: none;
+    max-width: 100%;
+    margin: 0 0 var(--fluent-space-3) 0;
+  }
+
+  /* Drawer always edge-to-edge on small phone */
+  dialog.fluent-drawer-dialog {
+    --drawer-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+
+  dialog.fluent-drawer-dialog[data-position="end"],
+  dialog.fluent-drawer-dialog[data-position="start"] {
+    inset-inline: 0;
+  }
+}
+
+/* --- 60.5 Safe area support (iPhone notch/home bar) --- */
+@supports (padding: max(0px)) {
+  .site-header,
+  #site-header,
+  .navbar {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+
+  .site-footer,
+  #site-footer,
+  .fluent-drawer-body,
+  drawer-body {
+    padding-bottom: max(var(--fluent-space-4), env(safe-area-inset-bottom));
+  }
+
+  .skip-link:focus {
+    top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* --- 60.6 Mobile admin-bar offset fixes --- */
+@media (max-width: 782px) {
+  html.admin-bar .site-header,
+  html.admin-bar #site-header,
+  html.admin-bar .navbar {
+    top: 46px !important;
+  }
+
+  .admin-bar body {
+    padding-top: 46px;
+  }
+}
+
+/* --- 60.7 Reduced motion polish on mobile --- */
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .card,
+  .post,
+  .blog-post,
+  .fluent-card,
+  .fluent-btn,
+  .wp-block-button__link,
+  .site-header,
+  .nav-menu a {
+    transition-duration: 1ms !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
