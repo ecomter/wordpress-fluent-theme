@@ -1,6 +1,6 @@
 <?php
 /**
- * Argon Fluent Child Theme — functions.php
+ * WordPress Fluent Theme — functions.php
  *
  * Responsibilities:
  *  1. Enqueue the parent Argon theme stylesheet.
@@ -10,11 +10,11 @@
  * Usage / Setup:
  *  1. Download the Argon parent theme from https://github.com/solstice23/argon-theme
  *     and install it via WP Admin → Appearance → Themes → Add New → Upload Theme.
- *  2. Upload this child-theme folder (argon-fluent-child/) to /wp-content/themes/.
- *  3. In WP Admin → Appearance → Themes, activate "Argon Fluent Child".
+ *  2. Upload this child-theme folder (wordpress-fluent-theme/) to /wp-content/themes/.
+ *  3. In WP Admin → Appearance → Themes, activate "WordPress Fluent Theme".
  *  4. Customise Fluent Design tokens in style.css (:root block) to match your brand.
  *
- * @package argon-fluent-child
+ * @package wordpress-fluent-theme
  * @version 0.1.0
  */
 
@@ -25,24 +25,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ---------------------------------------------------------------------------
 // 1. Enqueue parent + child stylesheets and Fluent UI Web Components
 // ---------------------------------------------------------------------------
-add_action( 'wp_enqueue_scripts', 'argon_fluent_child_enqueue_assets' );
+add_action( 'wp_enqueue_scripts', 'wft_enqueue_assets' );
 
 /**
  * Enqueue all front-end assets for the child theme.
  *
  * Load order:
- *   argon-parent-style  → the full Argon parent CSS
- *   argon-fluent-style  → our Fluent Design overrides (child style.css)
+ *   wft-parent-style  → the full Argon parent CSS
+ *   wft-style         → our Fluent Design overrides (child style.css)
  *   fluent-web-components → Fluent UI Web Components bundle via CDN
  */
-function argon_fluent_child_enqueue_assets() {
+function wft_enqueue_assets() {
 
     // ------------------------------------------------------------------
     // Parent theme stylesheet
     // Using get_template_directory_uri() always points to the parent.
     // ------------------------------------------------------------------
     wp_enqueue_style(
-        'argon-parent-style',
+        'wft-parent-style',
         get_template_directory_uri() . '/style.css',
         array(),    // no dependencies
         null        // let WordPress use the parent's version
@@ -53,9 +53,9 @@ function argon_fluent_child_enqueue_assets() {
     // Depends on the parent so it is loaded after it.
     // ------------------------------------------------------------------
     wp_enqueue_style(
-        'argon-fluent-style',
+        'wft-style',
         get_stylesheet_uri(),           // points to this child's style.css
-        array( 'argon-parent-style' ),  // loads after parent
+        array( 'wft-parent-style' ),    // loads after parent
         '0.1.0'
     );
 
@@ -85,7 +85,7 @@ function argon_fluent_child_enqueue_assets() {
 // 2. Add "type=module" to the Fluent Web Components script tag
 //    The @fluentui/web-components v3 bundle is an ES module.
 // ---------------------------------------------------------------------------
-add_filter( 'script_loader_tag', 'argon_fluent_child_module_script', 10, 3 );
+add_filter( 'script_loader_tag', 'wft_module_script', 10, 3 );
 
 /**
  * Adds type="module" to the Fluent Web Components <script> tag.
@@ -95,7 +95,7 @@ add_filter( 'script_loader_tag', 'argon_fluent_child_module_script', 10, 3 );
  * @param string $src    The script URL.
  * @return string Modified tag.
  */
-function argon_fluent_child_module_script( $tag, $handle, $src ) {
+function wft_module_script( $tag, $handle, $src ) {
     if ( 'fluent-web-components' === $handle ) {
         // Replace the standard <script src=…> with a module script.
         $tag = '<script type="module" src="' . esc_url( $src ) . '"></script>' . "\n";
@@ -106,15 +106,15 @@ function argon_fluent_child_module_script( $tag, $handle, $src ) {
 // ---------------------------------------------------------------------------
 // 3. Register child-theme textdomain for future translations
 // ---------------------------------------------------------------------------
-add_action( 'after_setup_theme', 'argon_fluent_child_load_textdomain' );
+add_action( 'after_setup_theme', 'wft_load_textdomain' );
 
 /**
  * Load the child theme's translated strings (if any translation files exist
- * in argon-fluent-child/languages/).
+ * in wordpress-fluent-theme/languages/).
  */
-function argon_fluent_child_load_textdomain() {
+function wft_load_textdomain() {
     load_child_theme_textdomain(
-        'argon-fluent-child',
+        'wordpress-fluent-theme',
         get_stylesheet_directory() . '/languages'
     );
 }

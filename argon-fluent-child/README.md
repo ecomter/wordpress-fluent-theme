@@ -1,4 +1,4 @@
-# Argon Fluent Child Theme
+# WordPress Fluent Theme
 
 A WordPress **child theme** for [Argon Theme](https://github.com/solstice23/argon-theme) that layers
 [Fluent Design System](https://fluent2.microsoft.design/) visual language on top of Argon's clean blog layout.
