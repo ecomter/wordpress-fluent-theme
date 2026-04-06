@@ -4458,3 +4458,313 @@ pre {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   61. MICROSOFT FLUENT VISUAL REFINEMENT
+   目标：整体更“微软风格”——克制、清晰层级、柔和深度、Acrylic/Mica
+   ============================================================ */
+
+/* --- 61.1 Fluent neutral hierarchy consistency --- */
+body,
+.entry-content,
+.post-content,
+.single-post-content {
+  color: var(--fluent-text);
+}
+
+/* Secondary text统一弱化，不抢主信息 */
+.post-meta,
+.post-meta-detail,
+.entry-meta,
+.comment-metadata,
+.wp-caption-text,
+figcaption,
+.fluent-text--secondary,
+.fluent-text--caption {
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* Tertiary hints */
+.comment-notes,
+.comment-form-cookies-consent,
+small,
+small *,
+.fluent-text--tertiary {
+  color: var(--fluent-text-tertiary) !important;
+}
+
+/* --- 61.2 Acrylic-style subtle surfaces --- */
+/* 让不同层面材质关系更微软：page < surface < raised */
+.card,
+.post,
+.blog-post,
+.widget,
+.sidebar-widget,
+.comment-list .comment-body,
+.fluent-card,
+.wp-block-group,
+.comment-respond {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 100%),
+    var(--fluent-surface) !important;
+}
+
+html.darkmode .card,
+html.darkmode .post,
+html.darkmode .blog-post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .comment-list .comment-body,
+html.darkmode .fluent-card,
+html.darkmode .wp-block-group,
+html.darkmode .comment-respond {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%),
+    var(--fluent-surface) !important;
+}
+
+/* --- 61.3 Primary accent discipline (CTA only) --- */
+/* 避免全页蓝色泛滥：只有按钮/交互焦点/重要链接用强accent */
+a {
+  color: color-mix(in srgb, var(--fluent-accent) 90%, #0a4d82);
+}
+
+a:hover,
+a:focus {
+  color: var(--fluent-accent-hover);
+}
+
+/* 内容区普通链接更克制，避免视觉噪音 */
+.entry-content a:not(.fluent-btn):not(.wp-block-button__link),
+.post-content a:not(.fluent-btn):not(.wp-block-button__link),
+.single-post-content a:not(.fluent-btn):not(.wp-block-button__link) {
+  text-decoration-thickness: 1px;
+}
+
+/* --- 61.4 Microsoft-style control radii and depth --- */
+/* Fluent 2 常见中小圆角，避免过度“胶囊化” */
+.fluent-btn,
+.btn,
+input[type="submit"],
+input[type="button"],
+.wp-block-button__link,
+.wp-element-button,
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+textarea,
+select,
+.wp-block-search__input {
+  border-radius: var(--fluent-radius-md) !important;
+}
+
+/* 仅特定组件保留pill */
+.fluent-btn--pill,
+.search-field,
+.search-form input[type="search"],
+.wp-block-search__input {
+  border-radius: var(--fluent-radius-pill) !important;
+}
+
+/* --- 61.5 Input & form Fluent polish --- */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.form-control,
+.wp-block-search__input {
+  background: color-mix(in srgb, var(--fluent-surface) 95%, var(--fluent-neutral-8) 5%) !important;
+  border: var(--fluent-stroke-strong) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--fluent-text-tertiary) !important;
+  opacity: 1;
+}
+
+/* --- 61.6 Fluent button emotional hierarchy --- */
+/* Primary: strong, Subtle:轻, Outline:中性, Danger:风险 */
+.fluent-btn--primary,
+.btn-primary,
+input[type="submit"],
+.wp-block-button:not(.is-style-outline) .wp-block-button__link {
+  letter-spacing: 0.01em;
+}
+
+.fluent-btn--subtle {
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 88%, var(--fluent-surface) 12%) !important;
+}
+
+.fluent-btn--outline,
+.btn-secondary,
+.btn-outline,
+.wp-block-button.is-style-outline .wp-block-button__link {
+  border-color: color-mix(in srgb, var(--fluent-text) 18%, transparent) !important;
+  color: var(--fluent-text) !important;
+}
+
+.fluent-btn--outline:hover,
+.btn-secondary:hover,
+.btn-outline:hover,
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 60%, var(--fluent-surface) 40%) !important;
+}
+
+/* --- 61.7 Fluent navigation clarity --- */
+.nav-menu a,
+.main-nav a,
+.site-nav a,
+.navbar a {
+  font-weight: var(--fluent-font-weight-medium) !important;
+}
+
+.nav-menu li.current-menu-item > a,
+.main-nav li.current-menu-item > a,
+.site-nav li.current-menu-item > a {
+  color: var(--fluent-accent) !important;
+  background: color-mix(in srgb, var(--fluent-accent-subtle) 72%, var(--fluent-surface) 28%) !important;
+}
+
+/* --- 61.8 Fluent typography rhythm --- */
+h1, h2, h3, h4, h5, h6,
+.fluent-text--display,
+.fluent-text--title-lg,
+.fluent-text--title,
+.fluent-text--subtitle {
+  text-wrap: balance;
+}
+
+p,
+li,
+dd,
+.comment-content {
+  text-wrap: pretty;
+}
+
+/* --- 61.9 Elevated key regions --- */
+/* 搜索框、评论区、作者区作为“功能容器”给更明确层次 */
+.search-form,
+.wp-block-search,
+.comment-respond,
+.author-box,
+.author-bio,
+.post-author-box {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* --- 61.10 Fluent divider consistency --- */
+hr,
+.fluent-divider,
+.wp-block-separator {
+  border-top-color: color-mix(in srgb, var(--fluent-text) 14%, transparent) !important;
+}
+
+/* --- 61.11 Soft highlight for selected/current entities --- */
+.current-menu-item > a,
+.page-numbers.current,
+.pagination .current,
+.breadcrumb-item.active,
+.wp-block-latest-posts li.current-post a {
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+/* --- 61.12 Harmonize dark mode contrast (微软式不刺眼) --- */
+html.darkmode {
+  color-scheme: dark;
+}
+
+html.darkmode a {
+  color: color-mix(in srgb, var(--fluent-accent) 92%, #cce7ff 8%);
+}
+
+html.darkmode a:hover,
+html.darkmode a:focus {
+  color: #8cc4ff;
+}
+
+/* 深色模式下减少过亮白边 */
+html.darkmode .card,
+html.darkmode .post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .comment-body,
+html.darkmode .fluent-card,
+html.darkmode .wp-block-group,
+html.darkmode .comment-respond {
+  border-color: rgba(255,255,255,0.09) !important;
+}
+
+/* --- 61.13 Mobile Fluent aesthetics continuity --- */
+@media (max-width: 768px) {
+  /* 移动端减轻阴影，保留层次不臃肿 */
+  .card,
+  .post,
+  .blog-post,
+  .widget,
+  .sidebar-widget,
+  .comment-body,
+  .fluent-card,
+  .wp-block-group,
+  .comment-respond {
+    box-shadow: var(--fluent-shadow-2) !important;
+  }
+
+  /* 移动端导航当前项更清晰 */
+  .nav-menu li.current-menu-item > a,
+  .main-nav li.current-menu-item > a,
+  .site-nav li.current-menu-item > a {
+    border: 1px solid color-mix(in srgb, var(--fluent-accent) 35%, transparent);
+  }
+
+  /* 内容区避免过窄导致文字密度不舒适 */
+  .entry-content,
+  .post-content,
+  .single-post-content {
+    max-width: 100%;
+  }
+}
+
+/* --- 61.14 Slight polish on Fluent web components --- */
+fluent-button::part(control) {
+  border-radius: var(--fluent-radius-md);
+  font-family: var(--fluent-font);
+  font-weight: var(--fluent-font-weight-semi);
+}
+
+fluent-button[appearance="accent"]::part(control) {
+  box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 2px 8px rgba(15,108,189,.30);
+}
+
+fluent-text-input::part(root),
+fluent-text-input::part(control) {
+  border-radius: var(--fluent-radius-md);
+}
+
+fluent-card::part(control) {
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-2);
+}
+
+/* --- 61.15 Finishing touches: smooth but restrained --- */
+* {
+  text-rendering: optimizeLegibility;
+}
+
+/* 避免动画过度影响微软风格的“安静感” */
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .card,
+  .post,
+  .fluent-card,
+  .fluent-btn,
+  a {
+    transition-duration: 1ms !important;
+  }
+}
