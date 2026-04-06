@@ -19,8 +19,9 @@
  * QUICK-START USAGE EXAMPLES
  * ================================================================
  *
+ * ----------------------------------------------------------------
  * BUTTONS
- * -------
+ * ----------------------------------------------------------------
  * <!-- Primary (accent fill) -->
  * <button class="fluent-btn fluent-btn--primary">Save changes</button>
  *
@@ -33,6 +34,9 @@
  * <!-- Danger (destructive action) -->
  * <button class="fluent-btn fluent-btn--danger">Delete post</button>
  *
+ * <!-- Success (confirmation) -->
+ * <button class="fluent-btn fluent-btn--success">Publish post</button>
+ *
  * <!-- Compound (title + description line) -->
  * <button class="fluent-btn fluent-btn--compound fluent-btn--primary">
  *   <span class="fluent-btn__title">Open settings</span>
@@ -42,87 +46,148 @@
  * <!-- Icon-only -->
  * <button class="fluent-btn fluent-btn--icon" aria-label="Close">✕</button>
  *
- * <!-- Small / Large size modifiers -->
+ * <!-- Size modifiers (sm / lg) -->
  * <button class="fluent-btn fluent-btn--primary fluent-btn--sm">Small</button>
  * <button class="fluent-btn fluent-btn--primary fluent-btn--lg">Large</button>
  *
+ * <!-- Fluent UI Web Component equivalents (CDN, no extra JS) -->
+ * <fluent-button appearance="accent">Primary</fluent-button>
+ * <fluent-button appearance="subtle">Subtle</fluent-button>
+ * <fluent-button appearance="outline">Outline</fluent-button>
+ * <fluent-button appearance="transparent">Transparent</fluent-button>
  *
+ *
+ * ----------------------------------------------------------------
  * TEXT STYLES (utility classes)
- * -----------------------------
- * <p class="fluent-text--display">Hero display heading</p>
- * <h1 class="fluent-text--title-lg">Large title</h1>
- * <h2 class="fluent-text--title">Title</h2>
- * <h3 class="fluent-text--subtitle">Subtitle</h3>
- * <p class="fluent-text--body-strong">Strong body text</p>
- * <p class="fluent-text--body">Regular body text</p>
- * <p class="fluent-text--body-sm">Small body text</p>
+ * ----------------------------------------------------------------
+ * <p   class="fluent-text--display">Hero display heading</p>
+ * <h1  class="fluent-text--title-lg">Large title</h1>
+ * <h2  class="fluent-text--title">Title</h2>
+ * <h3  class="fluent-text--subtitle">Subtitle</h3>
+ * <p   class="fluent-text--body-strong">Strong body text</p>
+ * <p   class="fluent-text--body">Regular body text</p>
+ * <p   class="fluent-text--body-sm">Small body text</p>
  * <span class="fluent-text--caption">Caption / meta text</span>
  * <span class="fluent-text--overline">OVERLINE LABEL</span>
- * <p class="fluent-text--secondary">Muted secondary text</p>
- * <p class="fluent-text--disabled">Disabled-state text</p>
+ * <!-- Color modifiers -->
+ * <p   class="fluent-text--secondary">Muted secondary text</p>
+ * <p   class="fluent-text--disabled">Disabled-state text</p>
+ * <p   class="fluent-text--accent">Accent-colored text</p>
+ * <p   class="fluent-text--danger">Error text</p>
  *
  *
- * DRAWER (slide-out panel)
- * ------------------------
- * CSS-only approach — add/remove class="fluent-drawer--open" via JS or
- * use the bundled fluent-drawer.js for automatic open/close handling.
+ * ----------------------------------------------------------------
+ * DRAWER — Approach A: <fluent-drawer> Web Component (recommended)
+ * ----------------------------------------------------------------
+ * Requires: functions.php enqueues the Fluent UI Web Components CDN
+ * bundle. This is the same component used in Microsoft 365 products.
+ * Spec: https://github.com/microsoft/fluentui/tree/master/packages/web-components/src/drawer
  *
- * <!-- Trigger button -->
+ * Attributes:
+ *   type     = "modal" (default) | "non-modal" | "inline"
+ *   position = "start" (left, default) | "end" (right)
+ *   size     = "small" (320px) | "medium" (default, 592px) |
+ *              "large" (940px) | "full" (100%)
+ *   aria-labelledby, aria-describedby, aria-label
+ *
+ * JS API:  drawerEl.show()   — opens the drawer
+ *          drawerEl.hide()   — closes the drawer
+ * Events:  beforetoggle, toggle  (CustomEvent, same as <dialog>)
+ *
+ * <!-- Left-side modal drawer -->
+ * <fluent-button id="nav-trigger" appearance="accent">Open navigation</fluent-button>
+ *
+ * <fluent-drawer id="nav-drawer" type="modal" position="start" size="medium"
+ *                aria-labelledby="nav-title">
+ *   <drawer-body>
+ *     <h2 id="nav-title" slot="title">Navigation</h2>
+ *     <nav>
+ *       <ul>
+ *         <li><a href="/">Home</a></li>
+ *         <li><a href="/blog">Blog</a></li>
+ *       </ul>
+ *     </nav>
+ *     <div slot="footer">
+ *       <fluent-button appearance="outline" id="nav-close">Close</fluent-button>
+ *     </div>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ * <script>
+ *   const btn    = document.getElementById('nav-trigger');
+ *   const drawer = document.getElementById('nav-drawer');
+ *   const close  = document.getElementById('nav-close');
+ *   btn.addEventListener('click', () => drawer.show());
+ *   close.addEventListener('click', () => drawer.hide());
+ *   // Or use the helper from fluent-drawer.js:
+ *   btn.setAttribute('data-fluent-drawer-toggle', 'nav-drawer');
+ *   close.setAttribute('data-fluent-drawer-close', 'nav-drawer');
+ * </script>
+ *
+ * <!-- Right-side settings drawer -->
+ * <fluent-drawer id="settings-drawer" type="modal" position="end" size="medium"
+ *                aria-labelledby="settings-title">
+ *   <drawer-body>
+ *     <h2 id="settings-title" slot="title">Settings</h2>
+ *     <p>Settings content here.</p>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ * <!-- Non-modal (no backdrop, stays alongside content) -->
+ * <fluent-drawer id="sidebar-drawer" type="non-modal" position="start" size="small"
+ *                aria-label="Sidebar">
+ *   <drawer-body>
+ *     <h2 slot="title">Sidebar</h2>
+ *     <p>Always-visible content.</p>
+ *   </drawer-body>
+ * </fluent-drawer>
+ *
+ *
+ * ----------------------------------------------------------------
+ * DRAWER — Approach B: <dialog> native fallback (no CDN required)
+ * ----------------------------------------------------------------
+ * Use when the Fluent WC CDN is unavailable or you want full control
+ * over the markup. fluent-drawer.js handles showModal() / close().
+ *
+ * data-fluent-drawer-toggle="id"  → open/toggle trigger
+ * data-fluent-drawer-close="id"   → close-only trigger
+ * Programmatic: FluentDrawer.show('id') / .hide('id') / .toggle('id')
+ *
+ * <!-- Trigger -->
  * <button class="fluent-btn fluent-btn--primary"
- *         data-fluent-drawer-toggle="my-drawer">Open drawer</button>
+ *         data-fluent-drawer-toggle="nav-dialog">Open navigation</button>
  *
- * <!-- Drawer from the left (default) -->
- * <div class="fluent-drawer" id="my-drawer" role="dialog"
- *      aria-modal="true" aria-label="Navigation">
- *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="my-drawer"></div>
- *   <div class="fluent-drawer__panel">
- *     <div class="fluent-drawer__header">
- *       <span class="fluent-text--subtitle">Menu</span>
- *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
- *               data-fluent-drawer-close="my-drawer" aria-label="Close drawer">✕</button>
+ * <!-- Left-side modal drawer (position="start", default) -->
+ * <dialog class="fluent-drawer-dialog" id="nav-dialog"
+ *         data-position="start" data-size="medium">
+ *   <div class="fluent-drawer-body">
+ *     <div class="fluent-drawer-body__header">
+ *       <h2 class="fluent-text--subtitle" id="nav-dialog-title">Navigation</h2>
+ *       <button class="fluent-btn fluent-btn--icon"
+ *               data-fluent-drawer-close="nav-dialog" aria-label="Close">✕</button>
  *     </div>
- *     <div class="fluent-drawer__body">
- *       <p>Drawer content goes here.</p>
+ *     <div class="fluent-drawer-body__content">
+ *       <p>Drawer content here.</p>
+ *     </div>
+ *     <div class="fluent-drawer-body__footer">
+ *       <button class="fluent-btn fluent-btn--outline"
+ *               data-fluent-drawer-close="nav-dialog">Close</button>
  *     </div>
  *   </div>
- * </div>
+ * </dialog>
  *
- * <!-- Drawer from the right -->
- * <div class="fluent-drawer fluent-drawer--right" id="settings-drawer" role="dialog"
- *      aria-modal="true" aria-label="Settings">
- *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="settings-drawer"></div>
- *   <div class="fluent-drawer__panel">
- *     <div class="fluent-drawer__header">
- *       <span class="fluent-text--subtitle">Settings</span>
- *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
- *               data-fluent-drawer-close="settings-drawer" aria-label="Close">✕</button>
+ * <!-- Right-side drawer (position="end") -->
+ * <dialog class="fluent-drawer-dialog" id="settings-dialog"
+ *         data-position="end" data-size="medium">
+ *   <div class="fluent-drawer-body">
+ *     <div class="fluent-drawer-body__header">
+ *       <h2 class="fluent-text--subtitle">Settings</h2>
+ *       <button class="fluent-btn fluent-btn--icon"
+ *               data-fluent-drawer-close="settings-dialog" aria-label="Close">✕</button>
  *     </div>
- *     <div class="fluent-drawer__body">...</div>
+ *     <div class="fluent-drawer-body__content">...</div>
  *   </div>
- * </div>
- *
- * <!-- Bottom sheet drawer (mobile-friendly) -->
- * <div class="fluent-drawer fluent-drawer--bottom" id="bottom-sheet" role="dialog"
- *      aria-modal="true" aria-label="Options">
- *   <div class="fluent-drawer__overlay" data-fluent-drawer-close="bottom-sheet"></div>
- *   <div class="fluent-drawer__panel">
- *     <div class="fluent-drawer__header">
- *       <span class="fluent-text--subtitle">Options</span>
- *       <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
- *               data-fluent-drawer-close="bottom-sheet" aria-label="Close">✕</button>
- *     </div>
- *     <div class="fluent-drawer__body">...</div>
- *   </div>
- * </div>
- *
- *
- * FLUENT WEB COMPONENTS (loaded via CDN in functions.php)
- * -------------------------------------------------------
- * <fluent-button appearance="accent">Primary</fluent-button>
- * <fluent-button appearance="outline">Secondary</fluent-button>
- * <fluent-button appearance="subtle">Subtle</fluent-button>
- * <fluent-text-input placeholder="Search…"></fluent-text-input>
- * <fluent-card>Card content</fluent-card>
+ * </dialog>
  * ================================================================
  */
 
@@ -1149,190 +1214,249 @@ html.darkmode ::-webkit-scrollbar-thumb {
 }
 
 /* ============================================================
-   20. DRAWER — slide-out panel component
+   20. DRAWER — Fluent Design System slide-out panel
    ============================================================
 
-   The Fluent drawer is a slide-in overlay panel anchored to
-   one edge of the viewport. It consists of:
+   TWO APPROACHES — both supported by this theme:
 
-     .fluent-drawer            — host element (hidden by default)
-       .fluent-drawer__overlay — translucent backdrop (click-to-close)
-       .fluent-drawer__panel   — the visible content pane
-         .fluent-drawer__header — title row + close button area
-         .fluent-drawer__body   — scrollable content
-         .fluent-drawer__footer — optional sticky action row
+   ── Approach A: <fluent-drawer> Web Component ───────────────
+   The official Fluent UI v3 web component, loaded via CDN in
+   functions.php. Uses a native <dialog> internally and exposes
+   .show() / .hide() methods plus beforetoggle / toggle events.
 
-   Positional variants (add to .fluent-drawer):
-     .fluent-drawer--left   (default) — slides in from the left
-     .fluent-drawer--right  — slides in from the right
-     .fluent-drawer--bottom — rises from the bottom (mobile sheet)
-     .fluent-drawer--top    — drops from the top
+   Spec: https://github.com/microsoft/fluentui/tree/master/
+         packages/web-components/src/drawer
 
-   State:
-     .fluent-drawer--open   — add this class to reveal the drawer
-                              (handled automatically by fluent-drawer.js)
+   Attributes:
+     type     = "modal" (default) | "non-modal" | "inline"
+     position = "start" (left, LTR default) | "end" (right)
+     size     = "small" | "medium" (default) | "large" | "full"
 
-   Sizing modifier:
-     .fluent-drawer--narrow  — 240 px panel width / height
-     .fluent-drawer--wide    — 480 px panel width / height
+   CSS variable:
+     --drawer-width  — override panel width (default 592px / medium)
 
-   JS integration (fluent-drawer.js):
-     data-fluent-drawer-toggle="drawer-id"  — open/close trigger
-     data-fluent-drawer-close="drawer-id"   — close-only trigger
+   Sub-component:
+     <drawer-body>  — grid layout: title slot, content, footer slot
+
+   fluent-drawer.js adds data-attribute trigger support:
+     data-fluent-drawer-toggle="id"
+     data-fluent-drawer-close="id"
+
+   ── Approach B: <dialog class="fluent-drawer-dialog"> ───────
+   Native HTML fallback — no CDN dependency. Style and structure
+   exactly mirrors Approach A. Controlled by fluent-drawer.js
+   which calls showModal() / show() / close() on the <dialog>.
+
+   Attributes (data-* on <dialog>):
+     data-position = "start" (default) | "end"
+     data-size     = "small" | "medium" (default) | "large" | "full"
+
+   Inner markup mirrors <drawer-body>:
+     .fluent-drawer-body                 — grid wrapper
+       .fluent-drawer-body__header       — title row
+       .fluent-drawer-body__content      — scrollable area
+       .fluent-drawer-body__footer       — action row
    ============================================================ */
 
-/* --- Host (covers the full viewport) --- */
-.fluent-drawer {
-  position: fixed;
-  inset: 0;
-  z-index: var(--fluent-z-drawer);
-  pointer-events: none;
-  /* visibility drives accessibility; opacity drives fade */
-  visibility: hidden;
-  /* Transitions are handled per-child so the panel and overlay
-     can animate independently (overlay fades, panel slides). */
+/* ─── A.1 <fluent-drawer> web component: CSS variable theme ─── */
+
+/* Map our design tokens into the component's custom properties  */
+fluent-drawer {
+  --drawer-width:     592px;     /* medium (default) */
+  --drawer-elevation: var(--fluent-z-drawer);
 }
 
-.fluent-drawer--open {
-  pointer-events: auto;
-  visibility: visible;
+fluent-drawer[size="small"] { --drawer-width: 320px; }
+fluent-drawer[size="large"] { --drawer-width: 940px; }
+fluent-drawer[size="full"]  { --drawer-width: 100%;  }
+
+/* The component exposes ::part(dialog) for direct styling       */
+fluent-drawer::part(dialog) {
+  font-family:    var(--fluent-font);
+  font-size:      var(--fluent-font-size-base);
+  color:          var(--fluent-text);
+  background:     var(--fluent-surface);
+  border-inline-end: var(--fluent-stroke);
 }
 
-/* --- Overlay / backdrop --- */
-.fluent-drawer__overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--fluent-scrim);
-  opacity: 0;
-  transition: opacity var(--fluent-drawer-transition);
+fluent-drawer[position="end"]::part(dialog) {
+  border-inline-end:   none;
+  border-inline-start: var(--fluent-stroke);
 }
 
-.fluent-drawer--open .fluent-drawer__overlay {
-  opacity: 1;
-}
+/* ─── A.2 <drawer-body> sub-component ──────────────────────── */
 
-/* --- Panel (the actual drawer content) --- */
-.fluent-drawer__panel {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
+drawer-body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--fluent-space-6);
+  font-family: var(--fluent-font);
+  color: var(--fluent-text);
   background: var(--fluent-surface);
+  max-height: 100svh;
+}
+
+/* Title slot (rendered by the browser as [slot="title"] child)  */
+drawer-body .header,
+drawer-body [slot="title"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size:   var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
+  padding: 0;
+  margin: 0 0 var(--fluent-space-4) 0;
+}
+
+/* Footer slot */
+drawer-body .footer,
+drawer-body [slot="footer"] {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--fluent-space-3);
+  padding-top: var(--fluent-space-4);
+}
+
+/* ─── B. <dialog class="fluent-drawer-dialog"> fallback ─────── */
+
+/* Reset browser default dialog positioning/border               */
+dialog.fluent-drawer-dialog {
+  --drawer-width: 592px;        /* medium — override with data-size */
+
+  display: flex;                /* shown via JS showModal() / show() */
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: var(--drawer-width);
+  max-width: min(var(--drawer-width), 100vw);
+  height: 100%;
+  max-height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: var(--fluent-surface);
+  color: var(--fluent-text);
+  font-family: var(--fluent-font);
   box-shadow: var(--fluent-shadow-16);
   overflow: hidden;
-  transition: transform var(--fluent-drawer-transition);
-  /* Ensure panel is above overlay */
-  z-index: 1;
+  /* start (left) — default */
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  inset-block: 0;
+  border-inline-end: var(--fluent-stroke);
+  /* Smooth open via @starting-style where supported */
+  transition:
+    transform var(--fluent-drawer-transition),
+    opacity   var(--fluent-drawer-transition),
+    display   var(--fluent-drawer-transition) allow-discrete,
+    overlay   var(--fluent-drawer-transition) allow-discrete;
 }
 
-/* --- Left (default) drawer --- */
-.fluent-drawer:not(.fluent-drawer--right):not(.fluent-drawer--bottom):not(.fluent-drawer--top)
-.fluent-drawer__panel,
-.fluent-drawer--left .fluent-drawer__panel {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: min(360px, 85vw);
-  border-radius: 0 var(--fluent-radius-lg) var(--fluent-radius-lg) 0;
-  transform: translateX(-100%);
+/* ── Size variants (via data-size attribute) ── */
+dialog.fluent-drawer-dialog[data-size="small"] { --drawer-width: 320px; }
+dialog.fluent-drawer-dialog[data-size="large"] { --drawer-width: 940px; }
+dialog.fluent-drawer-dialog[data-size="full"]  { --drawer-width: 100vw; }
+
+/* ── Position: end (right / inline-end) ── */
+dialog.fluent-drawer-dialog[data-position="end"] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  border-inline-end:   none;
+  border-inline-start: var(--fluent-stroke);
 }
 
-.fluent-drawer:not(.fluent-drawer--right):not(.fluent-drawer--bottom):not(.fluent-drawer--top).fluent-drawer--open
-.fluent-drawer__panel,
-.fluent-drawer--left.fluent-drawer--open .fluent-drawer__panel {
-  transform: translateX(0);
+/* ── Backdrop (native <dialog> ::backdrop pseudo-element) ── */
+dialog.fluent-drawer-dialog::backdrop {
+  background: var(--fluent-scrim);
+  opacity: 0;
+  transition:
+    opacity  var(--fluent-drawer-transition),
+    display  var(--fluent-drawer-transition) allow-discrete,
+    overlay  var(--fluent-drawer-transition) allow-discrete;
 }
 
-/* --- Right drawer --- */
-.fluent-drawer--right .fluent-drawer__panel {
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: min(360px, 85vw);
-  border-radius: var(--fluent-radius-lg) 0 0 var(--fluent-radius-lg);
-  transform: translateX(100%);
+/* ── Animations (modern browsers supporting @starting-style) ── */
+@layer fluent-drawer-animations {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* Entering: start/left — slide in from left */
+    dialog.fluent-drawer-dialog:not([data-position="end"]) {
+      transform: translateX(0);
+    }
+    /* Entering: end/right — slide in from right */
+    dialog.fluent-drawer-dialog[data-position="end"] {
+      transform: translateX(0);
+    }
+
+    /* Exiting (not open):  browsers that do NOT support @starting-style
+       fall through to a simple instant hide (no transform set).
+       Browsers with @starting-style get smooth slides. */
+    @starting-style {
+      dialog.fluent-drawer-dialog:not([data-position="end"])[open] {
+        transform: translateX(-100%);
+      }
+      dialog.fluent-drawer-dialog[data-position="end"][open] {
+        transform: translateX(100%);
+      }
+      dialog.fluent-drawer-dialog[open]::backdrop {
+        opacity: 0;
+      }
+    }
+
+    /* Fade in backdrop when open */
+    dialog.fluent-drawer-dialog[open]::backdrop {
+      opacity: 1;
+    }
+  }
 }
 
-.fluent-drawer--right.fluent-drawer--open .fluent-drawer__panel {
-  transform: translateX(0);
+/* ── .fluent-drawer-body (inner layout, mirrors <drawer-body>) ── */
+.fluent-drawer-body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--fluent-space-6);
+  box-sizing: border-box;
+  max-height: 100svh;
 }
 
-/* --- Bottom drawer (mobile sheet) --- */
-.fluent-drawer--bottom .fluent-drawer__panel {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: auto;
-  max-height: 80vh;
-  border-radius: var(--fluent-radius-xl) var(--fluent-radius-xl) 0 0;
-  transform: translateY(100%);
-}
-
-.fluent-drawer--bottom.fluent-drawer--open .fluent-drawer__panel {
-  transform: translateY(0);
-}
-
-/* --- Top drawer --- */
-.fluent-drawer--top .fluent-drawer__panel {
-  left: 0;
-  right: 0;
-  top: 0;
-  height: auto;
-  max-height: 80vh;
-  border-radius: 0 0 var(--fluent-radius-xl) var(--fluent-radius-xl);
-  transform: translateY(-100%);
-}
-
-.fluent-drawer--top.fluent-drawer--open .fluent-drawer__panel {
-  transform: translateY(0);
-}
-
-/* --- Sizing modifiers --- */
-.fluent-drawer--narrow .fluent-drawer__panel { width: min(240px, 80vw) !important; }
-.fluent-drawer--wide   .fluent-drawer__panel { width: min(480px, 90vw) !important; }
-.fluent-drawer--bottom.fluent-drawer--narrow .fluent-drawer__panel,
-.fluent-drawer--top.fluent-drawer--narrow    .fluent-drawer__panel {
-  width: 100% !important;
-  max-height: 40vh;
-}
-.fluent-drawer--bottom.fluent-drawer--wide .fluent-drawer__panel,
-.fluent-drawer--top.fluent-drawer--wide    .fluent-drawer__panel {
-  width: 100% !important;
-  max-height: 90vh;
-}
-
-/* --- Header --- */
-.fluent-drawer__header {
+.fluent-drawer-body__header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: var(--fluent-space-4) var(--fluent-space-5);
-  border-bottom: var(--fluent-stroke);
-  flex-shrink: 0;
-}
-
-/* --- Body (scrollable) --- */
-.fluent-drawer__body {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: var(--fluent-space-5);
-  overscroll-behavior: contain;
-}
-
-/* --- Footer (sticky action row) --- */
-.fluent-drawer__footer {
-  display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: var(--fluent-space-3);
-  padding: var(--fluent-space-3) var(--fluent-space-5);
-  border-top: var(--fluent-stroke);
-  flex-shrink: 0;
+  padding-bottom: var(--fluent-space-4);
+  border-bottom: var(--fluent-stroke);
+  margin-bottom: var(--fluent-space-4);
+  font-size:   var(--fluent-font-size-subtitle);
+  font-weight: var(--fluent-font-weight-semi);
+  line-height: var(--fluent-line-height-heading);
 }
 
-/* --- Reduce motion support --- */
+.fluent-drawer-body__content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-block: var(--fluent-space-1);
+}
+
+.fluent-drawer-body__footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--fluent-space-3);
+  padding-top: var(--fluent-space-4);
+  border-top: var(--fluent-stroke);
+  margin-top: var(--fluent-space-4);
+}
+
+/* ── Reduce motion: instant show/hide, no transforms ── */
 @media (prefers-reduced-motion: reduce) {
-  .fluent-drawer__overlay,
-  .fluent-drawer__panel {
+  dialog.fluent-drawer-dialog,
+  dialog.fluent-drawer-dialog::backdrop {
     transition-duration: 1ms !important;
   }
 }
@@ -1480,11 +1604,9 @@ html.darkmode ::-webkit-scrollbar-thumb {
 }
 
 .fluent-divider--strong {
-  border-top-color: rgba(0, 0, 0, 0.18);
-}
-
-html.darkmode .fluent-divider--strong {
-  border-top-color: rgba(255, 255, 255, 0.20);
+  /* Reuse the existing strong stroke token (rgba(0,0,0,0.18) in light mode,
+     rgba(255,255,255,0.20) in dark mode — auto-updated by token overrides) */
+  border-top: var(--fluent-stroke-strong);
 }
 
 /* ============================================================

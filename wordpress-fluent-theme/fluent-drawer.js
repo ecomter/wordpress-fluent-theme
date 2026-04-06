@@ -1,279 +1,340 @@
 /**
- * fluent-drawer.js — Fluent Design System drawer (slide-out panel)
+ * fluent-drawer.js — Fluent Design System drawer helper
+ * Version: 0.2.0
  *
- * Provides open/close behaviour for .fluent-drawer elements.
- * No build step required — this file is enqueued by functions.php.
+ * Bridges data-attribute triggers to both:
+ *   A) <fluent-drawer> web component  (.show() / .hide() methods)
+ *   B) <dialog class="fluent-drawer-dialog">  (showModal() / close())
  *
- * ================================================================
- * USAGE
- * ================================================================
- *
- * 1. TRIGGER — open or toggle a drawer:
- *    <button data-fluent-drawer-toggle="my-drawer">Open</button>
- *
- * 2. CLOSE — close a specific drawer:
- *    <button data-fluent-drawer-close="my-drawer">Close</button>
- *
- * 3. DRAWER MARKUP — see style.css for the full HTML template.
- *    The drawer ID referenced in the trigger must match the drawer
- *    element's id attribute:
- *
- *    <div class="fluent-drawer" id="my-drawer" role="dialog"
- *         aria-modal="true" aria-label="Navigation">
- *      <div class="fluent-drawer__overlay"
- *           data-fluent-drawer-close="my-drawer"></div>
- *      <div class="fluent-drawer__panel">
- *        <div class="fluent-drawer__header">
- *          <span class="fluent-text--subtitle">Title</span>
- *          <button class="fluent-btn fluent-btn--icon fluent-drawer__close"
- *                  data-fluent-drawer-close="my-drawer"
- *                  aria-label="Close drawer">✕</button>
- *        </div>
- *        <div class="fluent-drawer__body">…content…</div>
- *      </div>
- *    </div>
- *
- * 4. PROGRAMMATIC API:
- *    FluentDrawer.open('my-drawer');
- *    FluentDrawer.close('my-drawer');
- *    FluentDrawer.toggle('my-drawer');
- *    FluentDrawer.closeAll();
- *
- * 5. EVENTS — dispatched on the drawer element:
- *    fluent:drawer:open   — fired after the drawer is opened
- *    fluent:drawer:close  — fired after the drawer is closed
+ * Spec reference:
+ *   https://github.com/microsoft/fluentui/tree/master/packages/web-components/src/drawer
  *
  * ================================================================
+ * USAGE — triggers (add to any clickable element)
+ * ================================================================
+ *
+ *   data-fluent-drawer-toggle="drawer-id"   open ↔ close
+ *   data-fluent-drawer-close="drawer-id"    close only
+ *
+ * ================================================================
+ * USAGE — programmatic API
+ * ================================================================
+ *
+ *   FluentDrawer.show('drawer-id')
+ *   FluentDrawer.hide('drawer-id')
+ *   FluentDrawer.toggle('drawer-id')
+ *   FluentDrawer.closeAll()
+ *
+ * ================================================================
+ * EVENTS (dispatched on the drawer element, bubbles=true)
+ * ================================================================
+ *
+ *   beforetoggle  — fires before state changes
+ *                   event.detail = { newState, oldState }
+ *   toggle        — fires after state changes
+ *                   event.detail = { newState, oldState }
+ *
+ *   These match the CustomEvent names used by the official
+ *   <fluent-drawer> web component and the HTML <dialog> spec
+ *   proposal (https://github.com/whatwg/html/issues/9733).
+ *
+ * ================================================================
+ * MARKUP — Approach A: <fluent-drawer> Web Component
+ * ================================================================
+ *
+ *   <!-- trigger -->
+ *   <button data-fluent-drawer-toggle="nav-drawer">Open</button>
+ *
+ *   <fluent-drawer id="nav-drawer" type="modal" position="start"
+ *                  size="medium" aria-labelledby="nav-title">
+ *     <drawer-body>
+ *       <h2 id="nav-title" slot="title">Navigation</h2>
+ *       <nav><!-- links --></nav>
+ *       <div slot="footer">
+ *         <fluent-button appearance="outline"
+ *                        data-fluent-drawer-close="nav-drawer">Close</fluent-button>
+ *       </div>
+ *     </drawer-body>
+ *   </fluent-drawer>
+ *
+ * ================================================================
+ * MARKUP — Approach B: <dialog class="fluent-drawer-dialog">
+ * ================================================================
+ *
+ *   <!-- trigger -->
+ *   <button data-fluent-drawer-toggle="nav-dialog">Open</button>
+ *
+ *   <dialog class="fluent-drawer-dialog" id="nav-dialog"
+ *           data-position="start" data-size="medium"
+ *           aria-labelledby="nav-dialog-title">
+ *     <div class="fluent-drawer-body">
+ *       <div class="fluent-drawer-body__header">
+ *         <h2 id="nav-dialog-title" class="fluent-text--subtitle">Navigation</h2>
+ *         <button class="fluent-btn fluent-btn--icon"
+ *                 data-fluent-drawer-close="nav-dialog"
+ *                 aria-label="Close drawer">&#x2715;</button>
+ *       </div>
+ *       <div class="fluent-drawer-body__content">
+ *         <!-- scrollable content -->
+ *       </div>
+ *       <div class="fluent-drawer-body__footer">
+ *         <button class="fluent-btn fluent-btn--outline"
+ *                 data-fluent-drawer-close="nav-dialog">Close</button>
+ *       </div>
+ *     </div>
+ *   </dialog>
  */
 
 ( function () {
-	'use strict';
+'use strict';
 
-	/** CSS class that marks a drawer as visible/open */
-	var OPEN_CLASS = 'fluent-drawer--open';
+/* --------------------------------------------------------
+ * Helpers
+ * -------------------------------------------------------- */
 
-	/**
-	 * All currently tracked drawer element IDs.
-	 * Used for bulk-close operations.
-	 * @type {Set<string>}
-	 */
-	var activeDrawers = new Set();
+/**
+ * Returns true when the element is an official <fluent-drawer>
+ * web component that exposes .show() / .hide().
+ *
+ * @param {Element} el
+ * @returns {boolean}
+ */
+function isFluentDrawerWC( el ) {
+return (
+el.tagName === 'FLUENT-DRAWER' &&
+typeof el.show === 'function' &&
+typeof el.hide === 'function'
+);
+}
 
-	/* --------------------------------------------------------
-	 * Core API
-	 * -------------------------------------------------------- */
+/**
+ * Returns true when the element is a native <dialog> element.
+ *
+ * @param {Element} el
+ * @returns {boolean}
+ */
+function isDialogEl( el ) {
+return el.tagName === 'DIALOG';
+}
 
-	var FluentDrawer = {
+/**
+ * Emit a CustomEvent that mirrors the <fluent-drawer> / <dialog>
+ * beforetoggle / toggle event shape.
+ *
+ * @param {Element}  el       - Target element to dispatch on.
+ * @param {string}   name     - "beforetoggle" or "toggle".
+ * @param {string}   oldState - "open" or "closed".
+ * @param {string}   newState - "open" or "closed".
+ */
+function emitToggleEvent( el, name, oldState, newState ) {
+el.dispatchEvent( new CustomEvent( name, {
+bubbles:    true,
+cancelable: name === 'beforetoggle',
+detail: { oldState: oldState, newState: newState }
+} ) );
+}
 
-		/**
-		 * Open a drawer by its element ID.
-		 *
-		 * @param {string} id - The id attribute of the .fluent-drawer element.
-		 */
-		open: function ( id ) {
-			var drawer = document.getElementById( id );
-			if ( ! drawer ) {
-				return;
-			}
+/* --------------------------------------------------------
+ * Core API
+ * -------------------------------------------------------- */
 
-			drawer.classList.add( OPEN_CLASS );
-			drawer.setAttribute( 'aria-hidden', 'false' );
-			activeDrawers.add( id );
+var FluentDrawer = {
 
-			// Move focus to the panel so screen readers announce it.
-			var panel = drawer.querySelector( '.fluent-drawer__panel' );
-			if ( panel ) {
-				panel.setAttribute( 'tabindex', '-1' );
-				panel.focus( { preventScroll: true } );
-			}
+/**
+ * Show / open a drawer by its element ID.
+ * Works with <fluent-drawer> web component and <dialog> elements.
+ *
+ * @param {string} id
+ */
+show: function ( id ) {
+var el = document.getElementById( id );
+if ( ! el ) {
+return;
+}
 
-			// Prevent body from scrolling while drawer is open.
-			document.body.style.overflow = 'hidden';
+/* ── A: <fluent-drawer> web component ── */
+if ( isFluentDrawerWC( el ) ) {
+/* The WC fires its own beforetoggle/toggle events internally. */
+el.show();
+return;
+}
 
-			drawer.dispatchEvent( new CustomEvent( 'fluent:drawer:open', {
-				bubbles: true,
-				detail: { id: id }
-			} ) );
-		},
+/* ── B: native <dialog> element ── */
+if ( isDialogEl( el ) ) {
+if ( el.open ) {
+return; /* already open */
+}
 
-		/**
-		 * Close a drawer by its element ID.
-		 *
-		 * @param {string} id - The id attribute of the .fluent-drawer element.
-		 */
-		close: function ( id ) {
-			var drawer = document.getElementById( id );
-			if ( ! drawer ) {
-				return;
-			}
+var type = el.getAttribute( 'data-type' ) || 'modal';
 
-			drawer.classList.remove( OPEN_CLASS );
-			drawer.setAttribute( 'aria-hidden', 'true' );
-			activeDrawers.delete( id );
+emitToggleEvent( el, 'beforetoggle', 'closed', 'open' );
 
-			// Restore body scrolling only when no other drawers are open.
-			if ( activeDrawers.size === 0 ) {
-				document.body.style.overflow = '';
-			}
+if ( type === 'non-modal' ) {
+el.show();
+} else {
+el.showModal();
+}
 
-			// Return focus to the element that originally triggered the drawer.
-			var trigger = document.querySelector(
-				'[data-fluent-drawer-toggle="' + id + '"]'
-			);
-			if ( trigger ) {
-				trigger.focus();
-			}
+emitToggleEvent( el, 'toggle', 'closed', 'open' );
 
-			drawer.dispatchEvent( new CustomEvent( 'fluent:drawer:close', {
-				bubbles: true,
-				detail: { id: id }
-			} ) );
-		},
+/* Prevent body scroll while modal is open */
+if ( type !== 'non-modal' && type !== 'inline' ) {
+document.body.style.overflow = 'hidden';
+}
 
-		/**
-		 * Toggle a drawer open ↔ closed.
-		 *
-		 * @param {string} id
-		 */
-		toggle: function ( id ) {
-			var drawer = document.getElementById( id );
-			if ( ! drawer ) {
-				return;
-			}
+/* Return focus to trigger on ESC / close */
+el._fluentTrigger = document.activeElement || null;
+return;
+}
+},
 
-			if ( drawer.classList.contains( OPEN_CLASS ) ) {
-				FluentDrawer.close( id );
-			} else {
-				FluentDrawer.open( id );
-			}
-		},
+/**
+ * Hide / close a drawer by its element ID.
+ *
+ * @param {string} id
+ */
+hide: function ( id ) {
+var el = document.getElementById( id );
+if ( ! el ) {
+return;
+}
 
-		/**
-		 * Close every currently open drawer.
-		 */
-		closeAll: function () {
-			activeDrawers.forEach( function ( id ) {
-				FluentDrawer.close( id );
-			} );
-		}
-	};
+/* ── A: <fluent-drawer> web component ── */
+if ( isFluentDrawerWC( el ) ) {
+el.hide();
+return;
+}
 
-	/* --------------------------------------------------------
-	 * Initialise accessibility attributes on all drawers.
-	 * -------------------------------------------------------- */
-	function initDrawers() {
-		document.querySelectorAll( '.fluent-drawer' ).forEach( function ( drawer ) {
-			if ( ! drawer.id ) {
-				return; // Skip drawers without an id.
-			}
+/* ── B: native <dialog> element ── */
+if ( isDialogEl( el ) ) {
+if ( ! el.open ) {
+return; /* already closed */
+}
 
-			// Ensure drawers start with aria-hidden unless already open.
-			if ( ! drawer.classList.contains( OPEN_CLASS ) ) {
-				drawer.setAttribute( 'aria-hidden', 'true' );
-			}
-		} );
-	}
+emitToggleEvent( el, 'beforetoggle', 'open', 'closed' );
 
-	/* --------------------------------------------------------
-	 * Delegate click events for triggers and close buttons.
-	 * -------------------------------------------------------- */
-	document.addEventListener( 'click', function ( event ) {
-		var target = event.target;
+el.close();
 
-		// Walk up the DOM in case the click hit a child element (e.g. an icon).
-		while ( target && target !== document ) {
-			var toggleId = target.getAttribute( 'data-fluent-drawer-toggle' );
-			if ( toggleId ) {
-				event.preventDefault();
-				FluentDrawer.toggle( toggleId );
-				return;
-			}
+emitToggleEvent( el, 'toggle', 'open', 'closed' );
 
-			var closeId = target.getAttribute( 'data-fluent-drawer-close' );
-			if ( closeId ) {
-				event.preventDefault();
-				FluentDrawer.close( closeId );
-				return;
-			}
+/* Restore body scroll */
+document.body.style.overflow = '';
 
-			target = target.parentElement;
-		}
-	} );
+/* Return focus to the element that triggered this drawer */
+if ( el._fluentTrigger && typeof el._fluentTrigger.focus === 'function' ) {
+el._fluentTrigger.focus();
+el._fluentTrigger = null;
+}
+}
+},
 
-	/* --------------------------------------------------------
-	 * Keyboard: Escape closes the topmost open drawer.
-	 * -------------------------------------------------------- */
-	document.addEventListener( 'keydown', function ( event ) {
-		if ( event.key !== 'Escape' ) {
-			return;
-		}
+/**
+ * Toggle a drawer open ↔ closed.
+ *
+ * @param {string} id
+ */
+toggle: function ( id ) {
+var el = document.getElementById( id );
+if ( ! el ) {
+return;
+}
 
-		// Close the most-recently-opened drawer.
-		var ids = Array.from( activeDrawers );
-		if ( ids.length > 0 ) {
-			FluentDrawer.close( ids[ ids.length - 1 ] );
-		}
-	} );
+/* <fluent-drawer> WC: check the internal dialog's open state */
+if ( isFluentDrawerWC( el ) ) {
+var internalDialog = el.shadowRoot
+? el.shadowRoot.querySelector( 'dialog' )
+: null;
+var isOpen = internalDialog ? internalDialog.open : false;
+if ( isOpen ) {
+el.hide();
+} else {
+el.show();
+}
+return;
+}
 
-	/* --------------------------------------------------------
-	 * Focus trap: keep keyboard focus inside the open drawer.
-	 * -------------------------------------------------------- */
-	document.addEventListener( 'keydown', function ( event ) {
-		if ( event.key !== 'Tab' || activeDrawers.size === 0 ) {
-			return;
-		}
+/* <dialog> element */
+if ( isDialogEl( el ) ) {
+if ( el.open ) {
+FluentDrawer.hide( id );
+} else {
+FluentDrawer.show( id );
+}
+}
+},
 
-		// Get the last opened drawer.
-		var ids = Array.from( activeDrawers );
-		var drawer = document.getElementById( ids[ ids.length - 1 ] );
-		if ( ! drawer ) {
-			return;
-		}
+/**
+ * Close every currently open drawer on the page.
+ */
+closeAll: function () {
+/* Close all open native dialogs that are fluent drawers */
+document.querySelectorAll( 'dialog.fluent-drawer-dialog[open]' ).forEach(
+function ( el ) {
+if ( el.id ) {
+FluentDrawer.hide( el.id );
+}
+}
+);
 
-		var focusable = drawer.querySelectorAll(
-			'a[href], button:not([disabled]), input:not([disabled]), ' +
-			'select:not([disabled]), textarea:not([disabled]), ' +
-			'[tabindex]:not([tabindex="-1"])'
-		);
+/* Close all open fluent-drawer web components */
+document.querySelectorAll( 'fluent-drawer' ).forEach( function ( el ) {
+if ( el.id ) {
+var shadow = el.shadowRoot;
+var dlg    = shadow ? shadow.querySelector( 'dialog[open]' ) : null;
+if ( dlg ) {
+FluentDrawer.hide( el.id );
+}
+}
+} );
+}
+};
 
-		var focusableArray = Array.from( focusable ).filter( function ( el ) {
-			return el.offsetParent !== null; // visible elements only
-		} );
+/* --------------------------------------------------------
+ * Event delegation — handle trigger clicks anywhere
+ * -------------------------------------------------------- */
+document.addEventListener( 'click', function ( event ) {
+var target = event.target;
 
-		if ( focusableArray.length === 0 ) {
-			return;
-		}
+/* Walk up the DOM; a click on a child (e.g. an icon) should
+   still be caught by the trigger element. */
+while ( target && target !== document.documentElement ) {
+var toggleId = target.getAttribute( 'data-fluent-drawer-toggle' );
+if ( toggleId ) {
+event.preventDefault();
+FluentDrawer.toggle( toggleId );
+return;
+}
 
-		var first = focusableArray[ 0 ];
-		var last  = focusableArray[ focusableArray.length - 1 ];
+var closeId = target.getAttribute( 'data-fluent-drawer-close' );
+if ( closeId ) {
+event.preventDefault();
+FluentDrawer.hide( closeId );
+return;
+}
 
-		if ( event.shiftKey ) {
-			// Shift+Tab: wrap from first → last.
-			if ( document.activeElement === first ) {
-				event.preventDefault();
-				last.focus();
-			}
-		} else {
-			// Tab: wrap from last → first.
-			if ( document.activeElement === last ) {
-				event.preventDefault();
-				first.focus();
-			}
-		}
-	} );
+target = target.parentElement;
+}
+} );
 
-	/* --------------------------------------------------------
-	 * Expose the API globally.
-	 * -------------------------------------------------------- */
-	window.FluentDrawer = FluentDrawer;
+/* --------------------------------------------------------
+ * Native <dialog> cancel event (Escape key fires cancel)
+ * Mirror the WC behaviour: hide + restore focus.
+ * -------------------------------------------------------- */
+document.addEventListener( 'cancel', function ( event ) {
+var el = event.target;
+if ( isDialogEl( el ) && el.classList.contains( 'fluent-drawer-dialog' ) ) {
+/* Prevent the browser's default close (we handle it ourselves
+   so the beforetoggle event and focus restoration both fire). */
+event.preventDefault();
+if ( el.id ) {
+FluentDrawer.hide( el.id );
+}
+}
+}, true /* capture — fires before the dialog closes */ );
 
-	/* --------------------------------------------------------
-	 * Run init when the DOM is ready.
-	 * -------------------------------------------------------- */
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', initDrawers );
-	} else {
-		initDrawers();
-	}
+/* --------------------------------------------------------
+ * Expose the public API
+ * -------------------------------------------------------- */
+window.FluentDrawer = FluentDrawer;
 
 } )();
