@@ -206,6 +206,7 @@
   --fluent-font-size-sm:       13px;
   --fluent-font-size-body:     14px;
   --fluent-font-size-base:     16px;
+  --fluent-font-size-lg:       18px;   /* lead paragraph, large body */
   --fluent-font-size-subtitle: 20px;
   --fluent-font-size-title:    24px;
   --fluent-font-size-title-lg: 28px;
@@ -3318,4 +3319,796 @@ nav.breadcrumb,
 /* Live regions — no visible change, but ensure layout isn't broken */
 [aria-live] {
   display: block;
+}
+
+/* ============================================================
+   59. VISUAL POLISH & BEAUTY
+   协调美丽漂亮 — Harmonious · Beautiful · Pretty
+
+   This section layers Fluent Mica material, gradient accents,
+   micro-interactions, and refined aesthetics across every visible
+   element, making the theme feel like a premium Microsoft product.
+   ============================================================ */
+
+/* ── 59.1 Smooth page-load entrance ── */
+@keyframes fluent-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  animation: fluent-fade-in 280ms var(--fluent-transition) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+}
+
+/* ── 59.2 Mica material — page background texture ── */
+/* Mica simulates a frosted-glass window behind the OS wallpaper.
+   We approximate it with a subtle noise texture and a soft radial
+   gradient that adds luminance variation. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(15,108,189,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(15,108,189,0.05) 0%, transparent 55%);
+}
+
+html.darkmode body::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(71,158,245,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(71,158,245,0.07) 0%, transparent 55%);
+}
+
+/* ── 59.3 Glassmorphism / Mica sticky header ── */
+.site-header,
+#site-header,
+.navbar,
+header.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: var(--fluent-z-sticky) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  background: rgba(243, 243, 243, 0.82) !important;
+  border-bottom: var(--fluent-stroke) !important;
+  transition:
+    background var(--fluent-transition-slow),
+    box-shadow var(--fluent-transition-slow) !important;
+}
+
+html.darkmode .site-header,
+html.darkmode #site-header,
+html.darkmode .navbar {
+  background: rgba(31, 31, 31, 0.85) !important;
+}
+
+/* Scrolled state — deeper shadow */
+.site-header.is-scrolled,
+#site-header.is-scrolled {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* ── 59.4 Refined post cards & surface cards ── */
+.card,
+.post,
+.blog-post,
+.page-information-card,
+.fluent-card {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  transition:
+    box-shadow var(--fluent-transition-slow),
+    transform  var(--fluent-transition-slow),
+    border-color var(--fluent-transition-slow) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.card:hover,
+.post:hover,
+.blog-post:hover,
+.fluent-card:hover {
+  box-shadow: var(--fluent-shadow-8) !important;
+  transform: translateY(-3px) !important;
+  border-color: rgba(15, 108, 189, 0.25) !important;
+}
+
+html.darkmode .card:hover,
+html.darkmode .post:hover,
+html.darkmode .blog-post:hover {
+  border-color: rgba(71, 158, 245, 0.30) !important;
+}
+
+/* Subtle inner glow on card hover */
+.card::after,
+.blog-post::after,
+.fluent-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(15,108,189,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--fluent-transition-slow);
+  pointer-events: none;
+}
+
+.card:hover::after,
+.blog-post:hover::after,
+.fluent-card:hover::after {
+  opacity: 1;
+}
+
+/* ── 59.5 Featured image — smooth scale on hover ── */
+.card img,
+.blog-post img,
+.post-thumbnail img,
+.wp-block-image img,
+.fluent-card__media img,
+.wp-post-image {
+  transition: transform 360ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 360ms ease !important;
+  will-change: transform;
+}
+
+.card:hover img,
+.blog-post:hover img,
+.post-thumbnail:hover img {
+  transform: scale(1.03) !important;
+  filter: brightness(1.03) !important;
+}
+
+/* Clip images inside their card container */
+.card .post-thumbnail,
+.blog-post .post-thumbnail,
+.card .featured-image-wrapper {
+  overflow: hidden;
+  border-radius: var(--fluent-radius-md) var(--fluent-radius-md) 0 0;
+}
+
+/* ── 59.6 Gradient accent buttons ── */
+/* Add a subtle gradient to primary buttons for a premium feel */
+.fluent-btn--primary,
+.btn-primary,
+input[type="submit"],
+.wp-block-button:not(.is-style-outline) .wp-block-button__link {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent) 0%,
+    color-mix(in srgb, var(--fluent-accent) 85%, #004e8c) 100%
+  ) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 2px 8px rgba(15,108,189,0.30) !important;
+}
+
+.fluent-btn--primary:hover,
+.btn-primary:hover,
+input[type="submit"]:hover,
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent-hover) 0%,
+    color-mix(in srgb, var(--fluent-accent-hover) 85%, #004e8c) 100%
+  ) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.14), 0 4px 16px rgba(15,108,189,0.35) !important;
+}
+
+/* Dark mode — lighter accent glow */
+html.darkmode .fluent-btn--primary,
+html.darkmode .btn-primary,
+html.darkmode input[type="submit"] {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-accent) 0%,
+    color-mix(in srgb, var(--fluent-accent) 80%, #1a6eb8) 100%
+  ) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.30), 0 2px 12px rgba(71,158,245,0.35) !important;
+}
+
+/* Danger button gradient */
+.fluent-btn--danger:hover {
+  background: linear-gradient(
+    160deg,
+    var(--fluent-color-danger) 0%,
+    color-mix(in srgb, var(--fluent-color-danger) 85%, #7a0000) 100%
+  ) !important;
+  box-shadow: 0 2px 8px rgba(197,15,31,0.35) !important;
+}
+
+/* ── 59.7 Beautiful animated link underlines ── */
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers) {
+  text-decoration: none;
+  background-image: linear-gradient(var(--fluent-accent), var(--fluent-accent));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    color var(--fluent-transition),
+    background-size var(--fluent-transition);
+  padding-bottom: 1px;
+}
+
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers):hover,
+a:not(.fluent-btn):not(.wp-block-button__link):not(.nav-link):not(.page-numbers):focus {
+  color: var(--fluent-accent);
+  background-size: 100% 1.5px;
+}
+
+/* Nav links — keep classic hover, no underline animation */
+.nav-link,
+.navbar a,
+.nav-menu a,
+.main-nav a,
+.site-nav a {
+  background-image: none !important;
+}
+
+/* ── 59.8 Navigation link hover — Fluent pill indicator ── */
+.nav-menu a,
+.main-nav a,
+.site-nav a,
+.navbar-nav a {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-menu a::after,
+.main-nav a::after,
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--fluent-accent);
+  border-radius: var(--fluent-radius-pill);
+  transform: translateX(-50%);
+  transition: width var(--fluent-transition);
+}
+
+.nav-menu a:hover::after,
+.nav-menu li.current-menu-item > a::after,
+.main-nav a:hover::after,
+.site-nav a:hover::after {
+  width: 70%;
+}
+
+/* ── 59.9 Refined post title typography ── */
+.post-title,
+.entry-title,
+h1.page-title,
+.single-post-content h1 {
+  letter-spacing: var(--fluent-tracking-tight) !important;
+  line-height: var(--fluent-line-height-heading) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+}
+
+/* Post title hover accent on list pages */
+.post-title a:hover,
+.entry-title a:hover {
+  color: var(--fluent-accent) !important;
+  background-size: 0% !important; /* disable underline animation for headings */
+}
+
+/* Drop cap for long-form posts */
+.single-post-content .entry-content > p:first-of-type::first-letter,
+.post-content > p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5em;
+  line-height: 0.8;
+  padding-right: var(--fluent-space-2);
+  padding-top: 4px;
+  font-weight: var(--fluent-font-weight-bold);
+  color: var(--fluent-accent);
+}
+
+/* ── 59.10 Refined blockquote — decorative opening mark ── */
+blockquote {
+  position: relative;
+  padding-top: var(--fluent-space-6) !important;
+}
+
+blockquote::before {
+  content: "\201C"; /* " */
+  position: absolute;
+  top: -8px;
+  left: var(--fluent-space-4);
+  font-size: 72px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: var(--fluent-accent);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.wp-block-pullquote {
+  position: relative;
+  overflow: hidden;
+}
+
+.wp-block-pullquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 160px;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: var(--fluent-accent);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* ── 59.11 Code block — beautiful syntax-neutral styling ── */
+pre,
+.wp-block-code,
+.wp-block-preformatted {
+  position: relative;
+  /* Subtle gradient top bar */
+  border-top: 3px solid var(--fluent-accent) !important;
+}
+
+pre::before,
+.wp-block-code::before {
+  content: "• • •";
+  position: absolute;
+  top: -2.2em;
+  left: var(--fluent-space-4);
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--fluent-text-secondary);
+  pointer-events: none;
+}
+
+pre {
+  padding-top: calc(var(--fluent-space-4) + 1.5em) !important;
+}
+
+/* ── 59.12 Beautiful table — header gradient ── */
+thead {
+  background: linear-gradient(
+    135deg,
+    var(--fluent-accent-subtle) 0%,
+    color-mix(in srgb, var(--fluent-accent-subtle) 50%, var(--fluent-surface)) 100%
+  ) !important;
+}
+
+html.darkmode thead {
+  background: linear-gradient(
+    135deg,
+    var(--fluent-accent-subtle) 0%,
+    color-mix(in srgb, var(--fluent-accent-subtle) 60%, var(--fluent-surface)) 100%
+  ) !important;
+}
+
+/* ── 59.13 Form inputs — floating glow focus ring ── */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+  border-color: var(--fluent-accent) !important;
+  box-shadow: 0 0 0 3px rgba(15, 108, 189, 0.18),
+              0 1px 4px rgba(15, 108, 189, 0.10) !important;
+  outline: none !important;
+}
+
+html.darkmode input[type="text"]:focus,
+html.darkmode input[type="email"]:focus,
+html.darkmode input[type="password"]:focus,
+html.darkmode textarea:focus,
+html.darkmode select:focus {
+  box-shadow: 0 0 0 3px rgba(71, 158, 245, 0.25),
+              0 1px 4px rgba(71, 158, 245, 0.12) !important;
+}
+
+/* ── 59.14 Pagination — Fluent segmented style ── */
+.pagination,
+.post-navigation,
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fluent-space-2);
+}
+
+.page-numbers,
+.pagination .page-numbers {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 0 var(--fluent-space-2) !important;
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-family: var(--fluent-font) !important;
+  font-size: var(--fluent-font-size-sm) !important;
+  font-weight: var(--fluent-font-weight-medium) !important;
+  color: var(--fluent-text) !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  transition:
+    background var(--fluent-transition),
+    border-color var(--fluent-transition),
+    box-shadow var(--fluent-transition),
+    color var(--fluent-transition) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+}
+
+.page-numbers:hover:not(.current),
+.pagination .page-numbers:hover:not(.current) {
+  background: var(--fluent-accent-subtle) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+.page-numbers.current,
+.pagination .page-numbers.current {
+  background: var(--fluent-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  box-shadow: 0 2px 8px rgba(15, 108, 189, 0.30) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+}
+
+.page-numbers.dots {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--fluent-text-secondary) !important;
+}
+
+/* ── 59.15 Tags & category badges — pill style ── */
+.post-tag,
+.tag,
+a[rel="tag"],
+.cat-links a,
+.wp-block-tag-cloud a,
+.label,
+.badge:not(.fluent-badge) {
+  display: inline-block !important;
+  padding: 2px var(--fluent-space-3) !important;
+  background: var(--fluent-accent-subtle) !important;
+  color: var(--fluent-accent) !important;
+  border-radius: var(--fluent-radius-pill) !important;
+  font-size: var(--fluent-font-size-caption) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  border: 1px solid rgba(15, 108, 189, 0.18) !important;
+  transition:
+    background var(--fluent-transition),
+    color var(--fluent-transition),
+    box-shadow var(--fluent-transition) !important;
+  letter-spacing: var(--fluent-tracking-wide) !important;
+}
+
+.post-tag:hover,
+.tag:hover,
+a[rel="tag"]:hover,
+.cat-links a:hover {
+  background: var(--fluent-accent) !important;
+  color: var(--fluent-text-on-accent) !important;
+  border-color: var(--fluent-accent) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  background-size: 0% !important;
+}
+
+/* ── 59.16 Sidebar widgets — subtle depth ── */
+.widget,
+.sidebar-widget {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  padding: var(--fluent-space-5) !important;
+  margin-bottom: var(--fluent-space-5) !important;
+  transition: box-shadow var(--fluent-transition-slow) !important;
+}
+
+.widget:hover,
+.sidebar-widget:hover {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+.widget-title,
+.sidebar-widget-title {
+  font-size: var(--fluent-font-size-base) !important;
+  font-weight: var(--fluent-font-weight-semi) !important;
+  color: var(--fluent-text) !important;
+  padding-bottom: var(--fluent-space-3) !important;
+  border-bottom: 2px solid var(--fluent-accent) !important;
+  margin-bottom: var(--fluent-space-4) !important;
+  /* Accent gradient underline */
+  background: linear-gradient(var(--fluent-accent), var(--fluent-accent)) no-repeat left bottom / 32px 2px;
+  border-bottom: none !important;
+  padding-bottom: var(--fluent-space-3) !important;
+}
+
+/* ── 59.17 Comments — beautiful thread styling ── */
+.comment-list .comment {
+  margin-bottom: var(--fluent-space-4) !important;
+}
+
+.comment-list .comment-body {
+  background: var(--fluent-surface) !important;
+  border: var(--fluent-stroke) !important;
+  border-radius: var(--fluent-radius-lg) !important;
+  padding: var(--fluent-space-5) !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+  position: relative;
+  transition: box-shadow var(--fluent-transition-slow) !important;
+}
+
+.comment-list .comment-body:hover {
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Avatar circle border */
+.comment-list .comment-author img,
+.comment .avatar {
+  border-radius: var(--fluent-radius-pill) !important;
+  border: 2px solid var(--fluent-accent) !important;
+  padding: 1px !important;
+  box-shadow: var(--fluent-shadow-2) !important;
+}
+
+/* ── 59.18 Footer — layered gradient ── */
+.site-footer,
+#site-footer {
+  background: linear-gradient(
+    180deg,
+    var(--fluent-surface-alt) 0%,
+    var(--fluent-bg) 100%
+  ) !important;
+  border-top: var(--fluent-stroke) !important;
+  padding: var(--fluent-space-10) var(--fluent-space-6) var(--fluent-space-6) !important;
+}
+
+html.darkmode .site-footer,
+html.darkmode #site-footer {
+  background: linear-gradient(
+    180deg,
+    var(--fluent-surface-alt) 0%,
+    var(--fluent-bg) 100%
+  ) !important;
+}
+
+/* ── 59.19 Single post reading experience ── */
+.single-post-content,
+.entry-content,
+.post-content {
+  /* Ideal reading line length */
+  max-width: 72ch;
+}
+
+/* Generous inter-element spacing inside post content */
+.entry-content > * + *,
+.post-content > * + *,
+.single-post-content > * + * {
+  margin-top: var(--fluent-space-5);
+}
+
+/* Beautiful lead paragraph */
+.entry-content > p:first-of-type,
+.post-content > p:first-of-type {
+  font-size: var(--fluent-font-size-lg, 18px);
+  line-height: 1.7;
+  color: var(--fluent-text);
+  font-weight: var(--fluent-font-weight-base);
+}
+
+/* ── 59.20 Beautiful cover/hero block ── */
+.wp-block-cover {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(15,108,189,0.25) 0%, transparent 60%) !important;
+}
+
+.wp-block-cover .wp-block-cover__inner-container h1,
+.wp-block-cover .wp-block-cover__inner-container h2,
+.wp-block-cover .wp-block-cover__inner-container h3 {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+/* ── 59.21 Beautiful audio accent-color ── */
+audio {
+  accent-color: var(--fluent-accent);
+  color-scheme: light dark;
+}
+
+video {
+  border-radius: var(--fluent-radius-md);
+}
+
+/* ── 59.22 Selection highlight — Fluent accent tint ── */
+::selection {
+  background: rgba(15, 108, 189, 0.20);
+  color: var(--fluent-text);
+}
+
+html.darkmode ::selection {
+  background: rgba(71, 158, 245, 0.28);
+}
+
+/* ── 59.23 Scrollbar — refined Fluent thin style ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--fluent-neutral-32);
+  border-radius: var(--fluent-radius-pill);
+  transition: background var(--fluent-transition);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--fluent-accent); }
+
+/* ── 59.24 Focus ring — beautiful blue glow ── */
+:focus-visible {
+  outline: 2px solid var(--fluent-accent) !important;
+  outline-offset: 3px !important;
+  border-radius: var(--fluent-radius-sm) !important;
+  box-shadow: 0 0 0 4px rgba(15, 108, 189, 0.18) !important;
+}
+
+html.darkmode :focus-visible {
+  box-shadow: 0 0 0 4px rgba(71, 158, 245, 0.25) !important;
+}
+
+/* ── 59.25 Dark mode — premium rich dark ── */
+html.darkmode body {
+  background: var(--fluent-bg) !important;
+}
+
+/* Dark mode cards get a top-edge highlight (Fluent Mica shimmer) */
+html.darkmode .card,
+html.darkmode .blog-post,
+html.darkmode .widget,
+html.darkmode .sidebar-widget,
+html.darkmode .fluent-card {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: var(--fluent-shadow-4) !important;
+}
+
+/* Dark mode: headings slightly lighter for contrast pop */
+html.darkmode h1,
+html.darkmode h2,
+html.darkmode h3 {
+  color: #ffffff !important;
+}
+
+/* Dark mode: code blocks */
+html.darkmode pre,
+html.darkmode code,
+html.darkmode .wp-block-code {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Dark mode: table striping */
+html.darkmode tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html.darkmode tbody tr:hover {
+  background: rgba(71, 158, 245, 0.08) !important;
+}
+
+/* Dark mode: blockquote */
+html.darkmode blockquote {
+  background: rgba(71, 158, 245, 0.06) !important;
+  border-inline-start-color: var(--fluent-accent) !important;
+}
+
+/* Dark mode: mark */
+html.darkmode mark {
+  background: rgba(247, 99, 12, 0.20) !important;
+  color: var(--fluent-text) !important;
+}
+
+/* Dark mode: summary/details */
+html.darkmode summary:hover {
+  background: rgba(71, 158, 245, 0.10) !important;
+}
+
+/* ── 59.26 Responsive refinements ── */
+@media (max-width: 768px) {
+  /* Stack author box on mobile */
+  .author-box,
+  .author-bio {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Disable alignment breakout on small screens */
+  .alignwide,
+  .alignfull {
+    margin-inline: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Smaller display headings on mobile */
+  .fluent-text--display { font-size: var(--fluent-font-size-xl) !important; }
+  .fluent-text--title-lg { font-size: var(--fluent-font-size-title) !important; }
+
+  /* Make post cards full width */
+  .wp-block-columns { flex-direction: column !important; }
+
+  /* Comment form single column */
+  #commentform { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  /* Login page — full width on very small screens */
+  body.login #login {
+    max-width: 100% !important;
+    padding: var(--fluent-space-3) !important;
+  }
+
+  body.login #loginform,
+  body.login #lostpasswordform {
+    padding: var(--fluent-space-5) !important;
+    border-radius: var(--fluent-radius-md) !important;
+  }
+
+  /* Drawer full width on mobile */
+  dialog.fluent-drawer-dialog {
+    --drawer-width: 100vw !important;
+  }
+
+  dialog.fluent-drawer-dialog[data-size="small"],
+  dialog.fluent-drawer-dialog[data-size="medium"] {
+    --drawer-width: 100vw !important;
+  }
+}
+
+/* ── 59.27 Print styles — clean, ink-saving ── */
+@media print {
+  .site-header,
+  #site-header,
+  .site-footer,
+  #site-footer,
+  .sidebar,
+  .widget-area,
+  .nav-menu,
+  .pagination,
+  .comment-respond,
+  .post-navigation {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555555;
+  }
+
+  .card,
+  .blog-post {
+    box-shadow: none !important;
+    border: 1px solid #cccccc !important;
+    break-inside: avoid;
+  }
 }
